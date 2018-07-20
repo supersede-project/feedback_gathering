@@ -30,15 +30,15 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private TextView dateView;
     private TextView statusView;
     private TextView pointView;
-    private FeedbackBean feedbackBean;
+    private FeedbackDetailsBean feedbackDetailsBean;
     private Enums.FEEDBACK_SORTING sorting = NONE;
     private String ownUser = USER_NAME_ANONYMOUS;
     private LocalConfigurationBean configuration;
 
-    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
+    public FeedbackListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
         this.configuration = configuration;
-        this.feedbackBean = feedbackBean;
+        this.feedbackDetailsBean = feedbackDetailsBean;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                                  .getDefaultDisplay()
@@ -60,12 +60,12 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         if (ACTIVE.check(context)) {
             ownUser = FeedbackDatabase.getInstance(getContext()).readString(USER_NAME, null);
         }
-        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, padding, textColor);
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, padding, textColor);
-        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackBean.getFeedbackStatus().getColor(),0.4);
-        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel()
-                .concat(SPACE + context.getString(R.string.list_responses, feedbackBean.getResponses())), Gravity.START, padding, statusColor);
-        pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, padding, textColor);
+        titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, padding, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(getFeedbackBean().getTimeStamp())), Gravity.END, padding, textColor);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackDetailsBean.getFeedbackStatus().getColor(),0.4);
+        statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel()
+                .concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
+        pointView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackBean().getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor();
         setBackgroundColor(backgroundColor);
         upperWrapperLayout.addView(titleView);
@@ -99,14 +99,14 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
             return;
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);
+        intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
         getContext().startActivity(intent);
         ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public FeedbackBean getFeedbackBean() {
-        return feedbackBean;
+        return feedbackDetailsBean.getFeedbackBean();
     }
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {
@@ -132,13 +132,13 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         if (o instanceof FeedbackListItem) {
             if (sorting == MINE || sorting == NEW) {
                 long comparedTimestamp = ((FeedbackListItem) o).getFeedbackBean().getTimeStamp();
-                return comparedTimestamp > feedbackBean.getTimeStamp() ? 1 : comparedTimestamp == feedbackBean.getTimeStamp() ? 0 : -1;
+                return comparedTimestamp > getFeedbackBean().getTimeStamp() ? 1 : comparedTimestamp == getFeedbackBean().getTimeStamp() ? 0 : -1;
             } else if (sorting == HOT) {
                 int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
-                return comparedResponses > feedbackBean.getResponses() ? 1 : comparedResponses == feedbackBean.getResponses() ? 0 : -1;
+                return comparedResponses > getFeedbackBean().getResponses() ? 1 : comparedResponses == getFeedbackBean().getResponses() ? 0 : -1;
             } else if (sorting == TOP) {
                 int comparedUpVotes = ((FeedbackListItem) o).getFeedbackBean().getUpVotes();
-                return comparedUpVotes > feedbackBean.getUpVotes() ? 1 : comparedUpVotes == feedbackBean.getUpVotes() ? 0 : -1;
+                return comparedUpVotes > getFeedbackBean().getUpVotes() ? 1 : comparedUpVotes == getFeedbackBean().getUpVotes() ? 0 : -1;
             }
         }
         return 0;
@@ -146,23 +146,23 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
 
     public void updatePercentageColor() {
         float percent;
-        if (feedbackBean.getUpVotes() < 0) {
-            percent = 1f / (2 * feedbackBean.getMinUpVotes()) * (feedbackBean.getMinUpVotes() - feedbackBean.getUpVotes());
-        } else if (feedbackBean.getUpVotes() == 0) {
+        if (getFeedbackBean().getUpVotes() < 0) {
+            percent = 1f / (2 * getFeedbackBean().getMinUpVotes()) * (getFeedbackBean().getMinUpVotes() - getFeedbackBean().getUpVotes());
+        } else if (getFeedbackBean().getUpVotes() == 0) {
             pointView.setTextColor(DUPLICATE.getColor());
             return;
         } else {
-            percent = 1f / (2 * feedbackBean.getMaxUpVotes()) * (feedbackBean.getMaxUpVotes() + feedbackBean.getUpVotes());
+            percent = 1f / (2 * getFeedbackBean().getMaxUpVotes()) * (getFeedbackBean().getMaxUpVotes() + getFeedbackBean().getUpVotes());
         }
         pointView.setTextColor(ColorUtility.percentToColor(percent));
     }
 
     @Override
     public void setSorting(Enums.FEEDBACK_SORTING sorting, List<Enums.FEEDBACK_STATUS> allowedStatuses) {
-        if (sorting != MINE || StringUtility.equals(feedbackBean.getUserName(), ownUser)) {
+        if (sorting != MINE || StringUtility.equals(getFeedbackBean().getUserName(), ownUser)) {
             this.setVisibility(GONE);
             for (Enums.FEEDBACK_STATUS status : allowedStatuses){
-                if (status == feedbackBean.getFeedbackStatus()){
+                if (status == getFeedbackBean().getFeedbackStatus()){
                     this.setVisibility(VISIBLE);
                 }
             }

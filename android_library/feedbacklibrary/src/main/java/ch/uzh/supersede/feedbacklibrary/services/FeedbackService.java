@@ -122,7 +122,7 @@ public abstract class FeedbackService {
 
     public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity);
 
-    public abstract void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked);
+    public abstract void createSubscription(IFeedbackServiceEventListener callback, FeedbackBean feedbackBean, boolean isSubscribed);
 
     public abstract void pingRepository(IFeedbackServiceEventListener callback);
 
@@ -132,11 +132,15 @@ public abstract class FeedbackService {
 
     public abstract void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report);
 
+    public abstract void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String response);
+
     public abstract void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
+
+    public abstract void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote);
 
     public abstract void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
-    public abstract void getFeedbacktTags(IFeedbackServiceEventListener callback);
+    public abstract void getFeedbackTags(IFeedbackServiceEventListener callback);
 
     private static class FeedbackApiService extends FeedbackService {
 
@@ -208,9 +212,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
-            RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
-            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION_MOCK, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
+        public void createSubscription(IFeedbackServiceEventListener callback, FeedbackBean feedbackBean, boolean isSubscribed) {
+            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION_MOCK, feedbackBean);
         }
 
         @Override
@@ -223,34 +226,51 @@ public abstract class FeedbackService {
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback,FeedbackDetailsBean feedbackDetailsBean, Object item) {
             if (item instanceof String){
-                //TODO: mbo implement
+                callback.onEventCompleted(CREATE_FEEDBACK_STATUS_UPDATE_MOCK, false);
+                //TODO: mbo implement when backend allows this call;
             }
         }
 
         @Override
         public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_DELETION_MOCK, false);
+            //TODO: mbo implement when backend allows this call;
         }
 
         @Override
         public void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report) {
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_REPORT_MOCK, report);
+            //TODO: mbo implement when backend allows this call;
+        }
+
+        @Override
+        public void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String response) {
+            callback.onEventCompleted(CREATE_FEEDBACK_RESPONSE_MOCK, response);
+            //TODO: mbo implement when backend allows this call;
         }
 
         @Override
         public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
+            //TODO: mbo implement when backend allows this call;
         }
 
         @Override
-        public void getFeedbacktTags(IFeedbackServiceEventListener callback) {
-            //TODO: mbo implement
+        public void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote) {
+            //callback.onEventCompleted(CREATE_FEEDBACK_VOTE_MOCK, false);
+            //TODO: mbo implement when backend allows this call;
+        }
+
+        @Override
+        public void getFeedbackTags(IFeedbackServiceEventListener callback) {
+            callback.onEventCompleted(GET_FEEDBACK_IMAGE_MOCK, false);
+            //TODO: mbo implement when backend allows this call;
         }
 
         @Override
         public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             feedbackAPI.getFeedbackImage(getToken(), getLanguage(), getApplicationId(),feedbackDetailsBean.getBitmapName()).enqueue(
-                    new RepositoryCallback<byte[]>(callback, EventType.GET_FEEDBACK_IMAGE) {
+                    new RepositoryCallback<ResponseBody>(callback, EventType.GET_FEEDBACK_IMAGE) {
                     });
         }
 
@@ -281,7 +301,7 @@ public abstract class FeedbackService {
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
-            for (FeedbackBean bean : RepositoryStub.getFeedback(activity, 50, -30, 50, 0.1f)) {
+            for (FeedbackDetailsBean bean : RepositoryStub.getFeedback(activity, 50, -30, 50, 0.1f)) {
                 if (bean != null) {
                     FeedbackListItem listItem = new FeedbackListItem(activity, 8, bean, configuration, backgroundColor);
                     allFeedbackList.add(listItem);
@@ -306,9 +326,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
-            RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
-            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
+        public void createSubscription(IFeedbackServiceEventListener callback, FeedbackBean feedbackBean, boolean isSubscribed) {
+            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION, feedbackBean);
         }
 
         @Override
@@ -325,22 +344,32 @@ public abstract class FeedbackService {
         @Override
         public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             RepositoryStub.deleteFeedback(feedbackDetailsBean);
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_DELETION_MOCK, false);
         }
 
         @Override
         public void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report) {
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_REPORT_MOCK, false);
+        }
+
+        @Override
+        public void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String response) {
+            callback.onEventCompleted(CREATE_FEEDBACK_RESPONSE_MOCK, false);
         }
 
         @Override
         public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            //TODO: mbo implement
+            callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
         }
 
         @Override
-        public void getFeedbacktTags(IFeedbackServiceEventListener callback) {
-            //TODO: mbo implement
+        public void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote) {
+            //callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
+        }
+
+        @Override
+        public void getFeedbackTags(IFeedbackServiceEventListener callback) {
+            callback.onEventCompleted(GET_FEEDBACK_TAGS_MOCK, false);
         }
 
         @Override

@@ -12,6 +12,7 @@ import android.text.*;
 import android.view.*;
 import android.widget.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -22,6 +23,7 @@ import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
+import okhttp3.ResponseBody;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.EDITABLE;
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
@@ -96,7 +98,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         if (feedbackDetailsBean != null) {
             updateFeedbackState();
             for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, FIXED);
+                FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration,this, FIXED);
                 responseList.add(feedbackResponseListItem);
             }
             Collections.sort(responseList);
@@ -131,7 +133,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         colorViews(2,userText,titleText,statusText,descriptionText);
         updateReportStatus(null);
         updateOwnFeedbackCase();
-        invokeVersionControl(5,audioButton.getId());
+        invokeVersionControl(5,audioButton.getId(),tagButton.getId());
         onPostCreate();
     }
 
@@ -149,7 +151,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 votesText.setTextColor(ContextCompat.getColor(this, R.color.green_4));
                 upButton.setEnabled(false);
             }
-            if (feedbackState.isDownVoted()) { //TODO> Downvoting doesnt enable upvoting.
+            if (feedbackState.isDownVoted()) {
                 votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
                 downButton.setEnabled(false);
             }
@@ -169,10 +171,10 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                     .withoutCancel()
                     .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getTags())).buildAndShow();
         }else if (view.getId() == imageButton.getId()) {
-            if (feedbackDetailsBean.getBitmap() != null) { // Own, just created Feedback
-                showImageDialog(feedbackDetailsBean.getBitmap());
-            } else {
+             if (feedbackDetailsBean.getBitmapName() != null) { // Own, just created Feedback
                 FeedbackService.getInstance(getApplicationContext()).getFeedbackImage(FeedbackDetailsActivity.this,feedbackDetailsBean);
+            } else {
+                showImageDialog(feedbackDetailsBean.getBitmap());
             }
         }else if (view.getId() == upButton.getId()) {
             RepositoryStub.sendUpVote(this, feedbackDetailsBean.getFeedbackBean());
@@ -183,7 +185,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         }else if (view.getId() == subscribeButton.getId()){
             RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
         }else if (view.getId() == responseButton.getId() && mode == READING){
-            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,configuration,EDITABLE);
+            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,configuration,this,EDITABLE);
             //Get to the Bottom
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             responseLayout.addView(item);
@@ -196,7 +198,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 public void onClick(DialogInterface dialog, int which) {
                     makePublicButton.setVisibility(View.INVISIBLE);
                     FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(FeedbackDetailsActivity.this,feedbackDetailsBean);
-                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
                     dialog.cancel();
                 }
             };
@@ -219,8 +220,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                         Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
                     } else {
                         FeedbackService.getInstance(getApplicationContext()).reportFeedback(FeedbackDetailsActivity.this, feedbackDetailsBean, report);
-                        Toast.makeText(FeedbackDetailsActivity.this,R.string.details_report_sent,Toast.LENGTH_SHORT).show();
-                        updateReportStatus(report);
                         dialog.dismiss();
                     }
                 }
@@ -245,17 +244,17 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         }
     }
 
-    public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
-            String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
-            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
-            boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
-            FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
-            FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);
-            //Get to the Bottom
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
-            responseLayout.addView(item);
-            //Show new Entry
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
+    private void persistFeedbackResponseLocally(String feedbackResponse) {
+        String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, USER_NAME_ANONYMOUS);
+        boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER, false);
+        boolean isOwner = feedbackDetailsBean.getUserName() != null && feedbackDetailsBean.getUserName().equals(userName);
+        FeedbackResponseBean responseBean = RepositoryStub.persist(feedbackDetailsBean.getFeedbackBean(), feedbackResponse, userName, isDeveloper, isOwner);
+        FeedbackResponseListItem item = new FeedbackResponseListItem(this, feedbackDetailsBean.getFeedbackBean(), responseBean, configuration,this, FIXED);
+        //Get to the Bottom
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
+        responseLayout.addView(item);
+        //Show new Entry
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
     }
 
     public void updateReportStatus(String report){
@@ -309,32 +308,45 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     public void onEventCompleted(EventType eventType, Object response) {
         super.onEventCompleted(eventType, response);
         switch (eventType) {
-            case CREATE_FEEDBACK_SUBSCRIPTION:
-                break;
-            case CREATE_FEEDBACK_RESPONSE:
-                break;
-            case CREATE_FEEDBACK_REPORT:
-                break;
-            case CREATE_FEEDBACK_VOTE:
-                break;
-            case CREATE_FEEDBACK_PUBLICATION:
-                break;
-            case GET_FEEDBACK_IMAGE:
-                if (response instanceof byte[]){
-                    showImageDialog((byte[])response);
-                }
-                break;
+            case CREATE_FEEDBACK_SUBSCRIPTION://Subscriptions only saved before destroy/pause, therefore no callback
             case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
                 break;
+            case CREATE_FEEDBACK_RESPONSE:
             case CREATE_FEEDBACK_RESPONSE_MOCK:
+                if (response instanceof String){
+                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_response_sent,Toast.LENGTH_SHORT).show();
+                    persistFeedbackResponseLocally((String)response);
+                }
                 break;
+            case CREATE_FEEDBACK_DELETION://Developer view TODO: move it
+            case CREATE_FEEDBACK_DELETION_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT:
             case CREATE_FEEDBACK_REPORT_MOCK:
+                if (response instanceof String){
+                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_report_sent,Toast.LENGTH_SHORT).show();
+                    updateReportStatus((String)response);
+                }
                 break;
+            case CREATE_FEEDBACK_VOTE: //Votes only saved before destroy/pause, therefore no callback
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
+            case CREATE_FEEDBACK_PUBLICATION:
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
+                Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
                 break;
+            case CREATE_FEEDBACK_STATUS_UPDATE: //Developer view TODO: move it
+            case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
+                if (response instanceof ResponseBody ){
+                    try {
+                        showImageDialog(((ResponseBody)response).bytes());
+                    } catch (IOException e) {
+                        showImageDialog(new byte[0]);
+                    }
+                }
                 break;
             default:
         }
@@ -346,27 +358,35 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         switch (eventType) {
             case CREATE_FEEDBACK_SUBSCRIPTION:
                 break;
-            case CREATE_FEEDBACK_RESPONSE:
-                break;
-            case CREATE_FEEDBACK_REPORT:
-                break;
-            case CREATE_FEEDBACK_VOTE:
-                break;
-            case CREATE_FEEDBACK_PUBLICATION:
-                break;
-            case GET_FEEDBACK_IMAGE:
-                break;
             case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
+                break;
+            case CREATE_FEEDBACK_RESPONSE:
                 break;
             case CREATE_FEEDBACK_RESPONSE_MOCK:
                 break;
+            case CREATE_FEEDBACK_DELETION:
+                break;
+            case CREATE_FEEDBACK_DELETION_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT:
+                break;
             case CREATE_FEEDBACK_REPORT_MOCK:
+                break;
+            case CREATE_FEEDBACK_VOTE:
                 break;
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
+            case CREATE_FEEDBACK_PUBLICATION:
+                break;
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
                 break;
+            case CREATE_FEEDBACK_STATUS_UPDATE:
+                break;
+            case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
+                showImageDialog(new byte[0]);
                 break;
             default:
         }
@@ -378,30 +398,65 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         switch (eventType) {
             case CREATE_FEEDBACK_SUBSCRIPTION:
                 break;
-            case CREATE_FEEDBACK_RESPONSE:
-                break;
-            case CREATE_FEEDBACK_REPORT:
-                break;
-            case CREATE_FEEDBACK_VOTE:
-                break;
-            case CREATE_FEEDBACK_PUBLICATION:
-                break;
-            case GET_FEEDBACK_IMAGE:
-                break;
             case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
+                break;
+            case CREATE_FEEDBACK_RESPONSE:
                 break;
             case CREATE_FEEDBACK_RESPONSE_MOCK:
                 break;
+            case CREATE_FEEDBACK_DELETION:
+                break;
+            case CREATE_FEEDBACK_DELETION_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT:
+                break;
             case CREATE_FEEDBACK_REPORT_MOCK:
+                break;
+            case CREATE_FEEDBACK_VOTE:
                 break;
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
+            case CREATE_FEEDBACK_PUBLICATION:
+                break;
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
                 break;
+            case CREATE_FEEDBACK_STATUS_UPDATE:
+                break;
+            case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
+                showImageDialog(new byte[0]);
                 break;
             default:
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        if (!feedbackState.isEqualVoted()){
+            FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
+        }
+        if (feedbackState.isSubscribed()){
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),true);
+        }else{
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),false);
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (!feedbackState.isEqualVoted()){
+            FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
+        }
+        if (feedbackState.isSubscribed()){
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),true);
+        }else{
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),false);
+        }
+        super.onDestroy();
     }
 }
 

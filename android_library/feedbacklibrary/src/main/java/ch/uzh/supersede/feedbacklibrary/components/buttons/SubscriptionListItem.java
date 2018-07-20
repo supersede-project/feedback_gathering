@@ -48,8 +48,10 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
         toggle.getTrackDrawable().setColorFilter(getForegroundColor(), PorterDuff.Mode.MULTIPLY);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                FeedbackService.getInstance(context).createSubscription(getListener(), context, RepositoryStub.getFeedback(context, feedbackBean), isChecked);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isSubscribed) {
+                FeedbackBean feedback = RepositoryStub.getFeedback(context, feedbackBean);
+                RepositoryStub.sendSubscriptionChange(context, feedback, isSubscribed);
+                FeedbackService.getInstance(context).createSubscription(getListener(), feedback, isSubscribed);
             }
         });
 

@@ -16,6 +16,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.*;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -34,13 +35,15 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     private FeedbackBean feedbackBean;
     private RESPONSE_MODE mode;
     private LocalConfigurationBean configuration;
+    private IFeedbackServiceEventListener eventListener;
 
     public enum RESPONSE_MODE {
         FIXED, EDITABLE
     }
 
-    public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, RESPONSE_MODE mode) {
+    public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, IFeedbackServiceEventListener eventListener, RESPONSE_MODE mode) {
         super(context);
+        this.eventListener = eventListener;
         this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER,false)&& VersionUtility.getDateVersion()>=4;
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
@@ -223,11 +226,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                 String response = ((EditText) bottomView).getText().toString();
                 RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
                 removeFeedbackResponse();
-                if (isDeveloper) {
-                    FeedbackDetailsDeveloperActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);
-                }else{
-                    FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);
-                }
+                FeedbackService.getInstance(getContext()).respondFeedback(eventListener,feedbackBean,response);
             }
         }
     }

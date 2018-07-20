@@ -50,6 +50,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         getView(R.id.identity_focus_sink, LinearLayout.class).requestFocus();
         createEditableFields();
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
+        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
         onPostCreate();
     }
 
@@ -285,9 +286,9 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
-        editTitle.setEnabled(false);
-        editTag.setEnabled(false);
         if (!tutorialFinished && !tutorialInitialized) {
+            editTitle.setEnabled(false);
+            editTag.setEnabled(false);
             RelativeLayout root = getView(R.id.identity_root, RelativeLayout.class);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_cancel), getString(R.string.identity_tutorial_content_cancel), this, buttonBack);
             RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_continue),getString(R.string.identity_tutorial_content_continue), this, buttonNext, mLayout);

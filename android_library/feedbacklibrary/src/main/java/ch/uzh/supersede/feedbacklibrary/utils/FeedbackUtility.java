@@ -56,6 +56,10 @@ public class FeedbackUtility {
         int responses = 0; // TODO not yet implemented
 
         String description = null;
+        String imageName = null;
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()){
+            imageName = feedback.getScreenshotFeedbackList().get(0).getPath();
+        }
 
         if (!feedback.getTextFeedbackList().isEmpty()) {
             description = feedback.getTextFeedbackList().get(0).getText();
@@ -70,9 +74,11 @@ public class FeedbackUtility {
 
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
-        //TODO: Dani, we need title & tags, workaround for release 2
+        //TODO: Dani, we need title & tags, workaround for release 4
         if (title == null || title.length() == 0){
-            title = "#Dummy-Title# " + GeneratorStub.BagOfFeedbackTitles.pickRandom();
+            title = "#Dummy-Title#"+(imageName!=null?"* ":" ")+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        }else{
+            title = title +(imageName!=null?"* ":" ");
         }
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedback.getId())
@@ -97,7 +103,8 @@ public class FeedbackUtility {
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
-                .withBitmap(bitmap)
+                .withBitmapName(bitmap)
+                .withBitmapName(imageName)
                 .build();
     }
 }

@@ -82,12 +82,12 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withBitmap(Bitmap bitmap) {
+        public Builder withBitmapName(Bitmap bitmap) {
             this.bitmap = ImageUtility.imageToBytes(bitmap);
             return this;
         }
 
-        public Builder withBitmap(String bitmapName) {
+        public Builder withBitmapName(String bitmapName) {
             this.bitmapName = bitmapName;
             return this;
         }

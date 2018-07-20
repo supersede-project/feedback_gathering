@@ -5,7 +5,7 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 
 class PersistentDataSingleton {
-    private List<FeedbackBean> persistedFeedback = new ArrayList<>();
+    private List<FeedbackDetailsBean> persistedFeedback = new ArrayList<>();
     private HashMap<Long,List<FeedbackResponseBean>> persistedFeedbackResponses = new HashMap<>();
 
     private static final PersistentDataSingleton ourInstance = new PersistentDataSingleton();
@@ -17,11 +17,11 @@ class PersistentDataSingleton {
     private PersistentDataSingleton() {
     }
 
-    public List<FeedbackBean> getPersistedFeedback() {
+    public List<FeedbackDetailsBean> getPersistedFeedback() {
         return persistedFeedback;
     }
 
-    public void persistFeedbackBeans(List<FeedbackBean> feedbackBeans) {
+    public void persistFeedbackBeans(List<FeedbackDetailsBean> feedbackBeans) {
         persistedFeedback = feedbackBeans;
     }
 

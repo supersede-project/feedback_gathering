@@ -118,7 +118,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                         FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
                         if (feedbackDetailsBean != null){ //Avoid NP caused by old Repository Feedback
                             feedbackDetailsBeans.add(feedbackDetailsBean);
-                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
+                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
                         }
                     }
                     activeFeedbackList = new ArrayList<>(allFeedbackList);

@@ -84,6 +84,6 @@ public interface IFeedbackAPI {
             FeedbackVote body);
 
     //Retrieves a specific Screenshot/Image
-    @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name.ext}")
-    Call<byte[]> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name.ext") String fileNameWithExtension);
+    @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name_ext}")
+    Call<ResponseBody> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
 }
