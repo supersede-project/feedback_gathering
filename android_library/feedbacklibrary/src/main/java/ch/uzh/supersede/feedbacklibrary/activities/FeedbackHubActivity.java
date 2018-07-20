@@ -84,8 +84,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         onPostCreate();
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
-            FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getRepositoryLogin(), configuration.getRepositoryPass()));
         }
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getRepositoryLogin(), configuration.getRepositoryPass()));
         ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
@@ -152,7 +152,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            Utils.persistScreenshot(this, cachedScreenshot);
+            ImageUtility.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();

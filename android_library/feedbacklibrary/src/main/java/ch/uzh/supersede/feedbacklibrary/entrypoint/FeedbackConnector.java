@@ -17,7 +17,6 @@ import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -82,10 +81,10 @@ public class FeedbackConnector {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
         Bitmap screenshot;
         if (ACTIVE.check(activity)) {
-            Utils.wipeImages(activity.getApplicationContext());
-            screenshot = Utils.storeScreenshotToDatabase(activity);
+            ImageUtility.wipeImages(activity.getApplicationContext());
+            screenshot = ImageUtility.storeScreenshotToDatabase(activity);
         } else {
-            screenshot = Utils.storeScreenshotToIntent(activity, intent);
+            screenshot = ImageUtility.storeScreenshotToIntent(activity, intent);
         }
         getActivityConfiguration(activity, intent, screenshot);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

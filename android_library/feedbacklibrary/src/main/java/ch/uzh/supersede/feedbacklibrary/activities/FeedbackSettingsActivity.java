@@ -61,11 +61,11 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
         });
 
         ToggleButton enableNotificationsToggle = getView(R.id.settings_toggle_enable_notifications, ToggleButton.class);
-        enableNotificationsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(ENABLE_NOTIFICATIONS, false));
+        enableNotificationsToggle.setChecked(ServiceUtility.isServiceEnabled(this));
         enableNotificationsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isEnabled) {
-                FeedbackDatabase.getInstance(compoundButton.getContext()).writeBoolean(ENABLE_NOTIFICATIONS, isEnabled);
+                ServiceUtility.setServiceEnabled(compoundButton.getContext(), isEnabled);
                 execStartNotificationService(isEnabled);
             }
         });

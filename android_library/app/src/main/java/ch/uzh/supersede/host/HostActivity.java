@@ -109,18 +109,18 @@ public class HostActivity extends AbstractBaseActivity implements
 
     @Override
     public String getConfiguredRepositoryLogin() {
-        return "user"; //TODO fix with F2FA-80
+        return "super_admin";
     }
 
     @Override
     public String getConfiguredRepositoryPassword() {
-        return "password"; //TODO fix with F2FA-80
+        return "password";
     }
 
     //Feedback Behavior
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 5;
+        return 1;
     }
 
     //Feedback Layout

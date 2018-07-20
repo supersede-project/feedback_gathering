@@ -6,6 +6,11 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ENABLE_NOTIFICATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
+
 public class ServiceUtility {
     private ServiceUtility() {
     }
@@ -24,7 +29,7 @@ public class ServiceUtility {
     }
 
     public static void startService(Class<?> serviceClass, Context context, Extra... extras) {
-        if (!isServiceRunning(serviceClass, context)) {
+        if (!isServiceRunning(serviceClass, context) && isServiceEnabled(context)) {
             Intent service = new Intent(context, serviceClass);
             for (Extra extra : extras) {
                 service.putExtra(extra.getName(), extra.getValue());
@@ -37,6 +42,17 @@ public class ServiceUtility {
         if (isServiceRunning(serviceClass, context)) {
             context.stopService(new Intent(context, serviceClass));
         }
+    }
+
+    public static boolean isServiceEnabled(Context context) {
+        if (ACTIVE.check(context)) {
+            return FeedbackDatabase.getInstance(context).readBoolean(ENABLE_NOTIFICATIONS, false);
+        }
+        return false;
+    }
+
+    public static void setServiceEnabled(Context context, boolean isEnabled) {
+        FeedbackDatabase.getInstance(context).writeBoolean(ENABLE_NOTIFICATIONS, isEnabled);
     }
 
     public static class Extra {

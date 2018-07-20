@@ -277,13 +277,13 @@ public class RepositoryStub {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withResponses(feedbackResponses)
-                .withBitmap(Utils.loadImageFromDatabase(context))
+                .withBitmap(ImageUtility.loadImageFromDatabase(context))
                 .build();
     }
 
     public static Bitmap loadFeedbackImage(Context context, FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
-        return Utils.loadImageFromDatabase(context);
+        return ImageUtility.loadImageFromDatabase(context);
     }
 
     public static byte[] loadFeedbackAudio(Context context, FeedbackDetailsBean feedbackDetailsBean) {

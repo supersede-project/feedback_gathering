@@ -24,7 +24,7 @@ import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
@@ -53,7 +53,7 @@ public class OrchestratorStub {
         //TODO: Evaluation, Store etc
         Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
         toast.show();
-        Utils.wipeImages(activity);
+        ImageUtility.wipeImages(activity);
         activity.onBackPressed();
     }
 

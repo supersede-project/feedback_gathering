@@ -23,7 +23,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USE
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 public class NotificationService extends Service implements IFeedbackServiceEventListener {
-    private static final int MAX_FAIL_COUNT = 1000;
+    private static final int MAX_FAIL_COUNT = 10;
 
     private LocalConfigurationBean configuration;
     private String userName;
@@ -47,7 +47,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
         userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
 
         if (CompareUtility.notNull(configuration, userName)) {
-            execStartAsyncPolling();
+            execStartAsyncPolling(configuration);
         } else {
             Log.e(getClass().getSimpleName(), "service stopped due to a configuration error.");
             stopSelf();
@@ -106,19 +106,29 @@ public class NotificationService extends Service implements IFeedbackServiceEven
         }
     }
 
-    private void execStartAsyncPolling() {
-        asyncPoll = new AsyncPoll();
+    private void execStartAsyncPolling(LocalConfigurationBean config) {
+        asyncPoll = new AsyncPoll(config);
         pollThread = new Thread(asyncPoll);
         pollThread.start();
     }
 
-    void execPoll() {
+    /**
+     * Executes the polling mechanism. The override of member variable configuration via the parameter config is necessary since, if ON_BOOT_COMPLETED triggers the BootCompletedReceiver creates a
+     * new instance of this class which will cause a discrepancy between Service and AsyncPoll such that the LocalConfigurationBean cannot be stored, and thus is indeed null.
+     *
+     * @param config configuration that passed by Service through AsyncPoll
+     * @see BootCompletedReceiver
+     */
+    void execPoll(LocalConfigurationBean config) {
+        if (configuration == null) {
+            configuration = config;
+        }
         if (failCount > MAX_FAIL_COUNT) {
             resetFailCount();
             stopSelf();
             return;
         }
-        FeedbackService.getInstance(this).getFeedbackList(this, this);
+        FeedbackService.getInstance(this).getFeedbackSubscriptions(this, this);
         FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
     }
 
@@ -199,15 +209,22 @@ public class NotificationService extends Service implements IFeedbackServiceEven
      * Async task that creates a new thread which periodically calls ansync functions of enclosing class.
      * Runs forever until destory of enclosing class or calling task.shutdown().
      */
+    @SuppressWarnings("squid:S2209")
     public class AsyncPoll implements Runnable {
         private boolean isShutdown = false;
+        private LocalConfigurationBean config;
+
+        AsyncPoll(LocalConfigurationBean config) {
+            this.config = config;
+        }
 
         @Override
         public void run() {
             Thread thisThread = Thread.currentThread();
             while (pollThread == thisThread) {
+                execPoll(config);
                 try {
-                    thisThread.sleep(configuration.getPullIntervalMinutes() * 1000L);
+                    thisThread.sleep(DateUtility.minutesToMillis(config.getPullIntervalMinutes()));
                     synchronized (this) {
                         while (isShutdown && pollThread == thisThread) {
                             wait();
@@ -217,7 +234,6 @@ public class NotificationService extends Service implements IFeedbackServiceEven
                     Log.e(this.getClass().getSimpleName(), e.getMessage(), e);
                     thisThread.interrupt();
                 }
-                execPoll();
             }
         }
 

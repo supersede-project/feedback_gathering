@@ -212,21 +212,20 @@
     <string name="api_service_event_failed">Event %1$s failed: %2$s.</string>
     <string name="api_service_connection_failed">Event %1$s failed: server is not available.</string>
 
-
     <!-- Notifications -->
     <string name="notification_user_title">Your user has received new updates.</string>
-    <string name="notification_user_blocked">Your account got blocked!</string>
-    <string name="notification_user_unblocked">Your account got unblocked!</string>
-    <string name="notification_user_karma_increased">Your karma has increased by %1$d.</string>
-    <string name="notification_user_karma_decreased">Your karma has decreased by %1$d.</string>
-    <string name="notification_user_developer">Your are now a developer!</string>
-    <string name="notification_user_not_developer">Your no longer a developer!</string>
-    <string name="notification_user_name_changed">Your username has changed to %1$s.</string>
-    <string name="notification_feedback_title">Your subscribed feedback have received updates.</string>
-    <string name="notification_feedback_responses">There are %1$d new responses on your subscribed feedback.</string>
-    <string name="notification_feedback_votes">There are %1$d new votes on your subscribed feedback.</string>
-    <string name="notification_feedback_status">The status of %1$d off your subscribed feedback have changed.</string>
-    <string name="notification_feedback_visibility">The visibility of %1$d off your own feedback have changed.</string>
-    <string name="notification_feedback_own">Thereof %1$d off your own.</string>
+    <string name="notification_user_blocked">&#8226; Your account got &lt;b&gt;&lt;font color="red"&gt;blocked&lt;/font&gt;&lt;/b&gt;!</string>
+    <string name="notification_user_unblocked">&#8226; Your account got &lt;b&gt;unblocked&lt;/b&gt;!</string>
+    <string name="notification_user_karma_increased">&#8226; Your karma has increased by &lt;b&gt;%1$d&lt;/b&gt;.</string>
+    <string name="notification_user_karma_decreased">&#8226; Your karma has decreased by &lt;b&gt;%1$d&lt;/b&gt;.</string>
+    <string name="notification_user_developer">&#8226; Your are now a &lt;b&gt;developer&lt;/b&gt;!</string>
+    <string name="notification_user_not_developer">&#8226; Your are &lt;font color="red"&gt;no longer a &lt;b&gt;developer&lt;/b&gt;&lt;/font&gt;!</string>
+    <string name="notification_user_name_changed">&#8226; Your username has changed to &lt;b&gt;%1$s&lt;/b&gt;.</string>
+    <string name="notification_feedback_title">&#8226; Your subscribed feedback have received updates.</string>
+    <string name="notification_feedback_responses">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new responses.</string>
+    <string name="notification_feedback_votes">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new votes.</string>
+    <string name="notification_feedback_status">&#8226; The status of &lt;b&gt;%1$d&lt;/b&gt; subscribed feedback have changed.</string>
+    <string name="notification_feedback_visibility">&#8226; The visibility of &lt;b&gt;%1$d&lt;/b&gt; of your own feedback have changed.</string>
+    <string name="notification_feedback_own">&lt;b&gt;%1$d&lt;/b&gt; of your own. </string>
 
 </resources>

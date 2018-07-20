@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.text.Html;
 
 import java.util.*;
 
@@ -57,9 +58,9 @@ public class NotificationUtility {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_star_black_24dp)
+                .setSmallIcon(R.drawable.ic_notification_active)
                 .setContentTitle(title)
-                .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(Html.fromHtml(message)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -72,19 +73,18 @@ public class NotificationUtility {
 
         int resource = androidUser.isBlocked() ? R.string.notification_user_blocked : R.string.notification_user_unblocked;
         message.append(context.getResources().getString(resource));
-        message.append('\n');
+        message.append(HTML_LINEBREAK);
 
         int increase = androidUser.getKarma() - userKarma;
         resource = increase > 0 ? R.string.notification_user_karma_increased : R.string.notification_user_karma_decreased;
         message.append(context.getResources().getString(resource, increase));
-        message.append('\n');
+        message.append(HTML_LINEBREAK);
 
         resource = androidUser.isDeveloper() ? R.string.notification_user_developer : R.string.notification_user_not_developer;
         message.append(context.getResources().getString(resource));
-        message.append('\n');
+        message.append(HTML_LINEBREAK);
 
         message.append(context.getResources().getString(R.string.notification_user_name_changed, androidUser.getName()));
-        message.append('\n');
 
         return createNotification("DUMMY" + context.getResources().getString(R.string.notification_user_title), message.toString(), context, configuration);
     }
@@ -101,11 +101,14 @@ public class NotificationUtility {
         int visibilityUpdates = new Random().nextInt(100);
 
         append(message, context, R.string.notification_feedback_responses, newResponses, R.string.notification_feedback_own, newOwnResponses);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_votes, newVotes, R.string.notification_feedback_own, newOwnVotes);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_status, statusUpdates, R.string.notification_feedback_own, ownStatusUpdates);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_visibility, visibilityUpdates);
 
-        return createNotification(context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
+        return createNotification("DUMMY" + context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
     }
 
     public List<Notification> createUserUpdateNotification(AndroidUser androidUser, Context context, LocalConfigurationBean configuration, boolean isSummary) {
@@ -126,7 +129,7 @@ public class NotificationUtility {
         if (androidUser.isBlocked() != userIsBlocked) {
             int resource = androidUser.isBlocked() ? R.string.notification_user_blocked : R.string.notification_user_unblocked;
             message.append(context.getResources().getString(resource));
-            message.append('\n');
+            message.append(HTML_LINEBREAK);
             userIsBlocked = androidUser.isBlocked();
             FeedbackDatabase.getInstance(context).writeBoolean(USER_IS_BLOCKED, userIsBlocked);
         }
@@ -134,21 +137,21 @@ public class NotificationUtility {
             int increase = androidUser.getKarma() - userKarma;
             int resource = increase > 0 ? R.string.notification_user_karma_increased : R.string.notification_user_karma_decreased;
             message.append(context.getResources().getString(resource, increase));
-            message.append('\n');
+            message.append(HTML_LINEBREAK);
             userKarma = androidUser.getKarma();
             FeedbackDatabase.getInstance(context).writeInteger(USER_KARMA, userKarma);
         }
         if (androidUser.isDeveloper() != userIsDeveloper) {
             int resource = androidUser.isDeveloper() ? R.string.notification_user_developer : R.string.notification_user_not_developer;
             message.append(context.getResources().getString(resource));
-            message.append('\n');
+            message.append(HTML_LINEBREAK);
             userIsDeveloper = androidUser.isDeveloper();
             FeedbackDatabase.getInstance(context).writeBoolean(USER_IS_DEVELOPER, userIsDeveloper);
         }
         if (!androidUser.getName().equals(userName)) {
             userName = androidUser.getName();
             message.append(context.getResources().getString(R.string.notification_user_name_changed, userName));
-            message.append('\n');
+            message.append(HTML_LINEBREAK);
             FeedbackDatabase.getInstance(context).writeString(USER_NAME, userName);
         }
         return createNotification(context.getResources().getString(R.string.notification_user_title), message.toString(), context, configuration);
@@ -199,8 +202,11 @@ public class NotificationUtility {
 
         StringBuilder message = new StringBuilder();
         append(message, context, R.string.notification_feedback_responses, newResponses, R.string.notification_feedback_own, newOwnResponses);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_votes, newVotes, R.string.notification_feedback_own, newOwnVotes);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_status, statusUpdates, R.string.notification_feedback_own, ownStatusUpdates);
+        message.append(HTML_LINEBREAK);
         append(message, context, R.string.notification_feedback_visibility, visibilityUpdates);
 
         return createNotification(context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
@@ -219,7 +225,6 @@ public class NotificationUtility {
             if (valueOwn != null && resourceOwn != null && valueOwn != 0) {
                 message.append(context.getResources().getString(resourceOwn, valueOwn));
             }
-            message.append('\n');
         }
     }
 }

@@ -17,8 +17,12 @@ public class Constants {
     public static final String ENABLE_NOTIFICATIONS = "enableNotifications";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";
+    public static final String CONFIGURATION = "localConfigurationBean";
+
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
+    public static final String HTML_LINEBREAK = "<br/>";
+
     public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";
     public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
             "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
@@ -59,51 +63,6 @@ public class Constants {
         public static final String USER_IS_BLOCKED = "userIsBlocked";
         public static final String USER_REPORTED_FEEDBACK = "reportedFeedback";
     }
-
-
-    public static class ConfigurationConstants {
-        private ConfigurationConstants() {
-        }
-
-        public static final String CONFIG_HOST_APPLICATION_ID = "configHostApplicationId";
-        public static final String CONFIG_HOST_APPLICATION_LONG_ID = "configHostApplicationLongId";
-        public static final String CONFIG_HOST_APPLICATION_NAME = "configHostApplicationName";
-        public static final String CONFIG_HOST_APPLICATION_LANGUAGE = "configHostApplicationLanguage";
-        public static final String CONFIG_PULL_INTERVAL_MINUTES = "configPullIntervalMinutes";
-        public static final String CONFIG_IS_DEVELOPER = "configIsDeveloper";
-        public static final String CONFIG_REPOSITORY_LOGIN = "configRepositoryLogin";
-        public static final String CONFIG_REPOSITORY_PASS = "configRepositoryPassword";
-        public static final String CONFIG_AUDIO_ORDER = "configAudioOrder";
-        public static final String CONFIG_MAX_AUDIO_TIME = "configMaxAudioTime";
-        public static final String CONFIG_SCREENSHOT_ORDER = "configScreenshotOrder";
-        public static final String CONFIG_IS_SCREENSHOT_EDITABLE = "configIsScreenshotEditable";
-        public static final String CONFIG_RATING_ORDER = "configRatingOrder";
-        public static final String CONFIG_RATING_TITLE = "configRatingTitle";
-        public static final String CONFIG_RATING_ICON = "configRatingIcon";
-        public static final String CONFIG_RATING_DEFAULT_VALUE = "configRatingDefaultValue";
-        public static final String CONFIG_MAX_RATING_VALUE = "configMaxRatingValue";
-        public static final String CONFIG_TEXT_ORDER = "configTextOrder";
-        public static final String CONFIG_TEXT_LABEL = "configTextLabel";
-        public static final String CONFIG_TEXT_HINT = "configTextHint";
-        public static final String CONFIG_MAX_TEXT_LENGTH = "configMaxTextLength";
-        public static final String CONFIG_MIN_TEXT_LENGTH = "configMinTextLength";
-        public static final String CONFIG_MAX_TAG_LENGTH = "configMaxTagLength";
-        public static final String CONFIG_MIN_TAG_LENGTH = "configMinTagLength";
-        public static final String CONFIG_MAX_TAG_NUMBER = "configMaxTagNumber";
-        public static final String CONFIG_MIN_TAG_NUMBER = "configMinTagNumber";
-        public static final String CONFIG_MAX_TAG_RECOMMENDATION_NUMBER = "configMaxTagRecommendationNumber";
-        public static final String CONFIG_MAX_TITLE_LENGTH = "configMaxTitleLength";
-        public static final String CONFIG_MIN_TITLE_LENGTH = "configMinTitleLength";
-        public static final String CONFIG_MAX_RESPONSE_LENGTH = "configMaxResponseLength";
-        public static final String CONFIG_MIN_RESPONSE_LENGTH = "configMinResponseLength";
-        public static final String CONFIG_MAX_USER_NAME_LENGTH = "configMaxUserNameLength";
-        public static final String CONFIG_MIN_USER_NAME_LENGTH = "configMinUserNameLength";
-        public static final String CONFIG_STYLE = "configStyle";
-        public static final String CONFIG_IS_COLORING_VERTICAL = "configIsColoringVertical";
-        public static final String CONFIG_COLOR = "configColor";
-        public static final String CONFIG_COLORS_LENGTH = "configColorsLength";
-    }
-
 
     public static class UtilsConstants {
         private UtilsConstants() {

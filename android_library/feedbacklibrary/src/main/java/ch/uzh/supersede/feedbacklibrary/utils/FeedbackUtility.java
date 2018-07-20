@@ -80,8 +80,8 @@ public class FeedbackUtility {
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
         Bitmap bitmap = null;
         if (ACTIVE.check(context)) {
-            bitmap = Utils.loadAnnotatedImageFromDatabase(context);
-            bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
+            bitmap = ImageUtility.loadAnnotatedImageFromDatabase(context);
+            bitmap = bitmap != null ? bitmap : ImageUtility.loadImageFromDatabase(context);
         }
 
         String title = feedback.getTitle();

@@ -113,7 +113,7 @@ public abstract class FeedbackService {
 
     public abstract void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity);
 
-    public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity);
+    public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context);
 
     public abstract void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked);
 
@@ -189,8 +189,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
-            List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED);
+        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context) {
+            List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED);
             Long[] feedbackIds = new Long[feedbackBeans.size()];
             for (int i = 0; i < feedbackBeans.size(); i++) {
                 feedbackIds[i] = feedbackBeans.get(i).getFeedbackId();
@@ -274,8 +274,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
-            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED));
+        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context) {
+            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
         }
 
         @Override
