@@ -6,6 +6,7 @@ import android.graphics.*;
 import android.graphics.drawable.*;
 import android.net.*;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -52,8 +53,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
-        configuration = (LocalConfigurationBean) getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        configuration = DefaultConfiguration.DefaultConfigurationUtility.getConfigurationFromActivity(this);
         infoUtility = new InfoUtility(screenWidth,screenHeight);
+        getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
     }
 
     protected void onPostCreate() {

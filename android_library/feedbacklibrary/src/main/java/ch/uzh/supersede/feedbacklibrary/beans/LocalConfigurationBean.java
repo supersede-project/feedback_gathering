@@ -20,6 +20,8 @@ public class LocalConfigurationBean implements Serializable {
     // IFeedbackDeveloperConfiguration
     private boolean isDeveloper;
     // IFeedbackLayoutConfiguration
+    private String endpointUrl;
+    // IFeedbackLayoutConfiguration
     private int audioOrder;
     private double audioMaxTime;
     private int labelOrder;
@@ -64,20 +66,39 @@ public class LocalConfigurationBean implements Serializable {
 
     public LocalConfigurationBean(Activity activity, Integer[] topColors) {
         this.topColors = topColors;
+        readDefaultConfiguration();
+        if (activity instanceof ISimpleFeedbackConfiguration) {
+            readFeedbackConfiguration((ISimpleFeedbackConfiguration)activity);
+        }
+        if (activity instanceof IFeedbackAudioConfiguration) {
+            readFeedbackConfiguration((IFeedbackAudioConfiguration)activity);
+        }
         if (activity instanceof IFeedbackBehaviorConfiguration) {
-            readConfiguration((IFeedbackBehaviorConfiguration) activity);
+            readFeedbackConfiguration((IFeedbackBehaviorConfiguration)activity);
         }
         if (activity instanceof IFeedbackDeveloperConfiguration) {
-            readConfiguration((IFeedbackDeveloperConfiguration) activity);
+            readFeedbackConfiguration((IFeedbackDeveloperConfiguration)activity);
         }
-        if (activity instanceof IFeedbackConfiguration) {
-            readConfiguration((IFeedbackConfiguration) activity);
+        if (activity instanceof IFeedbackEndpointConfiguration) {
+            readFeedbackConfiguration((IFeedbackEndpointConfiguration)activity);
+        }
+        if (activity instanceof IFeedbackLabelConfiguration) {
+            readFeedbackConfiguration((IFeedbackLabelConfiguration)activity);
+        }
+        if (activity instanceof IFeedbackRatingConfiguration) {
+            readFeedbackConfiguration((IFeedbackRatingConfiguration)activity);
+        }
+        if (activity instanceof IFeedbackScreenshotConfiguration) {
+            readFeedbackConfiguration((IFeedbackScreenshotConfiguration)activity);
         }
         if (activity instanceof IFeedbackSettingsConfiguration) {
-            readConfiguration((IFeedbackSettingsConfiguration) activity);
+            readFeedbackConfiguration((IFeedbackSettingsConfiguration)activity);
         }
         if (activity instanceof IFeedbackStyleConfiguration) {
-            readConfiguration((IFeedbackStyleConfiguration) activity);
+            readFeedbackConfiguration((IFeedbackStyleConfiguration)activity);
+        }
+        if (activity instanceof IFeedbackTitleAndTagConfiguration) {
+            readFeedbackConfiguration((IFeedbackTitleAndTagConfiguration)activity);
         }
         hostApplicationName = getApplicationName(activity);
         hostApplicationId = getApplicationId(activity);
@@ -85,98 +106,102 @@ public class LocalConfigurationBean implements Serializable {
         hostApplicationLanguage = Locale.getDefault().getLanguage();
     }
 
-    private void readConfiguration(IFeedbackBehaviorConfiguration configuration) {
+    private void readDefaultConfiguration() {
+        this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
+        this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
+        this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
+        this.maxReportLength = DefaultConfiguration.getInstance().getConfiguredMaxReportLength();
+        this.maxResponseLength = DefaultConfiguration.getInstance().getConfiguredMaxResponseLength();
+        this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
+        this.maxTagNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagNumber();
+        this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
+        this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
+        this.maxUserNameLength = DefaultConfiguration.getInstance().getConfiguredMaxUserNameLength();
+        this.minReportLength = DefaultConfiguration.getInstance().getConfiguredMinReportLength();
+        this.minResponseLength = DefaultConfiguration.getInstance().getConfiguredMinResponseLength();
+        this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
+        this.minTagNumber = DefaultConfiguration.getInstance().getConfiguredMinTagNumber();
+        this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
+        this.minUserNameLength = DefaultConfiguration.getInstance().getConfiguredMinUserNameLength();
+        this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
+        this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
+        this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
+        this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
+        this.reportEnabled = DefaultConfiguration.getInstance().getConfiguredReportEnabled();
+        this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
+        this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
+        this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
+        this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
+        this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
+        this.labelOrder = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackOrder();
+        this.audioOrder = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
+        this.ratingOrder = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
+        this.screenshotOrder = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
+        this.textOrder = DefaultConfiguration.getInstance().getConfiguredTextFeedbackOrder();
+        this.endpointUrl = DefaultConfiguration.getInstance().getConfiguredEndpointUrl();
+    }
+    private void readFeedbackConfiguration(ISimpleFeedbackConfiguration simpleFeedbackConfiguration) {
+        this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
+        this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
+        this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
+        this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
+        this.textOrder = simpleFeedbackConfiguration.getConfiguredTextFeedbackOrder();
+    }
+    private void readFeedbackConfiguration(IFeedbackAudioConfiguration audioConfiguration) {
+        this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
+        this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
+    }
+    private void readFeedbackConfiguration(IFeedbackLabelConfiguration labelConfiguration) {
+        this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
+        this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
+        this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
+    }
+    private void readFeedbackConfiguration(IFeedbackRatingConfiguration ratingConfiguration) {
+        this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
+        this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
+        this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
+        this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
+        this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
+    }
+    private void readFeedbackConfiguration(IFeedbackScreenshotConfiguration screenshotConfiguration) {
+        this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
+        this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
+    }
+    private void readFeedbackConfiguration(IFeedbackTextConfiguration textConfiguration) {
+        this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
+        this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
+        this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
+        this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
+        this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
+    }
+    private void readFeedbackConfiguration(IFeedbackTitleAndTagConfiguration titleAndTagConfiguration) {
+        this.minTitleLength = titleAndTagConfiguration.getConfiguredMinTitleLength();
+        this.maxTitleLength = titleAndTagConfiguration.getConfiguredMaxTitleLength();
+        this.minTagLength = titleAndTagConfiguration.getConfiguredMinTagLength();
+        this.maxTagLength = titleAndTagConfiguration.getConfiguredMaxTagLength();
+        this.minTagNumber = titleAndTagConfiguration.getConfiguredMinTagNumber();
+        this.maxTagNumber = titleAndTagConfiguration.getConfiguredMaxTagNumber();
+        this.maxTagRecommendationNumber = titleAndTagConfiguration.getConfiguredMaxTagRecommendationNumber();
+    }
+    private void readFeedbackConfiguration(IFeedbackSettingsConfiguration feedbackSettingsConfiguration) {
+        this.minUserNameLength = feedbackSettingsConfiguration.getConfiguredMinUserNameLength();
+        this.maxUserNameLength = feedbackSettingsConfiguration.getConfiguredMaxUserNameLength();
+        this.minResponseLength = feedbackSettingsConfiguration.getConfiguredMinResponseLength();
+        this.maxResponseLength = feedbackSettingsConfiguration.getConfiguredMaxResponseLength();
+        this.minReportLength = feedbackSettingsConfiguration.getConfiguredMinReportLength();
+        this.maxReportLength = feedbackSettingsConfiguration.getConfiguredMaxReportLength();
+        this.reportEnabled = feedbackSettingsConfiguration.getConfiguredReportEnabled();
+    }
+    private void readFeedbackConfiguration(IFeedbackBehaviorConfiguration configuration) {
         this.pullIntervalMinutes = configuration.getConfiguredPullIntervalMinutes();
     }
-
-    private void readConfiguration(IFeedbackDeveloperConfiguration configuration) {
+    private void readFeedbackConfiguration(IFeedbackDeveloperConfiguration configuration) {
         this.isDeveloper = configuration.isDeveloper();
     }
-
-    private void readConfiguration(IFeedbackConfiguration configuration) {
-        if (configuration instanceof ISimpleFeedbackConfiguration){
-            ISimpleFeedbackConfiguration simpleFeedbackConfiguration = (ISimpleFeedbackConfiguration) configuration;
-            this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
-            this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-            this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
-            this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-            this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
-            this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
-            this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
-            this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
-            this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
-            this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
-            this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
-            this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
-            this.textOrder = simpleFeedbackConfiguration.getConfiguredTextFeedbackOrder();
-            this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
-            this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
-            this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
-            this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
-            this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
-            this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
-            this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
-            this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
-            this.minTagNumber = DefaultConfiguration.getInstance().getConfiguredMinTagNumber();
-            this.maxTagNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagNumber();
-            this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
-        }
-        if (configuration instanceof IAudioFeedbackConfiguration) {
-                IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
-                this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
-                this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
-        }
-        if (configuration instanceof ILabelFeedbackConfiguration) {
-                ILabelFeedbackConfiguration labelConfiguration = (ILabelFeedbackConfiguration) configuration;
-                this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-                this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
-                this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
-        }
-        if (configuration instanceof IRatingFeedbackConfiguration) {
-                IRatingFeedbackConfiguration ratingConfiguration = (IRatingFeedbackConfiguration) configuration;
-                this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
-                this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
-                this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
-                this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
-                this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
-        }
-        if (configuration instanceof IScreenshotFeedbackConfiguration) {
-                IScreenshotFeedbackConfiguration screenshotConfiguration = (IScreenshotFeedbackConfiguration) configuration;
-                this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
-                this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
-        }
-        if (configuration instanceof ITextFeedbackConfiguration) {
-                ITextFeedbackConfiguration textConfiguration = (ITextFeedbackConfiguration) configuration;
-                this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
-                this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
-                this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
-                this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
-                this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
-        }
-        if (configuration instanceof ITitleAndTagFeedbackConfiguration) {
-            ITitleAndTagFeedbackConfiguration titleAndTagConfiguration = (ITitleAndTagFeedbackConfiguration) configuration;
-            this.minTitleLength = titleAndTagConfiguration.getConfiguredMinTitleLength();
-            this.maxTitleLength = titleAndTagConfiguration.getConfiguredMaxTitleLength();
-            this.minTagLength = titleAndTagConfiguration.getConfiguredMinTagLength();
-            this.maxTagLength = titleAndTagConfiguration.getConfiguredMaxTagLength();
-            this.minTagNumber = titleAndTagConfiguration.getConfiguredMinTagNumber();
-            this.maxTagNumber = titleAndTagConfiguration.getConfiguredMaxTagNumber();
-            this.maxTagRecommendationNumber = titleAndTagConfiguration.getConfiguredMaxTagRecommendationNumber();
-        }
+    private void readFeedbackConfiguration(IFeedbackEndpointConfiguration configuration) {
+        this.endpointUrl = configuration.getConfiguredEndpointUrl();
     }
-
-
-    private void readConfiguration(IFeedbackSettingsConfiguration configuration) {
-        this.minUserNameLength = configuration.getConfiguredMinUserNameLength();
-        this.maxUserNameLength = configuration.getConfiguredMaxUserNameLength();
-        this.minResponseLength = configuration.getConfiguredMinResponseLength();
-        this.maxResponseLength = configuration.getConfiguredMaxResponseLength();
-        this.minReportLength = configuration.getConfiguredMinReportLength();
-        this.maxReportLength = configuration.getConfiguredMaxReportLength();
-        this.reportEnabled = configuration.getConfiguredReportEnabled();
-    }
-
-    private void readConfiguration(IFeedbackStyleConfiguration configuration) {
+    private void readFeedbackConfiguration(IFeedbackStyleConfiguration configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
         coloringVertical =true;
         if (style == DARK) {
@@ -400,5 +425,13 @@ public class LocalConfigurationBean implements Serializable {
 
     public int getMaxReportLength() {
         return maxReportLength;
+    }
+
+    public String getEndpointUrl() {
+        return endpointUrl;
+    }
+
+    public void setEndpointUrl(String endpointUrl) {
+        this.endpointUrl = endpointUrl;
     }
 }
