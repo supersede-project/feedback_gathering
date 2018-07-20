@@ -152,6 +152,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            ConfigurationUtility.execStoreStateToDatabase(this, configuration);
             ImageUtility.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();

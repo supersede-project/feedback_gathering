@@ -2,7 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.utils.ConfigurationUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -96,17 +95,11 @@ public class FeedbackConnector {
         Integer[] topColors = ImageUtility.calculateTopNColors(screenshot, 3, 20);
 
         LocalConfigurationBean configurationBean = new LocalConfigurationBean(activity, topColors);
-        execStoreStateToDatabase(activity, configurationBean);
+        ConfigurationUtility.execStoreStateToDatabase(activity, configurationBean);
 
         //Host Name for Database
         activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName()).apply();
         intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName());
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configurationBean);
-    }
-
-    private static void execStoreStateToDatabase(Context context, LocalConfigurationBean configuration) {
-        if (ACTIVE.check(context)) {
-            FeedbackDatabase.getInstance(context).writeConfiguration(configuration);
-        }
     }
 }

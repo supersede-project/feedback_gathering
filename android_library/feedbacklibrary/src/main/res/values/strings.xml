@@ -102,7 +102,7 @@
     <string name="hub_access_2_fail">The connection to the Server could not be established. Try again later.</string>
     <string name="hub_warning_username_too_short">User-Name too short!</string>
     <string name="hub_access_3">Accessing Level 3</string>
-    <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms and needs Audio-Recording-Permissions!</string>
+    <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms such as Notifications and needs Audio-Recording-Permissions!</string>
     <string name="hub_username_restored">User restored: "%1$s".</string>
     <string name="hub_username_registered">User "%1$s" registered.</string>
     <string name="hub_developer_registered">Developer "%1$s" registered.</string>

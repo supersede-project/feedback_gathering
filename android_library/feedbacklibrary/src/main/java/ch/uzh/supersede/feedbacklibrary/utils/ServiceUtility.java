@@ -9,7 +9,7 @@ import java.io.Serializable;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ENABLE_NOTIFICATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 public class ServiceUtility {
     private ServiceUtility() {
@@ -45,14 +45,16 @@ public class ServiceUtility {
     }
 
     public static boolean isServiceEnabled(Context context) {
-        if (ACTIVE.check(context)) {
+        if (ADVANCED.check(context)) {
             return FeedbackDatabase.getInstance(context).readBoolean(ENABLE_NOTIFICATIONS, false);
         }
         return false;
     }
 
     public static void setServiceEnabled(Context context, boolean isEnabled) {
-        FeedbackDatabase.getInstance(context).writeBoolean(ENABLE_NOTIFICATIONS, isEnabled);
+        if (ADVANCED.check(context)) {
+            FeedbackDatabase.getInstance(context).writeBoolean(ENABLE_NOTIFICATIONS, isEnabled);
+        }
     }
 
     public static class Extra {

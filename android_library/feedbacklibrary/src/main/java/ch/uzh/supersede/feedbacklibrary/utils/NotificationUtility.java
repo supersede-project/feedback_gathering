@@ -47,7 +47,7 @@ public class NotificationUtility {
     }
 
     private Notification createNotification(String title, String message, Context context, LocalConfigurationBean configuration) {
-        if (message.isEmpty()) {
+        if (message.replaceAll(HTML_LINEBREAK, "").isEmpty()) {
             return null;
         }
 
