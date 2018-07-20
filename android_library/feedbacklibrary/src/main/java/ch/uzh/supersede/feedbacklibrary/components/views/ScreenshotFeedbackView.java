@@ -21,7 +21,6 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
@@ -104,7 +103,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         View enclosingLayout = getEnclosingLayout();
         screenShotPreviewImageView = (ImageView) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
 
-        pictureBitmap = Utils.loadImageFromDatabase(getLayoutInflater().getContext());
+        pictureBitmap = ImageUtility.loadImageFromDatabase(getLayoutInflater().getContext());
         // Selecting image
         selectButton = (Button) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
         selectButton.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +166,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     }
 
     private void onImageDelete() {
-        Utils.wipeImages(activity);
+        ImageUtility.wipeImages(activity);
         pictureBitmap = null;
         allStickerAnnotations = null;
         refreshPreview(activity.getApplicationContext());
@@ -182,9 +181,9 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     public void refreshPreview(Context context) {
         screenShotPreviewImageView.setBackground(null);
         if (getPictureBitmap() == null) {
-            setPictureBitmap(Utils.loadImageFromDatabase(context));
+            setPictureBitmap(ImageUtility.loadImageFromDatabase(context));
         }
-        setPictureBitmapAnnotated(Utils.loadAnnotatedImageFromDatabase(context));
+        setPictureBitmapAnnotated(ImageUtility.loadAnnotatedImageFromDatabase(context));
         if (pictureBitmapAnnotated != null) {
             screenShotPreviewImageView.setImageBitmap(pictureBitmapAnnotated);
         } else if (pictureBitmap != null) {

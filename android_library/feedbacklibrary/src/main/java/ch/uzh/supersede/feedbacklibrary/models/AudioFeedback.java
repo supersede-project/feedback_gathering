@@ -2,8 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.List;
-
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
 public class AudioFeedback extends AbstractMultipartFeedback {

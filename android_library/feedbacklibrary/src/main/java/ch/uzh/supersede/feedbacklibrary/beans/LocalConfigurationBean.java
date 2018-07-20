@@ -9,16 +9,24 @@ import java.util.Locale;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
+import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
 public class LocalConfigurationBean implements Serializable {
+    // Application
+    private String hostApplicationName;
+    private String hostApplicationId;
+    private Long hostApplicationLongId;
+    private String hostApplicationLanguage;
     // IFeedbackBehaviorConfiguration
     private int pullIntervalMinutes;
     // IFeedbackDeveloperConfiguration
     private boolean isDeveloper;
+    private String repositoryLogin;
+    private String repositoryPass;
     // IFeedbackLayoutConfiguration
     private String endpointUrl;
     // IFeedbackLayoutConfiguration
@@ -56,49 +64,45 @@ public class LocalConfigurationBean implements Serializable {
     private int maxTagRecommendationNumber;
     // IFeedbackStyleConfiguration
     private FEEDBACK_STYLE style;
-    // Application
-    private String hostApplicationName;
-    private String hostApplicationId;
-    private Long hostApplicationLongId;
-    private String hostApplicationLanguage;
     private Integer[] topColors;
-    private boolean coloringVertical;
+    private boolean isColoringVertical;
+
+    private LocalConfigurationBean() {
+        //nop
+    }
 
     public LocalConfigurationBean(Activity activity, Integer[] topColors) {
         this.topColors = topColors;
         readDefaultConfiguration();
         if (activity instanceof ISimpleFeedbackConfiguration) {
-            readFeedbackConfiguration((ISimpleFeedbackConfiguration)activity);
+            readFeedbackConfiguration((ISimpleFeedbackConfiguration) activity);
         }
         if (activity instanceof IFeedbackAudioConfiguration) {
-            readFeedbackConfiguration((IFeedbackAudioConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackAudioConfiguration) activity);
         }
         if (activity instanceof IFeedbackBehaviorConfiguration) {
-            readFeedbackConfiguration((IFeedbackBehaviorConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackBehaviorConfiguration) activity);
         }
         if (activity instanceof IFeedbackDeveloperConfiguration) {
-            readFeedbackConfiguration((IFeedbackDeveloperConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackDeveloperConfiguration) activity);
         }
         if (activity instanceof IFeedbackEndpointConfiguration) {
-            readFeedbackConfiguration((IFeedbackEndpointConfiguration)activity);
-        }
-        if (activity instanceof IFeedbackLabelConfiguration) {
-            readFeedbackConfiguration((IFeedbackLabelConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackEndpointConfiguration) activity);
         }
         if (activity instanceof IFeedbackRatingConfiguration) {
-            readFeedbackConfiguration((IFeedbackRatingConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackRatingConfiguration) activity);
         }
         if (activity instanceof IFeedbackScreenshotConfiguration) {
-            readFeedbackConfiguration((IFeedbackScreenshotConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackScreenshotConfiguration) activity);
         }
         if (activity instanceof IFeedbackSettingsConfiguration) {
-            readFeedbackConfiguration((IFeedbackSettingsConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackSettingsConfiguration) activity);
         }
         if (activity instanceof IFeedbackStyleConfiguration) {
-            readFeedbackConfiguration((IFeedbackStyleConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackStyleConfiguration) activity);
         }
         if (activity instanceof IFeedbackTitleAndTagConfiguration) {
-            readFeedbackConfiguration((IFeedbackTitleAndTagConfiguration)activity);
+            readFeedbackConfiguration((IFeedbackTitleAndTagConfiguration) activity);
         }
         hostApplicationName = getApplicationName(activity);
         hostApplicationId = getApplicationId(activity);
@@ -108,8 +112,6 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readDefaultConfiguration() {
         this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-        this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-        this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
         this.maxReportLength = DefaultConfiguration.getInstance().getConfiguredMaxReportLength();
         this.maxResponseLength = DefaultConfiguration.getInstance().getConfiguredMaxResponseLength();
         this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
@@ -133,29 +135,25 @@ public class LocalConfigurationBean implements Serializable {
         this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
         this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
         this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
-        this.labelOrder = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackOrder();
         this.audioOrder = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
         this.ratingOrder = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
         this.screenshotOrder = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
         this.textOrder = DefaultConfiguration.getInstance().getConfiguredTextFeedbackOrder();
         this.endpointUrl = DefaultConfiguration.getInstance().getConfiguredEndpointUrl();
     }
+
     private void readFeedbackConfiguration(ISimpleFeedbackConfiguration simpleFeedbackConfiguration) {
-        this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
         this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
         this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
         this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
         this.textOrder = simpleFeedbackConfiguration.getConfiguredTextFeedbackOrder();
     }
+
     private void readFeedbackConfiguration(IFeedbackAudioConfiguration audioConfiguration) {
         this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
         this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
     }
-    private void readFeedbackConfiguration(IFeedbackLabelConfiguration labelConfiguration) {
-        this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-        this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
-        this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
-    }
+
     private void readFeedbackConfiguration(IFeedbackRatingConfiguration ratingConfiguration) {
         this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
         this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
@@ -163,10 +161,12 @@ public class LocalConfigurationBean implements Serializable {
         this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
         this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
     }
+
     private void readFeedbackConfiguration(IFeedbackScreenshotConfiguration screenshotConfiguration) {
         this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
         this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
     }
+
     private void readFeedbackConfiguration(IFeedbackTextConfiguration textConfiguration) {
         this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
         this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
@@ -174,6 +174,7 @@ public class LocalConfigurationBean implements Serializable {
         this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
         this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
     }
+
     private void readFeedbackConfiguration(IFeedbackTitleAndTagConfiguration titleAndTagConfiguration) {
         this.minTitleLength = titleAndTagConfiguration.getConfiguredMinTitleLength();
         this.maxTitleLength = titleAndTagConfiguration.getConfiguredMaxTitleLength();
@@ -183,6 +184,7 @@ public class LocalConfigurationBean implements Serializable {
         this.maxTagNumber = titleAndTagConfiguration.getConfiguredMaxTagNumber();
         this.maxTagRecommendationNumber = titleAndTagConfiguration.getConfiguredMaxTagRecommendationNumber();
     }
+
     private void readFeedbackConfiguration(IFeedbackSettingsConfiguration feedbackSettingsConfiguration) {
         this.minUserNameLength = feedbackSettingsConfiguration.getConfiguredMinUserNameLength();
         this.maxUserNameLength = feedbackSettingsConfiguration.getConfiguredMaxUserNameLength();
@@ -192,18 +194,22 @@ public class LocalConfigurationBean implements Serializable {
         this.maxReportLength = feedbackSettingsConfiguration.getConfiguredMaxReportLength();
         this.reportEnabled = feedbackSettingsConfiguration.getConfiguredReportEnabled();
     }
+
     private void readFeedbackConfiguration(IFeedbackBehaviorConfiguration configuration) {
         this.pullIntervalMinutes = configuration.getConfiguredPullIntervalMinutes();
     }
+
     private void readFeedbackConfiguration(IFeedbackDeveloperConfiguration configuration) {
         this.isDeveloper = configuration.isDeveloper();
     }
+
     private void readFeedbackConfiguration(IFeedbackEndpointConfiguration configuration) {
         this.endpointUrl = configuration.getConfiguredEndpointUrl();
     }
+
     private void readFeedbackConfiguration(IFeedbackStyleConfiguration configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
-        coloringVertical =true;
+        isColoringVertical = true;
         if (style == DARK) {
             topColors = new Integer[]{
                     ANTHRACITE_DARK, GRAY_DARK, GRAY
@@ -225,12 +231,12 @@ public class LocalConfigurationBean implements Serializable {
                     AUSTRIA_RED, WHITE, AUSTRIA_RED
             };
         } else if (style == FRANCE) {
-            coloringVertical = false;
+            isColoringVertical = false;
             topColors = new Integer[]{
                     FRANCE_BLUE, WHITE, FRANCE_RED
             };
         } else if (style == ITALY) {
-            coloringVertical = false;
+            isColoringVertical = false;
             topColors = new Integer[]{
                     ITALY_GREEN, WHITE, ITALY_RED
             };
@@ -240,7 +246,7 @@ public class LocalConfigurationBean implements Serializable {
             };
         } else if (style == WINDOWS95) {
             topColors = new Integer[]{
-                    WIN95_GRAY,WIN95_BLUE,WHITE
+                    WIN95_GRAY, WIN95_BLUE, WHITE
             };
         }
     }
@@ -412,7 +418,15 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     public boolean isColoringVertical() {
-        return coloringVertical;
+        return isColoringVertical;
+    }
+
+    public String getRepositoryLogin() {
+        return repositoryLogin;
+    }
+
+    public String getRepositoryPass() {
+        return repositoryPass;
     }
 
     public int getMinReportLength() {

@@ -1,15 +1,17 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.DialogInterface.OnClickListener;
 import android.annotation.SuppressLint;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.*;
-import android.view.*;
+import android.text.Html;
+import android.text.InputFilter;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.*;
 
 import java.util.List;
@@ -17,17 +19,15 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
 import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
@@ -48,7 +48,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +85,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getRepositoryLogin(), configuration.getRepositoryPass()));
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -152,7 +152,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            Utils.persistScreenshot(this, cachedScreenshot);
+            ConfigurationUtility.execStoreStateToDatabase(this, configuration);
+            ImageUtility.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
@@ -216,13 +217,13 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
                             //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
-                            nameInputText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
                             )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
-                                    .withMessage(getString(R.string.hub_access_2_description,configuration.getMinUserNameLength(),configuration.getMaxUserNameLength()))
+                                    .withMessage(getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {
@@ -248,7 +249,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 if (tapCounter >= 5 && ACTIVE.check(this)) {
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, null);
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, false);
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, false);
                     List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN);
                     List<LocalFeedbackBean> subscribedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(SUBSCRIBED);
                     List<LocalFeedbackBean> votedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(VOTED);
@@ -379,7 +380,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 if (response instanceof AndroidUser) {
                     AndroidUser androidUser = (AndroidUser) response;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, androidUser.isDeveloper());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_BLOCKED, androidUser.isBlocked());
                     userName = androidUser.getName();
                 }
                 preAllocatedStringStorage[0] = null;
@@ -396,7 +399,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
-                //FIXME [jfo] remove block as soon as possible
+                //FIXME [jfo] remove block with F2FA-80
                 FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
                 FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
                 FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());

@@ -4,15 +4,13 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.Gravity;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.*;
 
+import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
 public class SubscriptionListItem extends AbstractSettingsListItem implements IFeedbackServiceEventListener {
@@ -60,24 +58,24 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        if (eventType == EventType.CREATE_FEEDBACK_SUBSCRIPTION_MOCK) {
+        if (BuildConfig.DEBUG && eventType == EventType.CREATE_SUBSCRIPTION) {
             if (((LocalFeedbackState) response).isSubscribed()) {
                 Toast.makeText(getContext(), "Subscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             }
-            RepositoryStub.sendSubscriptionChange(getContext(), new FeedbackBean.Builder().fromLocalFeedbackBean(getContext(),getFeedbackBean()), ((LocalFeedbackState) response).isSubscribed());
         }
+        //TODO [jfo] real implementation
     }
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        //TODO [jfo] implement
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        //TODO [jfo] implement
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
     @Override

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.uzh.supersede.feedbacklibrary">
+    package="ch.uzh.supersede.feedbacklibrary"
+    android:largeHeap="true">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"
@@ -18,12 +20,12 @@
         <activity
             android:name=".activities.AnnotateImageActivity"
             android:label="@string/annotate_image_activity"
-            android:theme="@style/AppTheme.FeedbackLibrary"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FeedbackLibrary" />
         <activity
             android:name=".activities.FeedbackHubActivity"
-            android:theme="@style/AppTheme.FeedbackLibrary"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FeedbackLibrary" />
         <activity
             android:name=".activities.FeedbackActivity"
             android:launchMode="singleInstance"
@@ -32,31 +34,54 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackListActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackIdentityActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackDetailsDeveloperActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackSettingsActivity"
-            android:theme="@style/AppTheme.FeedbackLibrary"
-            android:screenOrientation="portrait" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FeedbackLibrary" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
+        <service android:name=".services.NotificationService" />
+
+        <receiver
+            android:name="ch.uzh.supersede.feedbacklibrary.services.NotificationServiceShutdownReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="@string/notification_service_shutdown" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="ch.uzh.supersede.feedbacklibrary.services.BootCompletedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

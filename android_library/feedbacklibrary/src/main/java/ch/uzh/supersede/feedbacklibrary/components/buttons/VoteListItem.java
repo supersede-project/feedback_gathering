@@ -2,22 +2,20 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackVoteBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
 public class VoteListItem extends AbstractSettingsListItem {
+
+    public VoteListItem(Context context) {
+        super(context);
+    }
 
     public VoteListItem(Context context, int visibleTiles, LocalFeedbackBean localFeedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context, visibleTiles, localFeedbackBean, configuration, backgroundColor);
@@ -40,10 +38,10 @@ public class VoteListItem extends AbstractSettingsListItem {
         imageView.setLayoutParams(layoutParams);
 
         if (localFeedbackBean.getVoted() > 0) {
-            imageView.setImageResource(R.drawable.ic_thumb_up_black_48dp);
+            imageView.setImageResource(R.drawable.ic_vote_up);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
-        } else if (localFeedbackBean.getVoted() < 0){
-            imageView.setImageResource(R.drawable.ic_thumb_down_black_48dp);
+        } else if (localFeedbackBean.getVoted() < 0) {
+            imageView.setImageResource(R.drawable.ic_vote_down);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         }
 
@@ -54,7 +52,7 @@ public class VoteListItem extends AbstractSettingsListItem {
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof VoteListItem){
+        if (o instanceof VoteListItem) {
             long comparedTimestamp = ((VoteListItem) o).getFeedbackBean().getCreationDate();
             return comparedTimestamp > getFeedbackBean().getCreationDate() ? 1 : comparedTimestamp == getFeedbackBean().getCreationDate() ? 0 : -1;
         }

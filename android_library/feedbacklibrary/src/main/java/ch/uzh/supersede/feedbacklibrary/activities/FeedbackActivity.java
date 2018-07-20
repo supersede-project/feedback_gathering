@@ -34,7 +34,6 @@ import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.utils.VersionUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.FEEDBACK_ACTIVITY_TAG;
@@ -128,20 +127,19 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                 .withText()
                 .withScreenshot()
                 .withAudio()
-                .withCategory()
                 .build(feedbackPartViews).getFeedbackParts();
 
     }
 
     private void execPrepareAndSendFeedback() {
-        Bitmap screenshot = Utils.loadAnnotatedImageFromDatabase(this);
-        screenshot = screenshot != null ? screenshot : Utils.loadImageFromDatabase(this);
+        Bitmap screenshot = ImageUtility.loadAnnotatedImageFromDatabase(this);
+        screenshot = screenshot != null ? screenshot : ImageUtility.loadImageFromDatabase(this);
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
 
         feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
         FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
-        Utils.wipeImages(this);
+        ImageUtility.wipeImages(this);
     }
 
     @Override
@@ -209,8 +207,8 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                 String tempPicturePath = cursor.getString(columnIndex);
                 cursor.close();
                 Bitmap tempPictureBitmap = BitmapFactory.decodeFile(tempPicturePath);
-                Utils.wipeImages(this);
-                Utils.storeImageToDatabase(this, tempPictureBitmap);
+                ImageUtility.wipeImages(this);
+                ImageUtility.storeImageToDatabase(this, tempPictureBitmap);
                 screenshotFeedbackView.refreshPreview(this);
             }
         }

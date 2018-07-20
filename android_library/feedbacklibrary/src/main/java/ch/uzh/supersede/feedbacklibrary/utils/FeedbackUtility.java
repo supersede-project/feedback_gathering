@@ -48,6 +48,27 @@ public class FeedbackUtility {
         return null;
     }
 
+    /**
+     * Transforms List<Feedback> to List<FeedbackDetailsBean>.
+     *
+     * @param response Object of a Retrofit2 response, presumably a List<Feedback>
+     * @param context  Context or activity
+     * @return transformed List<Feedback> to List<FeedbackDetailsBean>
+     */
+    @SuppressWarnings("unchecked")
+    public static List<FeedbackDetailsBean> transformFeedbackResponse(Object response, Context context) {
+        List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
+        if (response instanceof List) {
+            for (Feedback feedback : (List<Feedback>) response) {
+                FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+                if (feedbackDetailsBean != null) { //Avoid NP caused by old Repository Feedback
+                    feedbackDetailsBeans.add(feedbackDetailsBean);
+                }
+            }
+        }
+        return feedbackDetailsBeans;
+    }
+
     public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback) {
         int minUpVotes = 0; // TODO not yet implemented
         int maxUpVotes = 10; // TODO not yet implemented
@@ -67,9 +88,9 @@ public class FeedbackUtility {
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
         Bitmap bitmap = null;
-        if (ACTIVE.check(context)){
-            bitmap = Utils.loadAnnotatedImageFromDatabase(context);
-            bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
+        if (ACTIVE.check(context)) {
+            bitmap = ImageUtility.loadAnnotatedImageFromDatabase(context);
+            bitmap = bitmap != null ? bitmap : ImageUtility.loadImageFromDatabase(context);
         }
 
         String title = feedback.getTitle();
@@ -103,8 +124,7 @@ public class FeedbackUtility {
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
-                .withBitmapName(bitmap)
-                .withBitmapName(imageName)
+                .withBitmap(bitmap)
                 .build();
     }
 }

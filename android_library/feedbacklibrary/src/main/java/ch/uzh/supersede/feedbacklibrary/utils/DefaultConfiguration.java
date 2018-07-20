@@ -1,13 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import android.app.Activity;
-import android.content.*;
-
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 
 public class DefaultConfiguration implements
         IFeedbackBehaviorConfiguration,
@@ -15,12 +8,11 @@ public class DefaultConfiguration implements
         IFeedbackSettingsConfiguration,
         IFeedbackDeveloperConfiguration,
         IFeedbackAudioConfiguration,
-        IFeedbackLabelConfiguration,
         IFeedbackRatingConfiguration,
         IFeedbackScreenshotConfiguration,
         IFeedbackTextConfiguration,
         IFeedbackTitleAndTagConfiguration,
-        IFeedbackEndpointConfiguration{
+        IFeedbackEndpointConfiguration {
     private static DefaultConfiguration defaultConfiguration;
 
     private DefaultConfiguration() {
@@ -34,12 +26,6 @@ public class DefaultConfiguration implements
     }
 
     //ORDERS
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return -1;
-    }
-
     @Override
     public int getConfiguredRatingFeedbackOrder() {
         return 1;
@@ -63,6 +49,16 @@ public class DefaultConfiguration implements
     @Override
     public boolean isDeveloper() {
         return false;
+    }
+
+    @Override
+    public String getConfiguredRepositoryLogin() {
+        return "admin";
+    }
+
+    @Override
+    public String getConfiguredRepositoryPassword() {
+        return "password";
     }
 
     @Override
@@ -146,16 +142,6 @@ public class DefaultConfiguration implements
     }
 
     @Override
-    public int getConfiguredLabelFeedbackMaxCount() {
-        return 5;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackMinCount() {
-        return 2;
-    }
-
-    @Override
     public String getConfiguredRatingFeedbackTitle() {
         return "Please select a Rating";
     }
@@ -202,7 +188,7 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 0;
+        return 5;
     }
 
     @Override
@@ -210,12 +196,4 @@ public class DefaultConfiguration implements
         return "https://platform.supersede.eu:8443/";
     }
 
-    public static class DefaultConfigurationUtility {
-        public static LocalConfigurationBean getConfigurationFromActivity(Activity activity){
-            return getConfigurationFromIntent(activity.getIntent());
-        }
-        public static LocalConfigurationBean getConfigurationFromIntent(Intent intent){
-            return (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
-        }
-    }
 }

@@ -4,10 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 
-import java.io.File;
 import java.io.Serializable;
-
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 /**
  * Base class of feedback which need to be sent as multipart such as audio or screenshot.
