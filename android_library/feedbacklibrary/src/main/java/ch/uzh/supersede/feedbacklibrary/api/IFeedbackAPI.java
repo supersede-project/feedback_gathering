@@ -66,12 +66,12 @@ public interface IFeedbackAPI {
 
     // Does not exist in current repo version on server
     @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
-    Call<FeedbackResponse> getFeedbackResponseList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long
+    Call<FeedbackResponse> createFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long
             feedbackId, @Body FeedbackResponse body);
 
     // Does not exist in current repo version on server
     @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses/{responseId}")
-    Call<List<FeedbackResponse>> getFeedbackResponseList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
+    void deleteFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
             long feedbackId, @Path("responseId") long responseId);
 
     // Does not exist in current repo version on server
@@ -83,4 +83,7 @@ public interface IFeedbackAPI {
     Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
             FeedbackVote body);
 
+    //Retrieves a specific Screenshot/Image
+    @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name_ext}")
+    Call<ResponseBody> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
 }

@@ -21,6 +21,7 @@ public class FeedbackDetailsBean implements Serializable {
     private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
     private FeedbackBean feedbackBean;
     private byte[] bitmapBytes;
+    private String bitmapName;
 
     private FeedbackDetailsBean() {
     }
@@ -34,6 +35,7 @@ public class FeedbackDetailsBean implements Serializable {
         private FEEDBACK_STATUS feedbackStatus;
         private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
         private byte[] bitmap;
+        private String bitmapName;
         private FeedbackBean feedbackBean;
 
         public Builder() {
@@ -80,8 +82,13 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withBitmap(Bitmap bitmap) {
+        public Builder withBitmapName(Bitmap bitmap) {
             this.bitmap = ImageUtility.imageToBytes(bitmap);
+            return this;
+        }
+
+        public Builder withBitmapName(String bitmapName) {
+            this.bitmapName = bitmapName;
             return this;
         }
 
@@ -97,6 +104,7 @@ public class FeedbackDetailsBean implements Serializable {
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
                 bean.bitmapBytes = this.bitmap;
+                bean.bitmapName = this.bitmapName;
                 return bean;
             }
             return null;
@@ -151,5 +159,7 @@ public class FeedbackDetailsBean implements Serializable {
         return ImageUtility.bytesToImage(bitmapBytes);
     }
 
-
+    public String getBitmapName() {
+        return bitmapName;
+    }
 }

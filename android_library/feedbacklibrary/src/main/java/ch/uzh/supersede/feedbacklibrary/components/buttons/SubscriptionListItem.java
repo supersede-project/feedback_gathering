@@ -6,18 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Gravity;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackState;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
 public class SubscriptionListItem extends AbstractSettingsListItem implements IFeedbackServiceEventListener {
@@ -53,8 +46,10 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
         toggle.getTrackDrawable().setColorFilter(getForegroundColor(), PorterDuff.Mode.MULTIPLY);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                FeedbackService.getInstance(context).createSubscription(getListener(), context, RepositoryStub.getFeedback(context, feedbackBean), isChecked);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isSubscribed) {
+                FeedbackBean feedback = RepositoryStub.getFeedback(context, feedbackBean);
+                RepositoryStub.sendSubscriptionChange(context, feedback, isSubscribed);
+                FeedbackService.getInstance(context).createSubscription(getListener(), feedback, isSubscribed);
             }
         });
 

@@ -17,20 +17,21 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ONLINE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -61,7 +62,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         ContentFrameLayout rootLayout = getView(R.id.list_root, ContentFrameLayout.class);
         rootLayout.addView(loadingTextView);
 
-        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION, false);
+        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION,false);
 
         scrollListLayout = getView(R.id.list_layout_scroll, LinearLayout.class);
         myButton = setOnClickListener(getView(R.id.list_button_mine, Button.class));
@@ -88,7 +89,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                 getView(R.id.list_layout_color_3, LinearLayout.class),
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
-        colorViews(2, getView(R.id.list_root, ContentFrameLayout.class));
+        colorViews(2,getView(R.id.list_root,ContentFrameLayout.class));
         onPostCreate();
     }
 
@@ -97,11 +98,11 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         super.onResume();
         allFeedbackList.clear();
         loadingTextView.setVisibility(View.VISIBLE);
-        if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
+        if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)){
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getFeedbackList(this, this);
-        } else {
-            FeedbackService.getInstance(this).getFeedbackList(this, this);
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this, configuration, getTopColor(0));
+        }else{
+            FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
         }
         doSearch(searchText.getText().toString());
         sort();
@@ -111,24 +112,24 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
-                List<FeedbackDetailsBean> feedbackDetailsBeans = FeedbackUtility.transformFeedbackResponse(response, this);
-                for (FeedbackDetailsBean feedbackDetailsBean : feedbackDetailsBeans) {
-                    allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
+                if (response instanceof List) {
+                    List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
+                    for (Feedback feedback : (List<Feedback>) response) {
+                        FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+                        if (feedbackDetailsBean != null){ //Avoid NP caused by old Repository Feedback
+                            feedbackDetailsBeans.add(feedbackDetailsBean);
+                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
+                        }
+                    }
+                    activeFeedbackList = new ArrayList<>(allFeedbackList);
+                    doSearch(searchText.getText().toString());
+                    loadingTextView.setVisibility(View.INVISIBLE);
+                    sort();
                 }
-                activeFeedbackList = new ArrayList<>(allFeedbackList);
-                doSearch(searchText.getText().toString());
-                loadingTextView.setVisibility(View.INVISIBLE);
-                sort();
                 break;
             case GET_FEEDBACK_LIST_MOCK:
                 if (response instanceof ArrayList) {
-                    allFeedbackList = new ArrayList<>();
-                    for (FeedbackBean bean : RepositoryStub.getFeedback(this, 50, -30, 50, 0.1f)) {
-                        if (bean != null) {
-                            FeedbackListItem listItem = new FeedbackListItem(this, 8, bean, configuration, 0);
-                            allFeedbackList.add(listItem);
-                        }
-                    }
+                    allFeedbackList = (ArrayList<FeedbackListItem>) response;
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(searchText.getText().toString());
                     loadingTextView.setVisibility(View.INVISIBLE);
@@ -142,15 +143,15 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        super.onEventFailed(eventType, response);
+        super.onEventFailed(eventType,response);
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 loadingTextView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), R.string.list_alert_event, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
                 break;
             case GET_FEEDBACK_LIST_MOCK:
                 loadingTextView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), R.string.list_alert_event, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -163,11 +164,11 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 loadingTextView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), R.string.list_alert_server, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
                 break;
             case GET_FEEDBACK_LIST_MOCK:
                 loadingTextView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), R.string.list_alert_server, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -249,9 +250,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
 
     private void doSearch(String s) {
         activeFeedbackList.clear();
-        if (sorting == MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase
-                .getInstance(getApplicationContext())
-                .readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4) {
+        if (sorting==MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER,false) && VersionUtility.getDateVersion()>=4){
             addDeveloperContext();
             sort();
             return;

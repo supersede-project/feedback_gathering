@@ -3,16 +3,21 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -72,6 +77,10 @@ public class FeedbackUtility {
         int responses = 0; // TODO not yet implemented
 
         String description = null;
+        String imageName = null;
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()){
+            imageName = feedback.getScreenshotFeedbackList().get(0).getPath();
+        }
 
         if (!feedback.getTextFeedbackList().isEmpty()) {
             description = feedback.getTextFeedbackList().get(0).getText();
@@ -86,9 +95,11 @@ public class FeedbackUtility {
 
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
-        //TODO: Dani, we need title & tags, workaround for release 2
-        if (title == null || title.length() == 0) {
-            title = "#Dummy-Title# " + GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        //TODO: Dani, we need title & tags, workaround for release 4
+        if (title == null || title.length() == 0){
+            title = "#Dummy-Title#"+(imageName!=null?"* ":" ")+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        }else{
+            title = title +(imageName!=null?"* ":" ");
         }
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedback.getId())
@@ -102,7 +113,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        if (feedbackBean == null) {
+        if (feedbackBean == null){
             return null; //Avoid NP caused by old Feedback on the Repository
         }
         return new FeedbackDetailsBean.Builder()

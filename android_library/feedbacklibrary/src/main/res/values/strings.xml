@@ -145,6 +145,8 @@
     <string name="details_report_error_empty">Description empty!</string>
     <string name="details_report_error_short">Description too short!</string>
     <string name="details_report_error_long">Description too long!</string>
+    <string name="details_response_sent">Response sent, Thank you!</string>
+    <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
     <!--DetailsDeveloper-->
     <string name="details_developer_award_karma">Award Karma</string>
     <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>

@@ -8,8 +8,7 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
-import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
@@ -23,8 +22,8 @@ public class RepositoryStub {
     private RepositoryStub() {
     }
 
-    public static List<FeedbackBean> getFeedback(Context context, int count, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
-        List<FeedbackBean> feedbackBeans = PersistentDataSingleton.getInstance().getPersistedFeedback();
+    public static List<FeedbackDetailsBean> getFeedback(Context context, int count, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
+        List<FeedbackDetailsBean> feedbackBeans = PersistentDataSingleton.getInstance().getPersistedFeedback();
         if (!feedbackBeans.isEmpty()){
             return feedbackBeans; //Already loaded once, in place for offline usage
         }
@@ -34,11 +33,11 @@ public class RepositoryStub {
                 ownFeedbackPercent = 0; //if own feedback exists, dont create artificial ones
             }
             for (LocalFeedbackBean bean : ownFeedbackBeans){
-                feedbackBeans.add(new FeedbackBean.Builder().fromLocalFeedbackBean(context,bean));
+                feedbackBeans.add(getFeedbackDetails(context,new FeedbackBean.Builder().fromLocalFeedbackBean(context,bean)));
             }
         }
         for (int f = 0; f < count; f++) {
-            feedbackBeans.add(getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent));
+            feedbackBeans.add(getFeedbackDetails(context,getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent)));
         }
         PersistentDataSingleton.getInstance().persistFeedbackBeans(feedbackBeans);
         return feedbackBeans;
