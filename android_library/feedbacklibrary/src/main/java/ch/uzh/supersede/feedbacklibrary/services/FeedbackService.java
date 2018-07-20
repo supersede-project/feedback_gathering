@@ -332,13 +332,13 @@ public abstract class FeedbackService {
 
         @Override
         public void pingRepository(IFeedbackServiceEventListener callback) {
-            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, false);
+            callback.onEventCompleted(PING_REPOSITORY, false);
         }
 
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
             RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
-            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, false);
+            callback.onEventCompleted(CREATE_FEEDBACK_STATUS_UPDATE, false);
         }
 
         @Override
