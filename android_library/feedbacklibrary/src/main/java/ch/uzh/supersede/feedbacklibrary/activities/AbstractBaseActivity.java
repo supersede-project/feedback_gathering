@@ -58,6 +58,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         screenWidth = displayMetrics.widthPixels;
         configuration = ConfigurationUtility.getConfigurationFromActivity(this);
         infoUtility = new InfoUtility(screenWidth, screenHeight);
+
+        if (configuration == null) {
+            configuration = ConfigurationUtility.getConfigurationFromDatabase(this);
+        }
         getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
     }
