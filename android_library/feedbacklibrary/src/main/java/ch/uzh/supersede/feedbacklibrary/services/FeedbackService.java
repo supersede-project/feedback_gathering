@@ -130,9 +130,13 @@ public abstract class FeedbackService {
 
     public abstract void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
-    public abstract void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report);
+    public abstract void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report);
 
-    public abstract void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean);
+    public abstract void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
+
+    public abstract void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
+
+    public abstract void getFeedbacktTags(IFeedbackServiceEventListener callback);
 
     private static class FeedbackApiService extends FeedbackService {
 
@@ -206,7 +210,7 @@ public abstract class FeedbackService {
         @Override
         public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
             RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
-            callback.onEventCompleted(CREATE_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
+            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION_MOCK, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
         }
 
         @Override
@@ -219,7 +223,7 @@ public abstract class FeedbackService {
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback,FeedbackDetailsBean feedbackDetailsBean, Object item) {
             if (item instanceof String){
-                //TODO: mbo implement real
+                //TODO: mbo implement
             }
         }
 
@@ -229,14 +233,27 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report) {
+        public void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report) {
             //TODO: mbo implement
         }
 
         @Override
-        public void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
+        public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             //TODO: mbo implement
         }
+
+        @Override
+        public void getFeedbacktTags(IFeedbackServiceEventListener callback) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
+            feedbackAPI.getFeedbackImage(getToken(), getLanguage(), getApplicationId(),feedbackDetailsBean.getBitmapName()).enqueue(
+                    new RepositoryCallback<byte[]>(callback, EventType.GET_FEEDBACK_IMAGE) {
+                    });
+        }
+
     }
 
     private static class FeedbackMockService extends FeedbackService {
@@ -291,18 +308,18 @@ public abstract class FeedbackService {
         @Override
         public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
             RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
-            callback.onEventCompleted(CREATE_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
+            callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
         }
 
         @Override
         public void pingRepository(IFeedbackServiceEventListener callback) {
-            //TODO: mbo implement
+            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, false);
         }
 
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
             RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
-            //TODO: mbo implement
+            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, false);
         }
 
         @Override
@@ -312,13 +329,24 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report) {
+        public void reportFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String report) {
             //TODO: mbo implement
         }
 
         @Override
-        public void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
+        public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             //TODO: mbo implement
         }
+
+        @Override
+        public void getFeedbacktTags(IFeedbackServiceEventListener callback) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
+            callback.onEventCompleted(GET_FEEDBACK_IMAGE_MOCK, false);
+        }
+
     }
 }

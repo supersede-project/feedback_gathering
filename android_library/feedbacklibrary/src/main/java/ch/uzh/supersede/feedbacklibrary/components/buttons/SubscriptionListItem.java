@@ -10,10 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackState;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
@@ -61,14 +58,14 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        if (BuildConfig.DEBUG && eventType == EventType.CREATE_SUBSCRIPTION) {
+        if (eventType == EventType.CREATE_FEEDBACK_SUBSCRIPTION_MOCK) {
             if (((LocalFeedbackState) response).isSubscribed()) {
                 Toast.makeText(getContext(), "Subscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             }
+            RepositoryStub.sendSubscriptionChange(getContext(), new FeedbackBean.Builder().fromLocalFeedbackBean(getContext(),getFeedbackBean()), ((LocalFeedbackState) response).isSubscribed());
         }
-        //TODO [jfo] real implementation
     }
 
     @Override

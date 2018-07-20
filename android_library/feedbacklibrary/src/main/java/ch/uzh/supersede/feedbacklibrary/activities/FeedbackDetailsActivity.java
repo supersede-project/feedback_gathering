@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
 import android.content.*;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -17,7 +18,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
@@ -29,7 +30,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsActivity extends AbstractBaseActivity {
+public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     public static RESPONSE_MODE mode = READING;
     private FeedbackDetailsBean feedbackDetailsBean;
     private LocalFeedbackState feedbackState;
@@ -168,21 +169,11 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     .withoutCancel()
                     .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getTags())).buildAndShow();
         }else if (view.getId() == imageButton.getId()) {
-            final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
-            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
-            imageView.setImageBitmap(feedbackDetailsBean.getBitmap());
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    builder.dismiss();
-                }
-            });
-            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            builder.show();
+            if (feedbackDetailsBean.getBitmap() != null) { // Own, just created Feedback
+                showImageDialog(feedbackDetailsBean.getBitmap());
+            } else {
+                FeedbackService.getInstance(getApplicationContext()).getFeedbackImage(FeedbackDetailsActivity.this,feedbackDetailsBean);
+            }
         }else if (view.getId() == upButton.getId()) {
             RepositoryStub.sendUpVote(this, feedbackDetailsBean.getFeedbackBean());
             votesText.setText(feedbackDetailsBean.getFeedbackBean().upVote());
@@ -204,7 +195,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     makePublicButton.setVisibility(View.INVISIBLE);
-                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(feedbackDetailsBean);
+                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(FeedbackDetailsActivity.this,feedbackDetailsBean);
                     Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
                     dialog.cancel();
                 }
@@ -227,7 +218,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     } else if (report.length() > configuration.getMaxReportLength()) {
                         Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
                     } else {
-                        FeedbackService.getInstance(getApplicationContext()).reportFeedback(feedbackDetailsBean, report);
+                        FeedbackService.getInstance(getApplicationContext()).reportFeedback(FeedbackDetailsActivity.this, feedbackDetailsBean, report);
                         Toast.makeText(FeedbackDetailsActivity.this,R.string.details_report_sent,Toast.LENGTH_SHORT).show();
                         updateReportStatus(report);
                         dialog.dismiss();
@@ -243,6 +234,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         }
         updateFeedbackState();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -285,6 +277,130 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             if (feedbackDetailsBean.getUserName().equals(FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME,null))){
                 disableViews(reportButton,subscribeButton);
             }
+        }
+    }
+
+    private void showImageDialog(byte[] bitmap) {
+        Bitmap bitmapImage = ImageUtility.bytesToImage(bitmap);
+        if (bitmapImage != null){
+            showImageDialog(bitmapImage);
+        }
+    }
+
+    private void showImageDialog(Bitmap bitmap) {
+        final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
+        imageView.setImageBitmap(bitmap);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.dismiss();
+            }
+        });
+        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        builder.show();
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        super.onEventCompleted(eventType, response);
+        switch (eventType) {
+            case CREATE_FEEDBACK_SUBSCRIPTION:
+                break;
+            case CREATE_FEEDBACK_RESPONSE:
+                break;
+            case CREATE_FEEDBACK_REPORT:
+                break;
+            case CREATE_FEEDBACK_VOTE:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION:
+                break;
+            case GET_FEEDBACK_IMAGE:
+                if (response instanceof byte[]){
+                    showImageDialog((byte[])response);
+                }
+                break;
+            case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
+                break;
+            case CREATE_FEEDBACK_RESPONSE_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                break;
+            case CREATE_FEEDBACK_VOTE_MOCK:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE_MOCK:
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventCompleted(eventType, response);
+        switch (eventType) {
+            case CREATE_FEEDBACK_SUBSCRIPTION:
+                break;
+            case CREATE_FEEDBACK_RESPONSE:
+                break;
+            case CREATE_FEEDBACK_REPORT:
+                break;
+            case CREATE_FEEDBACK_VOTE:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION:
+                break;
+            case GET_FEEDBACK_IMAGE:
+                break;
+            case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
+                break;
+            case CREATE_FEEDBACK_RESPONSE_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                break;
+            case CREATE_FEEDBACK_VOTE_MOCK:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE_MOCK:
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        super.onConnectionFailed(eventType);
+        switch (eventType) {
+            case CREATE_FEEDBACK_SUBSCRIPTION:
+                break;
+            case CREATE_FEEDBACK_RESPONSE:
+                break;
+            case CREATE_FEEDBACK_REPORT:
+                break;
+            case CREATE_FEEDBACK_VOTE:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION:
+                break;
+            case GET_FEEDBACK_IMAGE:
+                break;
+            case CREATE_FEEDBACK_SUBSCRIPTION_MOCK:
+                break;
+            case CREATE_FEEDBACK_RESPONSE_MOCK:
+                break;
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                break;
+            case CREATE_FEEDBACK_VOTE_MOCK:
+                break;
+            case CREATE_FEEDBACK_PUBLICATION_MOCK:
+                break;
+            case GET_FEEDBACK_IMAGE_MOCK:
+                break;
+            default:
         }
     }
 }
