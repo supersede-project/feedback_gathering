@@ -4,7 +4,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.ValueCheck;
 
 @ValueCheck("(getConfiguredLabelFeedbackMaxCount() >= getConfiguredLabelFeedbackMinCount())" +
         "&& (getConfiguredLabelFeedbackMinCount() > 0)")
-public interface ILabelFeedbackConfiguration extends ISimpleFeedbackConfiguration {
+public interface IFeedbackLabelConfiguration extends ISimpleFeedbackConfiguration {
     /** Setting this to -1 will disable Label Feedback.
      * @return Sorting-Order of this Feedback
      */

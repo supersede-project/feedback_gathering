@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
-public interface IAudioFeedbackConfiguration {
+public interface IFeedbackAudioConfiguration {
 
     /** Setting this to -1 will disable Audio Feedback.
      * @return Sorting-Order of this Feedback

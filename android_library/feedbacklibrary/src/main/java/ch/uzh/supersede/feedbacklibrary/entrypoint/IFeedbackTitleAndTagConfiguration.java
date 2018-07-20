@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
-public interface ITitleAndTagFeedbackConfiguration {
+public interface IFeedbackTitleAndTagConfiguration {
 
     int getConfiguredMinTitleLength();
 
