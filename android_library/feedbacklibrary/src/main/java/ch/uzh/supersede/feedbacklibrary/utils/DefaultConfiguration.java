@@ -14,7 +14,6 @@ public class DefaultConfiguration implements
         IFeedbackSettingsConfiguration,
         IFeedbackDeveloperConfiguration,
         IFeedbackAudioConfiguration,
-        IFeedbackLabelConfiguration,
         IFeedbackRatingConfiguration,
         IFeedbackScreenshotConfiguration,
         IFeedbackTextConfiguration,

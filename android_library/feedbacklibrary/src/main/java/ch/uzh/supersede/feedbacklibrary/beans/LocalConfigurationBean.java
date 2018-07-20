@@ -89,9 +89,6 @@ public class LocalConfigurationBean implements Serializable {
         if (activity instanceof IFeedbackEndpointConfiguration) {
             readFeedbackConfiguration((IFeedbackEndpointConfiguration) activity);
         }
-        if (activity instanceof IFeedbackLabelConfiguration) {
-            readFeedbackConfiguration((IFeedbackLabelConfiguration) activity);
-        }
         if (activity instanceof IFeedbackRatingConfiguration) {
             readFeedbackConfiguration((IFeedbackRatingConfiguration) activity);
         }
@@ -115,8 +112,6 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readDefaultConfiguration() {
         this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-        this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-        this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
         this.maxReportLength = DefaultConfiguration.getInstance().getConfiguredMaxReportLength();
         this.maxResponseLength = DefaultConfiguration.getInstance().getConfiguredMaxResponseLength();
         this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
@@ -140,7 +135,6 @@ public class LocalConfigurationBean implements Serializable {
         this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
         this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
         this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
-        this.labelOrder = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackOrder();
         this.audioOrder = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
         this.ratingOrder = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
         this.screenshotOrder = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
@@ -149,7 +143,6 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     private void readFeedbackConfiguration(ISimpleFeedbackConfiguration simpleFeedbackConfiguration) {
-        this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
         this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
         this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
         this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
@@ -159,12 +152,6 @@ public class LocalConfigurationBean implements Serializable {
     private void readFeedbackConfiguration(IFeedbackAudioConfiguration audioConfiguration) {
         this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
         this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
-    }
-
-    private void readFeedbackConfiguration(IFeedbackLabelConfiguration labelConfiguration) {
-        this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-        this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
-        this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
     }
 
     private void readFeedbackConfiguration(IFeedbackRatingConfiguration ratingConfiguration) {

@@ -12,7 +12,7 @@ public class AudioFeedback extends AbstractMultipartFeedback {
 
     public AudioFeedback(LocalConfigurationBean configuration) {
         super(configuration.getAudioOrder());
-        this.maxTime = configuration.getMaxAudioTime();
+        this.maxTime = configuration.getAudioMaxTime();
         setPart("audio");
         setFileExtension("mp3");
     }
