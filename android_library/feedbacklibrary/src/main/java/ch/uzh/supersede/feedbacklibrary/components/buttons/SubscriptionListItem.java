@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.*;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
+import ch.uzh.supersede.feedbacklibrary.*;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
@@ -58,14 +58,13 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        if (BuildConfig.DEBUG && eventType == EventType.CREATE_SUBSCRIPTION) {
+        if (eventType == EventType.CREATE_FEEDBACK_SUBSCRIPTION) {
             if (((LocalFeedbackState) response).isSubscribed()) {
                 Toast.makeText(getContext(), "Subscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
             }
         }
-        //TODO [jfo] real implementation
     }
 
     @Override

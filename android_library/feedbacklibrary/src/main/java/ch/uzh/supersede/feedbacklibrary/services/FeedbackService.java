@@ -120,7 +120,7 @@ public abstract class FeedbackService {
 
     public abstract void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity);
 
-    public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity);
+    public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context activity);
 
     public abstract void createSubscription(IFeedbackServiceEventListener callback, FeedbackBean feedbackBean, boolean isSubscribed);
 
@@ -204,7 +204,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
+        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context activity) {
             //TODO [jfo] add list of SUBSCRIBED feedbackIds as query
             feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
@@ -321,7 +321,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
+        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context activity) {
             callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED));
         }
 

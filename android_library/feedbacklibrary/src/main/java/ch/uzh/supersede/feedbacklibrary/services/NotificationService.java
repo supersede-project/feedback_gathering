@@ -128,7 +128,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             stopSelf();
             return;
         }
-        FeedbackService.getInstance(this).getFeedbackSubscriptions(this, this);
+        FeedbackService.getInstance(this).getFeedbackSubscriptions(this,this);
         FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
     }
 
