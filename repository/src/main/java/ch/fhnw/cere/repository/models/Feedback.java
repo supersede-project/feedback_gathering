@@ -4,6 +4,7 @@ package ch.fhnw.cere.repository.models;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
+import ch.fhnw.cere.repository.models.view.FeedbackView;
 import ch.fhnw.cere.repository.serialization.CustomFeedbackStatusSerializer;
 import ch.fhnw.cere.repository.serialization.CustomTagDeserializer;
 import ch.fhnw.cere.repository.serialization.CustomTagSerializer;
@@ -22,14 +23,20 @@ public class Feedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(FeedbackView.Compact.class)
     private long id;
+    @JsonView(FeedbackView.Compact.class)
     private String title;
+    @JsonView(FeedbackView.Compact.class)
     private String userIdentification;
+    @JsonView(FeedbackView.Compact.class)
     private Date createdAt;
+    @JsonView(FeedbackView.Compact.class)
     private Date updatedAt;
     private long applicationId;
     private long configurationId;
     private String language;
+    @JsonView(FeedbackView.Compact.class)
     private Boolean isPublic = false;
 
     @ManyToOne()
@@ -81,12 +88,15 @@ public class Feedback {
     private List<Status> statuses;
 
     @Transient
+    @JsonView(FeedbackView.Compact.class)
     private int maxVotes;
 
     @Transient
+    @JsonView(FeedbackView.Compact.class)
     private int minVotes;
 
     @Transient
+    @JsonView(FeedbackView.Compact.class)
     private int votes;
 
     @Override

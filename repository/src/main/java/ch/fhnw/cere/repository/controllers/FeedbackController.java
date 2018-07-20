@@ -8,7 +8,9 @@ import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
 import ch.fhnw.cere.repository.integration.MdmFileIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
+import ch.fhnw.cere.repository.models.view.FeedbackView;
 import ch.fhnw.cere.repository.services.*;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -83,6 +85,15 @@ public class FeedbackController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/compact")
+    @JsonView(FeedbackView.Compact.class)
+    public List<Feedback> getApplicationFeedbacksCompact(@RequestParam(value = "view", required = false) String view,
+                                                  @RequestParam(value = "ids", required = false) List<Long> idList,
+                                                  @PathVariable long applicationId) {
+       return getApplicationFeedbacks(view,idList,applicationId);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/full")
     public List<Feedback> getDetailedApplicationFeedbacks(@PathVariable long applicationId) {
         List<Feedback> feedbacks = feedbackService.findByApplicationId(applicationId());
@@ -114,7 +125,7 @@ public class FeedbackController extends BaseController {
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/user_identification/{userIdentification}")
     public List<Feedback> getFeedbacksByUserIdentification(@PathVariable long applicationId, @PathVariable String userIdentification) {
-        return feedbackService.findByUserIdentification(userIdentification);
+        return setMinMaxVotes(feedbackService.findByUserIdentification(userIdentification), applicationId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
