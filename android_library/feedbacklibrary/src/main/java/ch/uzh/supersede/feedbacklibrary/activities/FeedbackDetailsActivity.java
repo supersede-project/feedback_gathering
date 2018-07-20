@@ -2,13 +2,13 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 
 import android.app.Dialog;
-import android.content.*;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ContentFrameLayout;
-import android.text.*;
+import android.text.InputFilter;
 import android.view.*;
 import android.widget.*;
 
@@ -21,13 +21,13 @@ import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListI
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import okhttp3.ResponseBody;
 
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.EDITABLE;
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
+import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -246,7 +246,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
 
     private void persistFeedbackResponseLocally(String feedbackResponse) {
         String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, USER_NAME_ANONYMOUS);
-        boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER, false);
+        boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(USER_IS_DEVELOPER, false);
         boolean isOwner = feedbackDetailsBean.getUserName() != null && feedbackDetailsBean.getUserName().equals(userName);
         FeedbackResponseBean responseBean = RepositoryStub.persist(feedbackDetailsBean.getFeedbackBean(), feedbackResponse, userName, isDeveloper, isOwner);
         FeedbackResponseListItem item = new FeedbackResponseListItem(this, feedbackDetailsBean.getFeedbackBean(), responseBean, configuration,this, FIXED);
@@ -260,9 +260,9 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     public void updateReportStatus(String report){
         if (ACTIVE.check(getApplicationContext())){
             if (report != null){
-                FeedbackDatabase.getInstance(getApplicationContext()).writeString(REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),report);
+                FeedbackDatabase.getInstance(getApplicationContext()).writeString(USER_REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),report);
             }
-            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),null) != null ){
+            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),null) != null ){
                 disableViews(reportButton);
             }
         }

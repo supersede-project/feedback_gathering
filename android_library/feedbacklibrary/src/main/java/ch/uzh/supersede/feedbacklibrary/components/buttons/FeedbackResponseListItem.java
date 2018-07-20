@@ -1,7 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
-import android.app.*;
-import android.content.*;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.*;
@@ -21,9 +21,8 @@ import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.EDITING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackResponseListItem extends LinearLayout implements Comparable {
@@ -44,7 +43,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, IFeedbackServiceEventListener eventListener, RESPONSE_MODE mode) {
         super(context);
         this.eventListener = eventListener;
-        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER,false)&& VersionUtility.getDateVersion()>=4;
+        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER,false)&& VersionUtility.getDateVersion()>=4;
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;
@@ -157,7 +156,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     }
 
     private int resolveTextColor(FeedbackResponseBean feedbackResponseBean) {
-        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
+        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)) {
             return ContextCompat.getColor(getContext(), R.color.gold_2);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
@@ -166,7 +165,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         }
     }
     private int resolveBackgroundColor(FeedbackResponseBean feedbackResponseBean) {
-        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
+        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)) {
             return ContextCompat.getColor(getContext(), R.color.gold_3);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);

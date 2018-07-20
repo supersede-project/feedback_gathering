@@ -19,12 +19,12 @@ import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListI
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.CLOSED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -223,7 +223,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
 
     private void persistFeedbackResponseLocally(String feedbackResponse) {
         String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, USER_NAME_ANONYMOUS);
-        boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER, false);
+        boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(USER_IS_DEVELOPER, false);
         boolean isOwner = activeFeedbackDetailsBean[0].getUserName() != null && activeFeedbackDetailsBean[0].getUserName().equals(userName);
         FeedbackResponseBean responseBean = RepositoryStub.persist(activeFeedbackDetailsBean[0].getFeedbackBean(), feedbackResponse, userName, isDeveloper, isOwner);
         FeedbackResponseListItem item = new FeedbackResponseListItem(this, activeFeedbackDetailsBean[0].getFeedbackBean(), responseBean, configuration,this, FIXED);
