@@ -4,7 +4,7 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
  * Simple interface to activate/deactivate the specific feedbackPart<br>
  * A specific interface will override the corresponding part in this interface
  */
-public interface ISimpleFeedbackConfiguration extends IFeedbackConfiguration {
+public interface ISimpleFeedbackConfiguration {
         /** Setting this to -1 will disable Audio Feedback.
          * @return Sorting-Order of this Feedback
          */

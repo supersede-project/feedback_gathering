@@ -22,7 +22,7 @@ import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -90,8 +90,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
 
     private void startFeedbackDetailsActivity() {
         Intent intent = null;
-        if (ACTIVE.check(getContext()) && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
-            if (VersionUtility.getDateVersion() >= 4) {
+        if (ACTIVE.check(getContext())) {
+            if (VersionUtility.getDateVersion() >= 4 && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER, false)) {
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
             } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);

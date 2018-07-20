@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
-public interface ITextFeedbackConfiguration {
+public interface IFeedbackTextConfiguration {
     /** Setting this to -1 will disable Text Feedback.
      * @return Sorting-Order of this Feedback
      */

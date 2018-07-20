@@ -2,6 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,7 +11,6 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
@@ -59,13 +59,16 @@ public abstract class FeedbackService {
             }
             return mockInstance;
         }
+
         if (apiInstance == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
+            String endpointUrl = PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREFERENCES_ENDPOINT_URL, SHARED_PREFERENCES_ENDPOINT_URL_FALLBACK);
+
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(SUPERSEDE_BASE_URL)
+                    .baseUrl(endpointUrl)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

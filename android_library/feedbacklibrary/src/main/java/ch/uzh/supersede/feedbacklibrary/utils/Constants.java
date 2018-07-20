@@ -45,6 +45,8 @@ public class Constants {
     public static final String SHARED_PREFERENCES_TUTORIAL_HUB = "hubTutorial";
     public static final String SHARED_PREFERENCES_TUTORIAL_IDENTITY = "identityTutorial";
     public static final String SHARED_PREFERENCES_ONLINE = "isOnline";
+    public static final String SHARED_PREFERENCES_ENDPOINT_URL = "endpointUrl";
+    public static final String SHARED_PREFERENCES_ENDPOINT_URL_FALLBACK = "https://www.google.com";
 
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;

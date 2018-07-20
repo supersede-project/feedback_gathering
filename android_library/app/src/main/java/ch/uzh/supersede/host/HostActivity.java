@@ -3,6 +3,7 @@ package ch.uzh.supersede.host;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,22 +13,23 @@ import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
-public class HostActivity extends AbstractBaseActivity implements
+public class HostActivity extends AppCompatActivity implements
         IFeedbackBehaviorConfiguration,
         IFeedbackStyleConfiguration,
         IFeedbackSettingsConfiguration,
         IFeedbackDeveloperConfiguration,
-        ISimpleFeedbackConfiguration {
+        ISimpleFeedbackConfiguration,
+        IFeedbackEndpointConfiguration{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
-        LinearLayout linearLayout = getView(R.id.root_layout, LinearLayout.class);
-        Button feedbackButton = getView(R.id.button_host_feedback, Button.class);
-        Button dummyButton1 = getView(R.id.button_host_trigger_1, Button.class);
-        Button dummyButton2 = getView(R.id.button_host_trigger_2, Button.class);
-        CoordinatorLayout cLayout = getView(R.id.coordinator_layout, CoordinatorLayout.class);
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.root_layout);
+        Button feedbackButton = (Button)findViewById(R.id.button_host_feedback);
+        Button dummyButton1 = (Button)findViewById(R.id.button_host_trigger_1);
+        Button dummyButton2 = (Button)findViewById(R.id.button_host_trigger_2);
+        CoordinatorLayout cLayout = (CoordinatorLayout)findViewById(R.id.coordinator_layout);
         double primaryColorDouble = ((double) Color.BLACK) * Math.random();
         int primaryColor = (int) primaryColorDouble;
         linearLayout.setBackgroundColor(primaryColor);
@@ -127,5 +129,10 @@ public class HostActivity extends AbstractBaseActivity implements
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
         return FEEDBACK_STYLE.DARK;
+    }
+
+    @Override
+    public String getConfiguredEndpointUrl() {
+        return "http://supersede.es.atos.net:8081/";
     }
 }

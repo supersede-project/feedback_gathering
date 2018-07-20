@@ -1,17 +1,25 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 
 public class DefaultConfiguration implements
         IFeedbackBehaviorConfiguration,
         IFeedbackStyleConfiguration,
         IFeedbackSettingsConfiguration,
         IFeedbackDeveloperConfiguration,
-        IAudioFeedbackConfiguration,
-        IRatingFeedbackConfiguration,
-        IScreenshotFeedbackConfiguration,
-        ITextFeedbackConfiguration,
-        ITitleAndTagFeedbackConfiguration {
+        IFeedbackAudioConfiguration,
+        IFeedbackLabelConfiguration,
+        IFeedbackRatingConfiguration,
+        IFeedbackScreenshotConfiguration,
+        IFeedbackTextConfiguration,
+        IFeedbackTitleAndTagConfiguration,
+        IFeedbackEndpointConfiguration {
     private static DefaultConfiguration defaultConfiguration;
 
     private DefaultConfiguration() {
@@ -190,4 +198,18 @@ public class DefaultConfiguration implements
         return 5;
     }
 
+    @Override
+    public String getConfiguredEndpointUrl() {
+        return "https://platform.supersede.eu:8443/";
+    }
+
+    public static class DefaultConfigurationUtility {
+        public static LocalConfigurationBean getConfigurationFromActivity(Activity activity) {
+            return getConfigurationFromIntent(activity.getIntent());
+        }
+
+        public static LocalConfigurationBean getConfigurationFromIntent(Intent intent) {
+            return (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        }
+    }
 }
