@@ -107,12 +107,20 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
+            case GET_MINE_FEEDBACK_VOTES:
+                myFeedbackList.clear();
+                //TODO [jfo]: parse server response
+                break;
             case GET_MINE_FEEDBACK_VOTES_MOCK:
                 myFeedbackList.clear();
                 for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
                     myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
                 Collections.sort(myFeedbackList);
+                break;
+            case GET_OTHERS_FEEDBACK_VOTES:
+                othersFeedbackList.clear();
+                //TODO [jfo]: parse server response
                 break;
             case GET_OTHERS_FEEDBACK_VOTES_MOCK:
                 othersFeedbackList.clear();
@@ -121,7 +129,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 }
                 Collections.sort(othersFeedbackList);
                 break;
-            case GET_FEEDBACK_SUBSCRIPTIONS_MOCK:
+            case GET_LOCAL_FEEDBACK_SUBSCRIPTIONS:
                 settingsFeedbackList.clear();
                 for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
                     settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
@@ -145,7 +153,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     private void execFillFeedbackList() {
         FeedbackService.getInstance(this).getOthersFeedbackVotes(this, this);
         FeedbackService.getInstance(this).getMineFeedbackVotes(this, this);
-        FeedbackService.getInstance(this).getFeedbackSubscriptions(this, this);
+        FeedbackService.getInstance(this).getLocalFeedbackSubscriptions(this, this);
     }
 
     private void execStartNotificationService(boolean isEnabled) {
