@@ -12,7 +12,6 @@ import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackUtility {
     private FeedbackUtility() {
@@ -62,6 +61,18 @@ public class FeedbackUtility {
         return feedbackDetailsBeans;
     }
 
+    public static String getIds(List<LocalFeedbackBean> feedbackBeans) {
+        if (feedbackBeans.isEmpty()) {
+            return null;
+        }
+
+        long[] ids = new long[feedbackBeans.size()];
+        for (int i = 0; i < feedbackBeans.size(); i++) {
+            ids[1] = feedbackBeans.get(i).getFeedbackId();
+        }
+        return StringUtility.join(ids, ",");
+    }
+
     public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback) {
         int minUpVotes = 0; // TODO not yet implemented
         int maxUpVotes = 10; // TODO not yet implemented
@@ -80,10 +91,11 @@ public class FeedbackUtility {
         }
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
-        Bitmap bitmap = null;
-        if (ACTIVE.check(context)) {
-            bitmap = ImageUtility.loadAnnotatedImageFromDatabase(context);
-            bitmap = bitmap != null ? bitmap : ImageUtility.loadImageFromDatabase(context);
+        Bitmap bitmap = null; //TODO bitmap
+        String bitmapName = null;
+
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
+            bitmapName = feedback.getScreenshotFeedbackList().get(0).getPath();
         }
 
         String title = feedback.getTitle();
@@ -118,6 +130,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmap(bitmap)
+                .withBitmapName(bitmapName)
                 .build();
     }
 }

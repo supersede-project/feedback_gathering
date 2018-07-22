@@ -25,6 +25,7 @@ public class FeedbackBean implements Serializable {
     private int responses;
     private FEEDBACK_STATUS feedbackStatus;
     private boolean isPublic;
+    private String bitmapName;
 
     private FeedbackBean() {
     }
@@ -202,5 +203,9 @@ public class FeedbackBean implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public String getBitmapName() {
+        return bitmapName;
     }
 }
