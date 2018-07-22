@@ -111,7 +111,7 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public String getConfiguredRepositoryLogin() {
-        return "super_admin";
+        return "admin";
     }
 
     @Override
@@ -133,6 +133,6 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public String getConfiguredEndpointUrl() {
-        return "http://supersede.es.atos.net:8081/";
+        return "http://mt.ronnieschaniel.com:8080/feedback_repository/";
     }
 }
