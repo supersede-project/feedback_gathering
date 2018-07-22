@@ -92,6 +92,11 @@ public class FeedbackUtility {
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
         Bitmap bitmap = null; //TODO bitmap
+        String bitmapName = null;
+
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
+            bitmapName = feedback.getScreenshotFeedbackList().get(0).getPath();
+        }
 
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
@@ -125,6 +130,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmap(bitmap)
+                .withBitmapName(bitmapName)
                 .build();
     }
 }
