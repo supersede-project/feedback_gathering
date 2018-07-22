@@ -32,4 +32,46 @@ public class StringUtility {
         }
         return finalString.substring(0, finalString.lastIndexOf(delimiter));
     }
+
+    public static String join(long[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(int[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(char[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(boolean[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(double[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(float[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    public static String join(short[] array, String separator) {
+        return join(ObjectUtility.asList(array), separator);
+    }
+
+    private static <T> String join(List<T> items, String separator){
+        StringBuilder sb = new StringBuilder();
+        if (items.size() > 1) {
+            for (int i = 0; i < items.size() - 1; i++) {
+                sb.append(items.get(i));
+                sb.append(separator);
+            }
+        }
+        if (!items.isEmpty()){
+            sb.append(items.get(items.size() - 1));
+        }
+        return sb.toString();
+    }
 }

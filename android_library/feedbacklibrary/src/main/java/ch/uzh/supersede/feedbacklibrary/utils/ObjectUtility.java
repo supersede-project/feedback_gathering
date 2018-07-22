@@ -3,6 +3,9 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import android.util.Log;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.AbstractList;
+import java.util.List;
 
 public class ObjectUtility {
 
@@ -59,5 +62,22 @@ public class ObjectUtility {
             }
         }
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> asList(final Object array) {
+        if (!array.getClass().isArray())
+            throw new IllegalArgumentException("Not an array");
+        return new AbstractList<T>() {
+            @Override
+            public T get(int index) {
+                return (T) Array.get(array, index);
+            }
+
+            @Override
+            public int size() {
+                return Array.getLength(array);
+            }
+        };
     }
 }
