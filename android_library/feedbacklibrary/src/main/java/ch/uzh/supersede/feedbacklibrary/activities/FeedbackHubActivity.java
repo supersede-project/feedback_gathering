@@ -140,11 +140,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         restoreHostApplicationNameToPreferences();
     }
 
-    private void authenticateAndStartService(){
-        if (ACTIVE.check(getApplicationContext())) {
-            FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getEndpointLogin(), configuration.getEndpointPass()));
-            ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
-        }
+    private void authenticateAndStartService() {
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getEndpointLogin(), configuration.getEndpointPass()));
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }
 
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
