@@ -77,6 +77,11 @@ public class Enums {
         SUBSCRIPTIONS
     }
 
+    public enum DEVELOPER_VIEW {
+        PRIVATE, REPORTED
+    }
+
+
     public enum DIALOG_TYPE {
         FAVORITE,
         QUICK_EDIT,

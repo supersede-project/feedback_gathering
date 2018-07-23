@@ -119,6 +119,11 @@
     <string name="list_alert_event">Could not process the Event from to the Server.</string>
     <string name="list_alert_server">Could not establish a Connection to the Server.</string>
     <string name="list_alert_user_level">Increase your User-Level to participate!</string>
+    <!--Developer List-->
+    <string name="developer_list_button_private">Private</string>
+    <string name="developer_list_button_reported">Reported</string>
+    <string name="developer_list_button_feature_1">Feature 1</string>
+    <string name="developer_list_button_feature_2">Feature 2</string>
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>

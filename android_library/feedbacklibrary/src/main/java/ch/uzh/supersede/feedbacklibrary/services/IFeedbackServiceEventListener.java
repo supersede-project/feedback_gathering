@@ -9,6 +9,8 @@ public interface IFeedbackServiceEventListener {
         CREATE_FEEDBACK,
         GET_FEEDBACK_LIST,
         GET_FEEDBACK_LIST_MOCK,
+        GET_PRIVATE_FEEDBACK_LIST,
+        GET_REPORTED_FEEDBACK_LIST,
         GET_CONFIGURATION,
         GET_MINE_FEEDBACK_VOTES,
         GET_MINE_FEEDBACK_VOTES_MOCK,
