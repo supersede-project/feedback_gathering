@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
@@ -39,6 +38,11 @@ public class HostActivity extends AppCompatActivity implements
         feedbackButton.setBackgroundColor(secondaryColor);
         dummyButton1.setBackgroundColor(secondaryColor);
         dummyButton2.setBackgroundColor(secondaryColor);
+
+        Integer currentUserKarma = FeedbackConnector.getInstance().getCurrentUserKarma(this);
+        if (currentUserKarma != null) {
+            Toast.makeText(getApplicationContext(), "Karma of current user = " + currentUserKarma, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onFeedbackClicked(View view) {

@@ -165,10 +165,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
             int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
-            int allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL).size();
+            int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
             if (configuration.hasAtLeastNTopColors(2)) {
                 statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
-                        allFeedbackBeans,
+                        userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
                         upVotedFeedbackBeans,
@@ -180,7 +180,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                 0.3)))));
             } else {
                 statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
-                        allFeedbackBeans,
+                        userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
                         upVotedFeedbackBeans,
