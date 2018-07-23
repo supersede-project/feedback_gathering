@@ -5,4 +5,7 @@ public interface IFeedbackEndpointConfiguration {
 
     String getConfiguredEndpointUrl();
 
+    String getConfiguredEndpointLogin();
+
+    String getConfiguredEndpointPassword();
 }

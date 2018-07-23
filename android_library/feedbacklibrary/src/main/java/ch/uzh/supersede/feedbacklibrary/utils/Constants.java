@@ -1,11 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RUNNING_MODE_TYPE.*;
-
 public class Constants {
-    public static final Enums.RUNNING_MODE_TYPE RUNNING_MODE = TEST;
-
     private Constants() {
     }
 
@@ -22,9 +18,6 @@ public class Constants {
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
     public static final String HTML_LINEBREAK = "<br/>";
-
-    public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://mt.ronnieschaniel.com:8080/feedback_repository/";
-    public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1MjQxNDkwNDM1MjcsImV4cCI6MjEyODk0OTA0M30.QCV2GDgD0GSeqjuVL8UjQUDGnxLrYIl5akiFTklUTlOVqmT9mqxuBpK6EDNhUP53-zSBYpieGdZmDwTjt4nDXQ"; //FIXME [jfo] remove as soon as possible
     public static final String SEPARATOR = "::;;::;;";
 
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
@@ -41,6 +34,10 @@ public class Constants {
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
+    public static final String SHARED_PREFERENCES_HOST_APPLICATION_ID = "hostApplicationId";
+    public static final Long SHARED_PREFERENCES_HOST_APPLICATION_ID_FALLBACK = 0L;
+    public static final String SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE = "hostApplicationLanguage";
+    public static final String SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE_FALLBACK = "en";
     public static final String SHARED_PREFERENCES_TUTORIAL_HUB = "hubTutorial";
     public static final String SHARED_PREFERENCES_TUTORIAL_IDENTITY = "identityTutorial";
     public static final String SHARED_PREFERENCES_ONLINE = "isOnline";

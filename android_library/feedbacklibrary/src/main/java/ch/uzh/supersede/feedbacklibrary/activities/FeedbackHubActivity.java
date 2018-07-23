@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -85,8 +86,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getRepositoryLogin(), configuration.getRepositoryPass()));
-        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
     }
@@ -131,6 +130,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         super.onStart();
         updateUserLevel(false);
         restoreHostApplicationNameToPreferences();
+        authenticateAndStartService();
     }
 
     @Override
@@ -138,6 +138,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         super.onResume();
         updateUserLevel(false);
         restoreHostApplicationNameToPreferences();
+    }
+
+    private void authenticateAndStartService() {
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getEndpointLogin(), configuration.getEndpointPass()));
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }
 
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
@@ -373,8 +378,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 if (response instanceof AuthenticateResponse) {
                     FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
                 }
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
                 break;
             case CREATE_USER:
                 if (response instanceof AndroidUser) {
@@ -396,20 +399,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        super.onEventCompleted(eventType, response);
-        switch (eventType) {
-            case AUTHENTICATE:
-                //FIXME [jfo] remove block with F2FA-80
-                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            default:
-        }
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        super.onConnectionFailed(eventType);
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 }
