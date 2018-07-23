@@ -23,9 +23,8 @@ public class Constants {
     public static final String PATH_DELIMITER = "/";
     public static final String HTML_LINEBREAK = "<br/>";
 
-    public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";
-    public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
-            "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
+    public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://mt.ronnieschaniel.com:8080/feedback_repository/";
+    public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1MjQxNDkwNDM1MjcsImV4cCI6MjEyODk0OTA0M30.QCV2GDgD0GSeqjuVL8UjQUDGnxLrYIl5akiFTklUTlOVqmT9mqxuBpK6EDNhUP53-zSBYpieGdZmDwTjt4nDXQ"; //FIXME [jfo] remove as soon as possible
     public static final String SEPARATOR = "::;;::;;";
 
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
