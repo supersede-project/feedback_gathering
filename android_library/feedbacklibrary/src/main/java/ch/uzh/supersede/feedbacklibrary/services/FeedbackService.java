@@ -42,8 +42,8 @@ public abstract class FeedbackService {
 
     private static IFeedbackAPI feedbackAPI;
     private String token;
-    private long applicationId;
-    private String language;
+    private static long applicationId;
+    private static String language;
 
     private FeedbackService() {
     }
@@ -70,6 +70,8 @@ public abstract class FeedbackService {
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
             String endpointUrl = PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREFERENCES_ENDPOINT_URL, SHARED_PREFERENCES_ENDPOINT_URL_FALLBACK);
+            applicationId = PreferenceManager.getDefaultSharedPreferences(context).getLong(SHARED_PREFERENCES_HOST_APPLICATION_ID, SHARED_PREFERENCES_HOST_APPLICATION_ID_FALLBACK);
+            language = PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE, SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE_FALLBACK);
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(endpointUrl)
@@ -88,22 +90,6 @@ public abstract class FeedbackService {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public long getApplicationId() {
-        return applicationId;
-    }
-
-    public void setApplicationId(long applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
@@ -159,14 +145,14 @@ public abstract class FeedbackService {
 
         @Override
         public void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
-            feedbackAPI.createUser(getToken(), getLanguage(), getApplicationId(), androidUser).enqueue(
+            feedbackAPI.createUser(getToken(), language, applicationId, androidUser).enqueue(
                     new RepositoryCallback<AndroidUser>(callback, EventType.CREATE_USER) {
                     });
         }
 
         @Override
         public void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
-            feedbackAPI.getUser(getToken(), getLanguage(), getApplicationId(), androidUser.getName()).enqueue(
+            feedbackAPI.getUser(getToken(), language, applicationId, androidUser.getName()).enqueue(
                     new RepositoryCallback<AndroidUser>(callback, EventType.GET_USER) {
                     });
         }
@@ -181,14 +167,14 @@ public abstract class FeedbackService {
             String jsonString = gson.toJson(feedback);
             MultipartBody.Part jsonFeedback = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
 
-            feedbackAPI.createFeedback(getToken(), getLanguage(), getApplicationId(), jsonFeedback, multipartFiles).enqueue(
+            feedbackAPI.createFeedback(getToken(), language, applicationId, jsonFeedback, multipartFiles).enqueue(
                     new RepositoryCallback<Feedback>(callback, EventType.CREATE_FEEDBACK) {
                     });
         }
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), language, applicationId, null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_LIST) {
                     });
         }
@@ -196,7 +182,7 @@ public abstract class FeedbackService {
         @Override
         public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN));
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, ids).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), language, applicationId, null, ids).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_OTHERS_FEEDBACK_VOTES) {
                     });
         }
@@ -204,7 +190,7 @@ public abstract class FeedbackService {
         @Override
         public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(activity).getFeedbackBeans(VOTED));
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, ids).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), language, applicationId, null, ids).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_MINE_FEEDBACK_VOTES) {
                     });
         }
@@ -212,7 +198,7 @@ public abstract class FeedbackService {
         @Override
         public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context activity) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED));
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, ids).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), language, applicationId, null, ids).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
                     });
         }
@@ -271,7 +257,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            feedbackAPI.getFeedbackImage(getToken(), getLanguage(), getApplicationId(),feedbackDetailsBean.getBitmapName()).enqueue(
+            feedbackAPI.getFeedbackImage(getToken(), language, applicationId,feedbackDetailsBean.getBitmapName()).enqueue(
                     new RepositoryCallback<ResponseBody>(callback, EventType.GET_FEEDBACK_IMAGE) {
                     });
         }

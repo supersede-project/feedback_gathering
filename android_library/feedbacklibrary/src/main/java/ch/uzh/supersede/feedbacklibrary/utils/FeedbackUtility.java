@@ -68,7 +68,7 @@ public class FeedbackUtility {
 
         long[] ids = new long[feedbackBeans.size()];
         for (int i = 0; i < feedbackBeans.size(); i++) {
-            ids[1] = feedbackBeans.get(i).getFeedbackId();
+            ids[i] = feedbackBeans.get(i).getFeedbackId();
         }
         return StringUtility.join(ids, ",");
     }

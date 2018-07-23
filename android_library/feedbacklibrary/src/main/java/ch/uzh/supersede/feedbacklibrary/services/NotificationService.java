@@ -139,8 +139,6 @@ public class NotificationService extends Service implements IFeedbackServiceEven
                 if (response instanceof AuthenticateResponse) {
                     FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
                 }
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId());
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
                 break;
             case GET_FEEDBACK_SUBSCRIPTIONS:
                 List<FeedbackDetailsBean> feedbackDetailsBeans = FeedbackUtility.transformFeedbackResponse(response, this);
@@ -178,15 +176,6 @@ public class NotificationService extends Service implements IFeedbackServiceEven
 
     @Override
     public void onEventFailed(IFeedbackServiceEventListener.EventType eventType, Object response) {
-        switch (eventType) {
-            case AUTHENTICATE:
-                //FIXME [jfo] remove block with F2FA-80
-                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId());
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            default:
-        }
         updateFailCount();
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }

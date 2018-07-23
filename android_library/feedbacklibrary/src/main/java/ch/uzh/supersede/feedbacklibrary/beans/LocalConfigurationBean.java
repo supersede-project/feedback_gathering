@@ -25,16 +25,13 @@ public class LocalConfigurationBean implements Serializable {
     private int pullIntervalMinutes;
     // IFeedbackDeveloperConfiguration
     private boolean isDeveloper;
-    private String repositoryLogin;
-    private String repositoryPass;
     // IFeedbackLayoutConfiguration
     private String endpointUrl;
+    private String endpointLogin;
+    private String endpointPass;
     // IFeedbackLayoutConfiguration
     private int audioOrder;
     private double audioMaxTime;
-    private int labelOrder;
-    private int labelMaxCount;
-    private int labelMinCount;
     private int ratingOrder;
     private String ratingTitle;
     private String ratingIcon;
@@ -167,14 +164,6 @@ public class LocalConfigurationBean implements Serializable {
         this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
     }
 
-    private void readFeedbackConfiguration(IFeedbackTextConfiguration textConfiguration) {
-        this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
-        this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
-        this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
-        this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
-        this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
-    }
-
     private void readFeedbackConfiguration(IFeedbackTitleAndTagConfiguration titleAndTagConfiguration) {
         this.minTitleLength = titleAndTagConfiguration.getConfiguredMinTitleLength();
         this.maxTitleLength = titleAndTagConfiguration.getConfiguredMaxTitleLength();
@@ -205,6 +194,8 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readFeedbackConfiguration(IFeedbackEndpointConfiguration configuration) {
         this.endpointUrl = configuration.getConfiguredEndpointUrl();
+        this.endpointLogin = configuration.getConfiguredEndpointLogin();
+        this.endpointPass = configuration.getConfiguredEndpointPassword();
     }
 
     private void readFeedbackConfiguration(IFeedbackStyleConfiguration configuration) {
@@ -287,18 +278,6 @@ public class LocalConfigurationBean implements Serializable {
 
     public double getAudioMaxTime() {
         return audioMaxTime;
-    }
-
-    public int getLabelOrder() {
-        return labelOrder;
-    }
-
-    public int getLabelMaxCount() {
-        return labelMaxCount;
-    }
-
-    public int getLabelMinCount() {
-        return labelMinCount;
     }
 
     public int getRatingOrder() {
@@ -421,12 +400,12 @@ public class LocalConfigurationBean implements Serializable {
         return isColoringVertical;
     }
 
-    public String getRepositoryLogin() {
-        return repositoryLogin;
+    public String getEndpointLogin() {
+        return endpointLogin;
     }
 
-    public String getRepositoryPass() {
-        return repositoryPass;
+    public String getEndpointPass() {
+        return endpointPass;
     }
 
     public int getMinReportLength() {
@@ -443,9 +422,5 @@ public class LocalConfigurationBean implements Serializable {
 
     public String getEndpointUrl() {
         return endpointUrl;
-    }
-
-    public void setEndpointUrl(String endpointUrl) {
-        this.endpointUrl = endpointUrl;
     }
 }

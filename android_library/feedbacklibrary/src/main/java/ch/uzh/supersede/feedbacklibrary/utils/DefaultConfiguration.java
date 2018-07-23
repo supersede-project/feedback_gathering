@@ -52,16 +52,6 @@ public class DefaultConfiguration implements
     }
 
     @Override
-    public String getConfiguredRepositoryLogin() {
-        return "admin";
-    }
-
-    @Override
-    public String getConfiguredRepositoryPassword() {
-        return "password";
-    }
-
-    @Override
     public int getConfiguredMinUserNameLength() {
         return 5;
     }
@@ -193,7 +183,16 @@ public class DefaultConfiguration implements
 
     @Override
     public String getConfiguredEndpointUrl() {
-        return "https://platform.supersede.eu:8443/";
+        return "https://google.ch";
     }
 
+    @Override
+    public String getConfiguredEndpointLogin() {
+        return "admin";
+    }
+
+    @Override
+    public String getConfiguredEndpointPassword() {
+        return "password";
+    }
 }

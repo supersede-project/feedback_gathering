@@ -62,7 +62,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         if (configuration == null) {
             configuration = ConfigurationUtility.getConfigurationFromDatabase(this);
         }
+        getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putLong(SHARED_PREFERENCES_HOST_APPLICATION_ID, configuration.getHostApplicationLongId()).apply();
+        getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE, configuration.getHostApplicationLanguage()).apply();
         getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(SHARED_PREFERENCES_HOST_APPLICATION_ID, configuration.getHostApplicationLongId()).apply();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE, configuration.getHostApplicationLanguage()).apply();
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(SHARED_PREFERENCES_ENDPOINT_URL, configuration.getEndpointUrl()).apply();
     }
 

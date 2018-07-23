@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
@@ -110,12 +109,12 @@ public class HostActivity extends AppCompatActivity implements
     }
 
     @Override
-    public String getConfiguredRepositoryLogin() {
+    public String getConfiguredEndpointLogin() {
         return "admin";
     }
 
     @Override
-    public String getConfiguredRepositoryPassword() {
+    public String getConfiguredEndpointPassword() {
         return "password";
     }
 
