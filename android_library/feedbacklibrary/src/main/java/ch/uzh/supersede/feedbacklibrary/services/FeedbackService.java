@@ -195,7 +195,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getReportedFeedbackList(IFeedbackServiceEventListener callback) {
-            getFeedbackList(callback, EventType.GET_REPORTED_FEEDBACK_LIST, VIEW_ALL, null); //TODO [jfo] view reported
+            getFeedbackList(callback, EventType.GET_REPORTED_FEEDBACK_LIST, VIEW_PUBLIC, null); //TODO [jfo] view reported
         }
 
         @Override

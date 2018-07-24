@@ -244,7 +244,6 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     private void doSearch(String s) {
         activeFeedbackList.clear();
         if (sorting==MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(USER_IS_DEVELOPER,false) && VersionUtility.getDateVersion()>=4){
-            addDeveloperContext();
             sort();
             return;
         }
@@ -260,10 +259,6 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
             activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
         sort();
-    }
-
-    private void addDeveloperContext() {
-        //TODO: connect new views with specific players (negatively contributing, often contributing, often replying etc.)
     }
 
     private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];

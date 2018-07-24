@@ -23,19 +23,13 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DEVELOPER_VIEW.PRIVATE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DEVELOPER_VIEW.REPORTED;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW.MINE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DEVELOPER_VIEW.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 
@@ -46,34 +40,24 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
 
     private Button privateButton;
     private Button reportedButton;
-    private Button feature1Button;
-    private Button feature2Button;
-    private Button filterButton;
     private LinearLayout focusSink;
     private EditText searchText;
     private String searchTerm;
     private ArrayList<FeedbackListItem> privateFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> reportedFeedbackList = new ArrayList<>();
+    private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<Enums.FEEDBACK_STATUS> allowedStatuses = new ArrayList<>();
-    private TextView loadingTextView;
-    private boolean returnedFromDeletion = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback_list);
-        loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
-        ContentFrameLayout rootLayout = getView(R.id.dev_list_root, ContentFrameLayout.class);
-        rootLayout.addView(loadingTextView);
-
-        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION, false);
-
+        setContentView(R.layout.activity_developer_list);
         scrollListLayout = getView(R.id.dev_list_layout_scroll, LinearLayout.class);
         privateButton = setOnClickListener(getView(R.id.dev_list_button_private, Button.class));
         reportedButton = setOnClickListener(getView(R.id.dev_list_button_reported, Button.class));
-        feature1Button = setOnClickListener(getView(R.id.dev_list_button_feature_1, Button.class));
-        feature2Button = setOnClickListener(getView(R.id.dev_list_button_feature_2, Button.class));
-        filterButton = getView(R.id.dev_list_button_filter, Button.class);
+        Button feature1Button = setOnClickListener(getView(R.id.dev_list_button_feature_1, Button.class));
+        Button feature2Button = setOnClickListener(getView(R.id.dev_list_button_feature_2, Button.class));
+        Button filterButton = getView(R.id.dev_list_button_filter, Button.class);
         filterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +68,8 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
         searchText = addTextChangedListener(getView(R.id.dev_list_edit_search, EditText.class));
         focusSink = getView(R.id.dev_list_edit_focus_sink, LinearLayout.class);
 
-        colorShape(0, reportedButton, feature1Button, feature2Button);
+        colorShape(0, reportedButton);
+        colorShape(0, true, feature1Button, feature2Button);
         colorShape(1, privateButton);
         colorViews(0, filterButton);
         colorViews(1,
@@ -100,8 +85,7 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
     @Override
     protected void onResume() {
         super.onResume();
-        allFeedbackList.clear();
-        loadingTextView.setVisibility(View.VISIBLE);
+        getActiveList().clear();
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
             FeedbackService.getInstance(this, true).getPrivateFeedbackList(this);
@@ -138,7 +122,6 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
                 feedbackListItems.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
             }
             doSearch(searchText.getText().toString());
-            loadingTextView.setVisibility(View.INVISIBLE);
             sort();
         }
     }
@@ -155,14 +138,6 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
-    private void sort(List<FeedbackListItem> feedbackListItems) {
-        for (FeedbackListItem item : feedbackListItems) {
-            item.setSorting(currentViewState, allowedStatuses);
-        }
-        Collections.sort(feedbackListItems);
-        load();
-    }
-
     private EditText addTextChangedListener(final EditText editText) {
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -177,12 +152,12 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //nop
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //nop
             }
 
             @Override
@@ -205,16 +180,16 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
     }
 
     private void toggleButtons(View v) {
-        setInactive(privateButton, reportedButton, feature1Button, feature2Button);
+        setInactive(privateButton, reportedButton);
         colorShape(1, v);
 
         if (v.getId() == privateButton.getId()) {
-            load(privateFeedbackList);
             currentViewState = PRIVATE;
         } else if (v.getId() == reportedButton.getId()) {
-            load(othersFeedbackList);
             currentViewState = REPORTED;
         }
+        activeFeedbackList = new ArrayList<>(getActiveList());
+        doSearch(searchTerm);
 
         //handle focus and keyboard
         focusSink.requestFocus();
@@ -224,13 +199,18 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
         }
     }
 
-    private View getViewByState(Enums.DEVELOPER_VIEW state) {
+    private List<FeedbackListItem> getActiveList() {
+        return getActiveListByState(currentViewState);
+    }
+
+    private List<FeedbackListItem> getActiveListByState(Enums.DEVELOPER_VIEW state) {
         switch (state) {
             case REPORTED:
-                return reportedButton;
+                return reportedFeedbackList;
             case PRIVATE:
+                return privateFeedbackList;
             default:
-                return privateButton;
+                return new ArrayList<>();
         }
     }
 
@@ -239,25 +219,25 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
     }
 
     private void doSearch(String s) {
+        List<FeedbackListItem> sortedFeedbackList = new ArrayList<>(getActiveList());
         activeFeedbackList.clear();
-        if (sorting == MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase
-                .getInstance(getApplicationContext())
-                .readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4) {
-            sort();
-            return;
-        }
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
-            for (FeedbackListItem item : allFeedbackList) {
+            for (FeedbackListItem item : sortedFeedbackList) {
                 if (item.getFeedbackBean().getTitle().toLowerCase().contains(s.toLowerCase())) {
                     activeFeedbackList.add(item);
                 }
             }
             searchTerm = s;
         } else {
+            activeFeedbackList = new ArrayList<>(getActiveList());
             searchTerm = null;
-            activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
         sort();
+    }
+
+    private void sort() {
+        Collections.sort(activeFeedbackList);
+        load();
     }
 
     private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];
@@ -316,7 +296,7 @@ public class DeveloperListActivity extends AbstractBaseActivity implements IFeed
     private void load() {
         scrollListLayout.removeAllViews();
         getView(R.id.dev_list_view_scroll, ScrollView.class).scrollTo(0, 0);
-        for (FeedbackListItem item : activeFeedbackList) {
+        for (LinearLayout item : activeFeedbackList) {
             scrollListLayout.addView(item);
         }
     }

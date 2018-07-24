@@ -439,9 +439,9 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
             FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
         }
         if (feedbackState.isSubscribed()){
-            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),true);
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
         }else{
-            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),false);
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
         }
         super.onPause();
     }
@@ -452,9 +452,9 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
             FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
         }
         if (feedbackState.isSubscribed()){
-            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),true);
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
         }else{
-            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean(),false);
+            FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
         }
         super.onDestroy();
     }

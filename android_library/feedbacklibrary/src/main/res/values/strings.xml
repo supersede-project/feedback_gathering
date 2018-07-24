@@ -69,6 +69,7 @@
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
+    <string name="hub_feedback_developer_list">Show\nFeedback\n(Developer)</string>
     <string name="hub_feedback_status_label">Hub-Status</string>
     <string name="hub_feedback_list_label">Show Feedback</string>
     <string name="hub_feedback_user_lvl_label">User-Level</string>
@@ -122,8 +123,8 @@
     <!--Developer List-->
     <string name="developer_list_button_private">Private</string>
     <string name="developer_list_button_reported">Reported</string>
-    <string name="developer_list_button_feature_1">Feature 1</string>
-    <string name="developer_list_button_feature_2">Feature 2</string>
+    <string name="developer_list_button_feature_1">#Feature 1</string>
+    <string name="developer_list_button_feature_2">#Feature 2</string>
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>

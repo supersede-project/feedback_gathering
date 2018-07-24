@@ -187,6 +187,13 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         .replace(SECONDARY_COLOR_STRING, DARK_BLUE)));
             }
 
+            boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
+            if (userIsDeveloper) {
+                feedbackButton.setText(R.string.hub_feedback_developer_list);
+            } else {
+                feedbackButton.setText(R.string.hub_feedback_create);
+            }
+
             enableView(feedbackButton, viewToColorMap.get(feedbackButton));
             enableView(settingsButton, viewToColorMap.get(settingsButton));
         }
@@ -207,7 +214,12 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             if (i == R.id.hub_button_list) {
                 startActivity(this, FeedbackListActivity.class, false);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackIdentityActivity.class, false);
+                boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
+                if (userIsDeveloper) {
+                    startActivity(this, DeveloperListActivity.class, false);
+                } else {
+                    startActivity(this, FeedbackIdentityActivity.class, false);
+                }
             } else if (i == R.id.hub_button_settings) {
                 startActivity(this, FeedbackSettingsActivity.class, false);
             } else if (i == R.id.hub_button_user_level) {
