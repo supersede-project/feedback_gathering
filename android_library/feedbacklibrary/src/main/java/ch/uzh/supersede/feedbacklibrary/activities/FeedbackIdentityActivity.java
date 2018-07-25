@@ -325,6 +325,9 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
                     loadedTags = TagUtility.getFeedbackTags(this, (List<String>)response);
                 }
                 break;
+            case GET_FEEDBACK_TAGS_MOCK:
+                    loadedTags = RepositoryStub.getFeedbackTags(this);
+                break;
         }
     }
 
