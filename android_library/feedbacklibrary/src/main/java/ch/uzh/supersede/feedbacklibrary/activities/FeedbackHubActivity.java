@@ -216,7 +216,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             } else if (i == R.id.hub_button_feedback) {
                 boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
                 if (userIsDeveloper) {
-                    startActivity(this, DeveloperListActivity.class, false);
+                    startActivity(this, FeedbackListDeveloperActivity.class, false);
                 } else {
                     startActivity(this, FeedbackIdentityActivity.class, false);
                 }
