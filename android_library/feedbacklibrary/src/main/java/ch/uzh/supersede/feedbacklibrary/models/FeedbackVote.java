@@ -1,7 +1,5 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-import java.util.Date;
-
 public class FeedbackVote {
     private long id;
     private int vote;

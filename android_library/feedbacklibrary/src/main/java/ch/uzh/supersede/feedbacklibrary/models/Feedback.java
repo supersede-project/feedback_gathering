@@ -52,6 +52,7 @@ public class Feedback implements Serializable {
     private int minVotes;
     private int maxVotes;
     private Enums.FEEDBACK_STATUS feedbackStatus;
+    private boolean isPublic;
 
 
     private Feedback() {
@@ -245,5 +246,13 @@ public class Feedback implements Serializable {
 
     public Enums.FEEDBACK_STATUS getFeedbackStatus() {
         return feedbackStatus;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 }

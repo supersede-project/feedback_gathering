@@ -197,7 +197,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     makePublicButton.setVisibility(View.INVISIBLE);
-                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(FeedbackDetailsActivity.this,feedbackDetailsBean);
+                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(FeedbackDetailsActivity.this,null/*feedbackDetailsBean*/);
                     dialog.cancel();
                 }
             };
@@ -219,7 +219,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                     } else if (report.length() > configuration.getMaxReportLength()) {
                         Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
                     } else {
-                        FeedbackService.getInstance(getApplicationContext()).reportFeedback(FeedbackDetailsActivity.this, feedbackDetailsBean, report);
+                        FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, feedbackDetailsBean, null /*report*/);
                         dialog.dismiss();
                     }
                 }
@@ -318,7 +318,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                     persistFeedbackResponseLocally((String)response);
                 }
                 break;
-            case CREATE_FEEDBACK_DELETION://Developer view TODO: move it
+            case DELETE_FEEDBACK://Developer view TODO: move it
             case CREATE_FEEDBACK_DELETION_MOCK:
                 break;
             case CREATE_FEEDBACK_REPORT:
@@ -364,7 +364,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 break;
             case CREATE_FEEDBACK_RESPONSE_MOCK:
                 break;
-            case CREATE_FEEDBACK_DELETION:
+            case DELETE_FEEDBACK:
                 break;
             case CREATE_FEEDBACK_DELETION_MOCK:
                 break;
@@ -404,7 +404,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 break;
             case CREATE_FEEDBACK_RESPONSE_MOCK:
                 break;
-            case CREATE_FEEDBACK_DELETION:
+            case DELETE_FEEDBACK:
                 break;
             case CREATE_FEEDBACK_DELETION_MOCK:
                 break;

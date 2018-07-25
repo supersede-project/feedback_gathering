@@ -28,6 +28,9 @@ public interface IFeedbackAPI {
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, long feedbackId);
 
+    @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
+    Call<Feedback> deleteFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, long feedbackId);
+
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("view") String view, @Query
             ("ids") String ids);
