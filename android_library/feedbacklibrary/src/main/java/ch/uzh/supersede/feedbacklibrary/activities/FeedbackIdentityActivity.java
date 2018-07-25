@@ -13,12 +13,15 @@ import com.nex3z.flowlayout.FlowLayout;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
+import ch.uzh.supersede.feedbacklibrary.utils.TagUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-public class FeedbackIdentityActivity extends AbstractBaseActivity {
+public class FeedbackIdentityActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     private Map<String,String> loadedTags = new TreeMap<>();
     private List<String> createdTags = new ArrayList<>();
     private Button buttonNext;
@@ -34,7 +37,9 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_identity);
-        loadedTags = RepositoryStub.getFeedbackTags(this);
+        FeedbackService
+                .getInstance(this).getFeedbackTags(this);
+
         buttonNext = getView(R.id.identity_button_next, Button.class);
         buttonBack = getView(R.id.identity_button_back, Button.class);
         tagContainer = getView(R.id.identity_container_tags, FlowLayout.class);
@@ -309,6 +314,35 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
             });
             colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
             tutorialInitialized = true;
+        }
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case GET_FEEDBACK_TAGS:
+                if (response instanceof List) {
+                    loadedTags = TagUtility.getFeedbackTags(this, (List<String>)response);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventFailed(eventType,response);
+        switch (eventType) {
+            case GET_FEEDBACK_TAGS:
+                 break;
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        super.onConnectionFailed(eventType);
+        switch (eventType) {
+            case GET_FEEDBACK_TAGS:
+               break;
         }
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
 public class Feedback implements Serializable {
 
@@ -45,11 +46,12 @@ public class Feedback implements Serializable {
     private String language;
     private Date createdAt;
     private Date updatedAt;
+    @Expose
     private String[] tags;
     private int votes;
     private int minVotes;
     private int maxVotes;
-    //private Enums.FEEDBACK_STATUS feedbackStatus; TODO [jfo]
+    private Enums.FEEDBACK_STATUS feedbackStatus;
 
 
     private Feedback() {
@@ -233,5 +235,9 @@ public class Feedback implements Serializable {
 
     public int getMaxVotes() {
         return maxVotes;
+    }
+
+    public Enums.FEEDBACK_STATUS getFeedbackStatus() {
+        return feedbackStatus;
     }
 }
