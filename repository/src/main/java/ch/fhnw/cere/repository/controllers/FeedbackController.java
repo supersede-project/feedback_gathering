@@ -63,6 +63,9 @@ public class FeedbackController extends BaseController {
     @Autowired
     private FeedbackStatusService feedbackStatusService;
 
+    @Autowired
+    private AndroidUserService androidUserService;
+
     @Value("${integration.feedback_central}")
     private boolean feedbackCentralIntegrationEnabled;
 
@@ -70,6 +73,7 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view,
                                                   @RequestParam(value = "ids", required = false) List<Long> idList,
+                                                  @RequestParam(value = "relevantForUser", required = false) String username,
                                                   @PathVariable long applicationId) {
         if (view != null && idList == null) {
             if (view.equals("public")) {
@@ -80,6 +84,11 @@ public class FeedbackController extends BaseController {
             throw new NotFoundException();
         } else if (idList != null && !idList.isEmpty()) {
             return setMinMaxVotes(feedbackService.findAllByFeedbackIdIn(applicationId, idList), applicationId);
+        } else if (username != null) {
+            AndroidUser androidUser = androidUserService.findByNameAndApplicationId(username, applicationId);
+            if (androidUser != null) {
+                return setMinMaxVotes(feedbackService.findByUserIdentificationOrIsPublicAndApplicationId(applicationId,username,true),applicationId);
+            }
         }
         return setMinMaxVotes(feedbackService.findByApplicationId(applicationId), applicationId);
     }
@@ -88,9 +97,10 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/compact")
     @JsonView(FeedbackView.Compact.class)
     public List<Feedback> getApplicationFeedbacksCompact(@RequestParam(value = "view", required = false) String view,
-                                                  @RequestParam(value = "ids", required = false) List<Long> idList,
-                                                  @PathVariable long applicationId) {
-       return getApplicationFeedbacks(view,idList,applicationId);
+                                                         @RequestParam(value = "ids", required = false) List<Long> idList,
+                                                         @RequestParam(value = "isRelevantForUser", required = false) String username,
+                                                         @PathVariable long applicationId) {
+        return getApplicationFeedbacks(view, idList, username, applicationId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")

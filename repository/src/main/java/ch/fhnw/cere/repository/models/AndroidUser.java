@@ -16,11 +16,11 @@ public class AndroidUser {
     private boolean isDeveloper;
     private boolean isBlocked;
     @Transient
-    private long karma;
+    private int karma;
     @Transient
     private VoteCount voteCount;
     @Transient
-    private long feedbackCount;
+    private int feedbackCount;
 
     public AndroidUser() {
     }
@@ -78,11 +78,11 @@ public class AndroidUser {
         this.karma = karma;
     }
 
-    public long getFeedbackCount() {
+    public int getFeedbackCount() {
         return feedbackCount;
     }
 
-    public void setFeedbackCount(long feedbackCount) {
+    public void setFeedbackCount(int feedbackCount) {
         this.feedbackCount = feedbackCount;
     }
 

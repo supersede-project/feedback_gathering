@@ -117,7 +117,7 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         return voteCount;
     }
 
-    private long countFeedback(String userIdentification) {
+    private int countFeedback(String userIdentification) {
         return feedbackService.countByUserIdentification(userIdentification);
     }
 

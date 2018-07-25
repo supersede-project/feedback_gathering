@@ -45,6 +45,15 @@ public class AndroidUserController extends BaseController {
         return androidUser;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/karma", params = "user")
+    public long getAndroidUserKarma(@PathVariable long applicationId, @RequestParam("user") String username ) {
+        AndroidUser androidUser = androidUserService.findByNameAndApplicationId(username, applicationId);
+        if (androidUser == null) {
+            throw new NotFoundException();
+        }
+        return androidUser.getKarma();
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public AndroidUser createAndroidUser(@PathVariable long applicationId, @RequestBody AndroidUser androidUser) {

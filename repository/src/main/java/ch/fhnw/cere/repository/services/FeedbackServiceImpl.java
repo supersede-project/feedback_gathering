@@ -37,7 +37,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     public Feedback find(long id) {
         Feedback feedback = feedbackRepository.findOne(id);
-        if(feedback != null) {
+        if (feedback != null) {
             calculateVotes(feedback);
         }
         return feedback;
@@ -80,7 +80,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public long countByUserIdentification(String userIdentification) {
+    public List<Feedback> findByUserIdentificationOrIsPublicAndApplicationId(long applicationId, String userIdentification, boolean isPublic) {
+        return feedbackRepository.findByUserIdentificationOrIsPublicAndApplicationId(userIdentification, isPublic, applicationId);
+    }
+
+    @Override
+    public int countByUserIdentification(String userIdentification) {
         return feedbackRepository.countByUserIdentification(userIdentification);
     }
 
@@ -94,6 +99,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         return feedbackList;
     }
+
 
     private void calculateVotes(Feedback feedback) {
         feedback.setVotes(countVotes(feedback.getId()));

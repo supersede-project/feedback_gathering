@@ -5,6 +5,7 @@ import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import ch.fhnw.cere.repository.models.view.FeedbackView;
+import ch.fhnw.cere.repository.serialization.CustomFeedbackStatusDeserializer;
 import ch.fhnw.cere.repository.serialization.CustomFeedbackStatusSerializer;
 import ch.fhnw.cere.repository.serialization.CustomTagDeserializer;
 import ch.fhnw.cere.repository.serialization.CustomTagSerializer;
@@ -37,11 +38,12 @@ public class Feedback {
     private long configurationId;
     private String language;
     @JsonView(FeedbackView.Compact.class)
-    private Boolean isPublic = false;
+    private boolean isPublic = false;
 
     @ManyToOne()
     @JoinColumn(name = "feedback_status")
     @JsonSerialize(using = CustomFeedbackStatusSerializer.class)
+    @JsonDeserialize(using = CustomFeedbackStatusDeserializer.class)
     private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
 
     @Transient
@@ -341,12 +343,12 @@ public class Feedback {
         this.application = application;
     }
 
-    public Boolean isPublic() {
+    public boolean isPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public FeedbackStatus getFeedbackStatus() {
