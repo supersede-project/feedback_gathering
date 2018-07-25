@@ -28,17 +28,10 @@ public interface IFeedbackAPI {
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, long feedbackId);
 
-    /**
-     * Query Params do not exists in current repo version on server!!!
-     *
-     * @param view either public or private
-     * @param ids  comma separated ids
-     */
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("view") String view, @Query
             ("ids") String ids);
 
-    // Does not exist in current repo version on server
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body Feedback body);
 
@@ -48,37 +41,33 @@ public interface IFeedbackAPI {
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);
 
+    @GET("feedback_repository/{language}/applications/{applicationId}/android_users/karma")
+    Call<ResponseBody> getUserKarma(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);
+
     @PUT("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> editUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user, @Body AndroidUser body);
 
-    // Does not exist in current repo version on server
     @GET("feedback_repository/{language}/applications/{applicationId}/reports")
     Call<List<FeedbackReport>> getFeedbackReportList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
-    // Does not exist in current repo version on server
     @POST("feedback_repository/{language}/applications/{applicationId}/reports")
     Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReport body);
 
-    // Does not exist in current repo version on server
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
     Call<List<FeedbackResponse>> getFeedbackResponseList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
             long feedbackId);
 
-    // Does not exist in current repo version on server
     @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
     Call<FeedbackResponse> createFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long
             feedbackId, @Body FeedbackResponse body);
 
-    // Does not exist in current repo version on server
     @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses/{responseId}")
     void deleteFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
             long feedbackId, @Path("responseId") long responseId);
 
-    // Does not exist in current repo version on server
     @GET("feedback_repository/{language}/applications/{applicationId}/tags")
     Call<List<String>> getTagList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
-    // Does not exist in current repo version on server
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/votes")
     Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
             FeedbackVote body);
@@ -86,4 +75,9 @@ public interface IFeedbackAPI {
     //Retrieves a specific Screenshot/Image
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name_ext}")
     Call<ResponseBody> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
+
+    //Retrieves a specific Audiofile
+    @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/audios/{file_name_ext}")
+    Call<ResponseBody> getFeedbackAudio(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
+
 }
