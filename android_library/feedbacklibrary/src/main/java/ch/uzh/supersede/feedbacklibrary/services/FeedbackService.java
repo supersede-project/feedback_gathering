@@ -264,8 +264,9 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackTags(IFeedbackServiceEventListener callback) {
-            callback.onEventCompleted(GET_FEEDBACK_IMAGE_MOCK, false);
-            //TODO: mbo implement when backend allows this call;
+            feedbackAPI.getTagList(getToken(), language, applicationId).enqueue(
+                    new RepositoryCallback<List<String>>(callback, EventType.GET_FEEDBACK_TAGS) {
+                    });
         }
 
         @Override

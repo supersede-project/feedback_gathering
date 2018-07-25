@@ -305,14 +305,7 @@ public class RepositoryStub {
                         "GUI", "Images", "Scaling", "Performance", "Permissions", "Data-Usage", "Improvement", "Development", "Translations",
                         "Battery", "Privacy", "Crashes", "Bugs", "Functionality", "Ideas", "Updates", "Region-Lock", "Content", "Features",
                         "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"));
-        TreeMap<String,String> sortedTags = new TreeMap<>();
-        for (String tag : loadedTags){
-            sortedTags.put(tag.toLowerCase(),tag);
-        }
-        for (String tag : FeedbackDatabase.getInstance(context).readTags(null)){
-            sortedTags.put(tag.toLowerCase(),tag);
-        }
-        return sortedTags;
+        return TagUtility.getFeedbackTags(context,loadedTags);
     }
 
     public static AuthenticateResponse generateAuthenticateResponse() {

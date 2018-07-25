@@ -74,10 +74,10 @@ public class FeedbackUtility {
     }
 
     public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback) {
-        int minUpVotes = 0; // TODO not yet implemented
-        int maxUpVotes = 10; // TODO not yet implemented
-        Enums.FEEDBACK_STATUS status = OPEN;  // TODO not yet implemented
-        int upVotes = 0; // TODO not yet implemented
+        int minUpVotes = feedback.getMinVotes();
+        int maxUpVotes = feedback.getMaxVotes();
+        Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
+        int upVotes = feedback.getVotes();
         int responses = 0; // TODO not yet implemented
 
         String description = null;
