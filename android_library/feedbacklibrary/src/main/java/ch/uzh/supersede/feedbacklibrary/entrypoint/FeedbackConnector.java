@@ -14,11 +14,13 @@ import java.util.HashMap;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.ConfigurationUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_KARMA;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackConnector {
@@ -101,5 +103,12 @@ public class FeedbackConnector {
         activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName()).apply();
         intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName());
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configurationBean);
+    }
+
+    public Integer getCurrentUserKarma(Activity activity){
+        if (ACTIVE.check(activity)) {
+            return FeedbackDatabase.getInstance(activity).readInteger(USER_KARMA, null);
+        }
+        return null;
     }
 }
