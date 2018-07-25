@@ -333,6 +333,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         super.onEventFailed(eventType,response);
         switch (eventType) {
             case GET_FEEDBACK_TAGS:
+                // TODO: Error-handling
                  break;
         }
     }
@@ -342,6 +343,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         super.onConnectionFailed(eventType);
         switch (eventType) {
             case GET_FEEDBACK_TAGS:
+                // TODO: Error-handling
                break;
         }
     }

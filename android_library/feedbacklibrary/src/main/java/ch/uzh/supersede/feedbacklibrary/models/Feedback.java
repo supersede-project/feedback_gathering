@@ -71,6 +71,7 @@ public class Feedback implements Serializable {
         private List<ScreenshotFeedback> screenshotFeedbackList;
         private List<TextFeedback> textFeedbackList;
         private String[] tags;
+        private Enums.FEEDBACK_STATUS feedbackStatus;
 
         public Builder() {
             //NOP
@@ -142,6 +143,10 @@ public class Feedback implements Serializable {
             }
             return this;
         }
+        public Builder withFeedbackStatus(Enums.FEEDBACK_STATUS feedbackStatus) {
+            this.feedbackStatus = feedbackStatus;
+            return this;
+        }
 
         public Feedback build() {
             if (CompareUtility.notNull(userIdentification)) {
@@ -156,6 +161,7 @@ public class Feedback implements Serializable {
                 bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
                 bean.tags = tags;
                 bean.createdAt = new Date();
+                bean.feedbackStatus = this.feedbackStatus;
                 return bean;
             }
             return null;

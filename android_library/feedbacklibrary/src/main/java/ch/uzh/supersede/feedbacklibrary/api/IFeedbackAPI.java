@@ -40,7 +40,7 @@ public interface IFeedbackAPI {
 
     // Does not exist in current repo version on server
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
-    Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body Feedback body);
+    Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body Feedback body);
 
     @POST("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> createUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
