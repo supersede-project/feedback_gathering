@@ -55,7 +55,7 @@ public class Enums {
     }
 
     public enum FEEDBACK_SORTING {
-        NONE, MINE, HOT, TOP, NEW
+        NONE, MINE, HOT, TOP, NEW, PRIVATE, REPORTED
     }
 
 

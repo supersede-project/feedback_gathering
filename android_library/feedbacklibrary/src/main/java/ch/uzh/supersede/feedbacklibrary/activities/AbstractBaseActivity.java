@@ -168,6 +168,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     protected void colorShape(int colorIndex, View... views) {
+        colorShape(colorIndex, false, views);
+    }
+
+    protected void colorShape(int colorIndex, boolean isShapeDisabled, View... views) {
         if (configuration.getTopColors().length >= colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
             for (View view : color != null ? views : new View[0]) {
@@ -184,10 +188,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
                 } else if (background instanceof StateListDrawable) {
                     background.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 }
-                colorizeText(color, view);
+                colorizeText(color, view, isShapeDisabled);
                 if (view instanceof RelativeLayout) {
                     for (int v = 0; v < ((RelativeLayout) view).getChildCount(); v++) {
-                        colorizeText(color, ((RelativeLayout) view).getChildAt(v));
+                        colorizeText(color, ((RelativeLayout) view).getChildAt(v), isShapeDisabled);
                     }
                 }
             }
@@ -203,12 +207,24 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         }
     }
 
-    private void colorizeText(Integer color, View view) {
+    private void colorizeText(Integer color, View view, boolean isTextDisabled) {
         if (view instanceof TextView && ColorUtility.isDark(color)) {
-            ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
+            if (isTextDisabled) {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.anthrazit));
+            } else {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
+            }
         } else if (view instanceof TextView) {
-            ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
+            if (isTextDisabled) {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.anthrazitDark));
+            } else {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
+            }
         }
+    }
+
+    private void colorizeText(Integer color, View view) {
+        colorizeText(color, view, false);
     }
 
     protected final int getColorCount() {

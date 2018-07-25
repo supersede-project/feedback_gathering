@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.*;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.*;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
@@ -77,6 +78,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             setFeedbackDetailsBean(RepositoryStub.getFeedbackDetails(this, feedbackBean));
         }
         if (getFeedbackDetailsBean() != null) {
+            updateFeedbackState();
             for (FeedbackResponseBean bean : getFeedbackDetailsBean().getResponses()) {
                 FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, this,FIXED);
                 responseList.add(feedbackResponseListItem);
@@ -140,6 +142,19 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
 
     public void setFeedbackDetailsBean(FeedbackDetailsBean feedbackDetailsBean) {
         this.activeFeedbackDetailsBean[0] = feedbackDetailsBean;
+    }
+
+    private void updateFeedbackState() {
+        if (ACTIVE.check(this,true)) {
+            feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(getFeedbackDetailsBean().getFeedbackBean());
+            if (feedbackState.isSubscribed() && subscribeButton.isEnabled()) {
+                subscribeButton.setText(getString(R.string.details_unsubscribe));
+                subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
+            } else if (subscribeButton.isEnabled()){
+                subscribeButton.setText(getString(R.string.details_subscribe));
+                colorViews(0,subscribeButton);
+            }
+        }
     }
 
     @Override
@@ -219,6 +234,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
                     .withCustomOk("Confirm",okClickListener)
                     .withMessage(getString(R.string.details_developer_delete_confirm)).buildAndShow();
         }
+        updateFeedbackState();
     }
 
     private void persistFeedbackResponseLocally(String feedbackResponse) {
