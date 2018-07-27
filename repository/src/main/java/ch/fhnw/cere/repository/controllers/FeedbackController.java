@@ -10,6 +10,7 @@ import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.view.FeedbackView;
 import ch.fhnw.cere.repository.services.*;
+import ch.fhnw.cere.repository.util.FeedbackUtil;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -29,7 +30,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -74,23 +74,28 @@ public class FeedbackController extends BaseController {
     public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view,
                                                   @RequestParam(value = "ids", required = false) List<Long> idList,
                                                   @RequestParam(value = "relevantForUser", required = false) String username,
+                                                  @RequestParam(value = "isReported", required = false) boolean isReported,
                                                   @PathVariable long applicationId) {
+
+        if(isReported) {
+            return FeedbackUtil.setMinMaxVotes(feedbackService.findByIsReported(applicationId), applicationId, feedbackService);
+        }
         if (view != null && idList == null) {
             if (view.equals("public")) {
-                return setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, true), applicationId);
+                return FeedbackUtil.setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, true), applicationId, feedbackService);
             } else if (view.equals("private")) {
-                return setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, false), applicationId);
+                return FeedbackUtil.setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, false), applicationId, feedbackService);
             }
             throw new NotFoundException();
         } else if (idList != null && !idList.isEmpty()) {
-            return setMinMaxVotes(feedbackService.findAllByFeedbackIdIn(applicationId, idList), applicationId);
+            return FeedbackUtil.setMinMaxVotes(feedbackService.findAllByFeedbackIdIn(applicationId, idList), applicationId, feedbackService);
         } else if (username != null) {
             AndroidUser androidUser = androidUserService.findByNameAndApplicationId(username, applicationId);
             if (androidUser != null) {
-                return setMinMaxVotes(feedbackService.findByUserIdentificationOrIsPublicAndApplicationId(applicationId,username,true),applicationId);
+                return FeedbackUtil.setMinMaxVotes(feedbackService.findByUserIdentificationOrIsPublicAndApplicationId(applicationId,username,true),applicationId, feedbackService);
             }
         }
-        return setMinMaxVotes(feedbackService.findByApplicationId(applicationId), applicationId);
+        return FeedbackUtil.setMinMaxVotes(feedbackService.findByApplicationId(applicationId), applicationId, feedbackService);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -99,8 +104,9 @@ public class FeedbackController extends BaseController {
     public List<Feedback> getApplicationFeedbacksCompact(@RequestParam(value = "view", required = false) String view,
                                                          @RequestParam(value = "ids", required = false) List<Long> idList,
                                                          @RequestParam(value = "isRelevantForUser", required = false) String username,
+                                                         @RequestParam(value = "isReported", required = false) boolean isReported,
                                                          @PathVariable long applicationId) {
-        return getApplicationFeedbacks(view, idList, username, applicationId);
+        return getApplicationFeedbacks(view, idList, username, isReported, applicationId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -129,13 +135,13 @@ public class FeedbackController extends BaseController {
         if (feedback == null) {
             throw new NotFoundException();
         }
-        return setMinMaxVotes(feedback, applicationId);
+        return FeedbackUtil.setMinMaxVotes(feedback, applicationId, feedbackService);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/user_identification/{userIdentification}")
     public List<Feedback> getFeedbacksByUserIdentification(@PathVariable long applicationId, @PathVariable String userIdentification) {
-        return setMinMaxVotes(feedbackService.findByUserIdentification(userIdentification), applicationId);
+        return FeedbackUtil.setMinMaxVotes(feedbackService.findByUserIdentification(userIdentification), applicationId, feedbackService);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -327,50 +333,6 @@ public class FeedbackController extends BaseController {
             }
         }
         throw new BadRequestException();
-    }
-
-    private List<Feedback> setMinMaxVotes(List<Feedback> feedbackList, long applicationId) {
-        List<Feedback> applicationFeedbackList = feedbackService.findByApplicationId(applicationId);
-
-        int minVotes = 0;
-        int maxVotes = 0;
-        Feedback minFeedback = applicationFeedbackList.stream().min(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
-        Feedback maxFeedback = applicationFeedbackList.stream().max(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
-
-        if (minFeedback != null) {
-            minVotes = minFeedback.getVotes();
-        }
-
-        if (maxFeedback != null) {
-            maxVotes = maxFeedback.getVotes();
-        }
-
-        int finalMinVotes = minVotes;
-        int finalMaxVotes = maxVotes;
-        feedbackList.forEach(feedback -> feedback.setMinMaxVotes(finalMinVotes, finalMaxVotes));
-
-        return feedbackList;
-    }
-
-    private Feedback setMinMaxVotes(Feedback feedback, long applicationId) {
-        List<Feedback> applicationFeedbackList = feedbackService.findByApplicationId(applicationId);
-
-        int minVotes = 0;
-        int maxVotes = 0;
-        Feedback minFeedback = applicationFeedbackList.stream().min(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
-        Feedback maxFeedback = applicationFeedbackList.stream().max(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
-
-        if (minFeedback != null) {
-            minVotes = minFeedback.getVotes();
-        }
-
-        if (maxFeedback != null) {
-            maxVotes = maxFeedback.getVotes();
-        }
-
-        feedback.setMinMaxVotes(minVotes, maxVotes);
-
-        return feedback;
     }
 
 }

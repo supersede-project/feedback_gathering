@@ -16,6 +16,7 @@ public interface FeedbackService {
     List<Feedback> findByUserIdentification(String userIdentification);
     List<Feedback> findAllByFeedbackIdIn(long applicationId, List<Long> idList);
     List<Feedback> findByUserIdentificationOrIsPublicAndApplicationId(long applicationId, String userIdentification, boolean isPublic);
+    List<Feedback> findByIsReported(long applicationId);
     int countByUserIdentification(String userIdentification);
 }
 

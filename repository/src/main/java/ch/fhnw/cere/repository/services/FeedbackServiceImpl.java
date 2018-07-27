@@ -85,6 +85,11 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public List<Feedback> findByIsReported(long applicationId) {
+        return feedbackRepository.findByIsReported(applicationId);
+    }
+
+    @Override
     public int countByUserIdentification(String userIdentification) {
         return feedbackRepository.countByUserIdentification(userIdentification);
     }

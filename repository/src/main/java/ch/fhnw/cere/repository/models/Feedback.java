@@ -38,6 +38,7 @@ public class Feedback {
     private long configurationId;
     private String language;
     @JsonView(FeedbackView.Compact.class)
+    @JsonProperty("public")
     private boolean isPublic = false;
 
     @ManyToOne()
@@ -79,6 +80,12 @@ public class Feedback {
 
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
+
+    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<FeedbackResponse> feedbackResponses;
+
+    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<FeedbackReport> feedbackReports;
 
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonSerialize(using = CustomTagSerializer.class)
@@ -327,6 +334,22 @@ public class Feedback {
         this.screenshotFeedbacks = screenshotFeedbacks;
     }
 
+    public List<FeedbackResponse> getFeedbackResponses() {
+        return feedbackResponses;
+    }
+
+    public void setFeedbackResponses(List<FeedbackResponse> feedbackResponses) {
+        this.feedbackResponses = feedbackResponses;
+    }
+
+    public List<FeedbackReport> getFeedbackReports() {
+        return feedbackReports;
+    }
+
+    public void setFeedbackReports(List<FeedbackReport> feedbackReports) {
+        this.feedbackReports = feedbackReports;
+    }
+
     public List<TextFeedback> getTextFeedbacks() {
         return textFeedbacks;
     }
@@ -343,10 +366,12 @@ public class Feedback {
         this.application = application;
     }
 
+    @JsonProperty("public")
     public boolean isPublic() {
         return isPublic;
     }
 
+    @JsonProperty("public")
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }

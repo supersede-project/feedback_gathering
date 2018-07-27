@@ -1,5 +1,6 @@
 package ch.fhnw.cere.repository.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +18,7 @@ public class FeedbackReport {
     @JoinColumn(name = "reporter_id")
     private AndroidUser reporter;
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")

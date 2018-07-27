@@ -24,4 +24,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     int countByUserIdentification(@Param("userIdentification") String userIdentification);
 
     List<Feedback> findByUserIdentificationOrIsPublicAndApplicationId(@Param("userIdentification") String userIdentification, @Param("isPublic") boolean isPublic, @Param("applicationId") long applicationId);
+
+    @Query( "select feedback from Feedback feedback join feedback.feedbackReports fr where feedback.applicationId = :applicationId" )
+    List<Feedback> findByIsReported(@Param("applicationId") long applicationId);
+
 }
