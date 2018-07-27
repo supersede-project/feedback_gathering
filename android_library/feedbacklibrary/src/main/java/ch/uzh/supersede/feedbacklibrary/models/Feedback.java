@@ -73,6 +73,7 @@ public class Feedback implements Serializable {
         private List<TextFeedback> textFeedbackList;
         private String[] tags;
         private Enums.FEEDBACK_STATUS feedbackStatus;
+        private boolean isPublic;
 
         public Builder() {
             //NOP
@@ -144,28 +145,32 @@ public class Feedback implements Serializable {
             }
             return this;
         }
+
         public Builder withFeedbackStatus(Enums.FEEDBACK_STATUS feedbackStatus) {
             this.feedbackStatus = feedbackStatus;
             return this;
         }
 
+        public Builder withIsPublic(boolean isPublic) {
+            this.isPublic = isPublic;
+            return this;
+        }
+
         public Feedback build() {
-            if (CompareUtility.notNull(userIdentification)) {
-                Feedback bean = new Feedback();
-                bean.contextInformationFeedback = this.contextInformationFeedback;
-                bean.title = this.title;
-                bean.userIdentification = this.userIdentification;
-                bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
-                bean.labelFeedbackList = new ArrayList<>(this.categoryFeedbackList);
-                bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
-                bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
-                bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
-                bean.tags = tags;
-                bean.createdAt = new Date();
-                bean.feedbackStatus = this.feedbackStatus;
-                return bean;
-            }
-            return null;
+            Feedback bean = new Feedback();
+            bean.contextInformationFeedback = this.contextInformationFeedback;
+            bean.title = this.title;
+            bean.userIdentification = this.userIdentification;
+            bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
+            bean.labelFeedbackList = new ArrayList<>(this.categoryFeedbackList);
+            bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
+            bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
+            bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
+            bean.tags = tags;
+            bean.createdAt = new Date();
+            bean.feedbackStatus = this.feedbackStatus;
+            bean.isPublic = this.isPublic;
+            return bean;
         }
 
     }
