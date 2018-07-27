@@ -74,10 +74,10 @@ public class FeedbackController extends BaseController {
     public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view,
                                                   @RequestParam(value = "ids", required = false) List<Long> idList,
                                                   @RequestParam(value = "relevantForUser", required = false) String username,
-                                                  @RequestParam(value = "isReported", required = false) boolean isReported,
+                                                  @RequestParam(value = "onlyReported", required = false) boolean onlyReported,
                                                   @PathVariable long applicationId) {
 
-        if(isReported) {
+        if(onlyReported) {
             return FeedbackUtil.setMinMaxVotes(feedbackService.findByIsReported(applicationId), applicationId, feedbackService);
         }
         if (view != null && idList == null) {
