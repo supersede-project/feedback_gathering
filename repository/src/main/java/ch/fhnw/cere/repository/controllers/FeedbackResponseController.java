@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.BadRequestException;
+import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.AndroidUser;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.FeedbackResponse;
@@ -28,7 +29,7 @@ public class FeedbackResponseController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public List<FeedbackResponse> getFeedbackResponses(@PathVariable long feedbackId) {
+    public List<FeedbackResponse> getFeedbackResponses(@PathVariable long applicationId, @PathVariable long feedbackId) {
         return feedbackResponseService.findByFeedbackId(feedbackId);
     }
 
@@ -42,8 +43,11 @@ public class FeedbackResponseController extends BaseController {
             String content = obj.getString("content");
             AndroidUser respondingAndroidUser = androidUserService.findByName(username);
             Feedback respondedFeedback = feedbackService.find(feedbackId);
-            FeedbackResponse feedbackResponse = new FeedbackResponse(respondingAndroidUser, respondedFeedback, content);
-            return feedbackResponseService.save(feedbackResponse);
+            if(respondingAndroidUser != null && respondedFeedback != null) {
+                FeedbackResponse feedbackResponse = new FeedbackResponse(respondingAndroidUser, respondedFeedback, content);
+                return feedbackResponseService.save(feedbackResponse);
+            }
+            throw new NotFoundException();
 
         }
 

@@ -37,13 +37,12 @@ public class FeedbackReportController extends BaseController {
         return feedbackReportService.find(id);
     }
 
-    //TODO: CHECK if this is the right way to to this...
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.POST, value = "")
     public FeedbackReport createFeedbackReport(@PathVariable long applicationId, HttpEntity<String> feedbackReportRequest) {
         JSONObject obj = new JSONObject(feedbackReportRequest.getBody());
         long feedbackId = obj.getLong("feedbackId");
-        String reporterUserName = obj.getString("reporterUserName");
+        String reporterUserName = obj.getString("reporterUsername");
         String reason = obj.getString("reason");
 
         AndroidUser androidUser = androidUserService.findByNameAndApplicationId(reporterUserName, applicationId);

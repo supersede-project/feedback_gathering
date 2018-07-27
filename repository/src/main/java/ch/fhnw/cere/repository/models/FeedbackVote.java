@@ -1,9 +1,8 @@
 package ch.fhnw.cere.repository.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import javax.persistence.*;
 
@@ -17,14 +16,12 @@ public class FeedbackVote {
 
     private int vote;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "voter_user_id")
     private AndroidUser voterUser;
