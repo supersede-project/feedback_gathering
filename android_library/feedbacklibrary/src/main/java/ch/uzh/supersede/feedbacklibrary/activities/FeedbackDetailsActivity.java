@@ -221,7 +221,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                     } else if (report.length() > configuration.getMaxReportLength()) {
                         Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
                     } else {
-                        FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, feedbackDetailsBean, null /*report*/);
+                        FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, feedbackDetailsBean, null);
                         dialog.dismiss();
                     }
                 }

@@ -6,12 +6,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
 public class Feedback implements Serializable {
@@ -53,6 +49,7 @@ public class Feedback implements Serializable {
     private int maxVotes;
     private Enums.FEEDBACK_STATUS feedbackStatus;
     private boolean isPublic;
+    private List<FeedbackResponse> feedbackResponses;
 
 
     private Feedback() {
@@ -74,6 +71,7 @@ public class Feedback implements Serializable {
         private String[] tags;
         private Enums.FEEDBACK_STATUS feedbackStatus;
         private boolean isPublic;
+        private List<FeedbackResponse> feedbackResponses;
 
         public Builder() {
             //NOP
@@ -156,6 +154,11 @@ public class Feedback implements Serializable {
             return this;
         }
 
+        public Builder withFeedbackResponses(List<FeedbackResponse> feedbackResponses){
+            this.feedbackResponses = feedbackResponses;
+            return this;
+        }
+
         public Feedback build() {
             Feedback bean = new Feedback();
             bean.contextInformationFeedback = this.contextInformationFeedback;
@@ -170,6 +173,7 @@ public class Feedback implements Serializable {
             bean.createdAt = new Date();
             bean.feedbackStatus = this.feedbackStatus;
             bean.isPublic = this.isPublic;
+            bean.feedbackResponses = this.feedbackResponses;
             return bean;
         }
 
@@ -259,5 +263,9 @@ public class Feedback implements Serializable {
 
     public void setPublic(boolean aPublic) {
         isPublic = aPublic;
+    }
+
+    public List<FeedbackResponse> getFeedbackResponses() {
+        return feedbackResponses;
     }
 }

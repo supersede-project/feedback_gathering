@@ -227,7 +227,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                 String response = ((EditText) bottomView).getText().toString();
                 RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
                 removeFeedbackResponse();
-                FeedbackService.getInstance(getContext()).createFeedbackResponse(eventListener,feedbackBean,response, userName);
+                FeedbackService.getInstance(getContext()).createFeedbackResponse(eventListener,feedbackBean, userName, response);
             }
         }
     }

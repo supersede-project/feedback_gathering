@@ -160,31 +160,6 @@ public class RepositoryStub {
                 .build();
     }
 
-    public static FeedbackBean getFeedback(Context context, LocalFeedbackBean localFeedbackBean) {
-        int minUpVotes = -30; //FIXME [jfo]
-        int maxUpVotes = 50; //FIXME [jfo]
-
-        long feedbackId = localFeedbackBean.getFeedbackId();
-        String title = localFeedbackBean.getTitle();
-        FEEDBACK_STATUS feedbackStatus = localFeedbackBean.getFeedbackStatus();
-        int upVotes = localFeedbackBean.getVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
-        long timeStamp = localFeedbackBean.getCreationDate();
-        int responses = localFeedbackBean.getResponses();
-        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
-
-        return new FeedbackBean.Builder()
-                .withFeedbackId(feedbackId)
-                .withTitle(title)
-                .withUserName(userName)
-                .withTimestamp(timeStamp)
-                .withUpVotes(upVotes)
-                .withMinUpVotes(minUpVotes)
-                .withMaxUpVotes(maxUpVotes)
-                .withResponses(responses)
-                .withStatus(feedbackStatus)
-                .build();
-    }
-
     private static FEEDBACK_STATUS generateFeedbackStatus() {
         FEEDBACK_STATUS[] status = new FEEDBACK_STATUS[]{OPEN, IN_PROGRESS, REJECTED, DUPLICATE, CLOSED};
         return status[NumberUtility.randomPosition(status)];
