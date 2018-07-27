@@ -1,12 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackReport {
+public class FeedbackReportResponseBody {
     private long id;
     private Feedback feedback;
     private AndroidUser reporter;
     private String reason;
 
-    public FeedbackReport(Feedback feedback, AndroidUser reporter, String reason) {
+    public FeedbackReportResponseBody(Feedback feedback, AndroidUser reporter, String reason) {
         this.feedback = feedback;
         this.reporter = reporter;
         this.reason = reason;
