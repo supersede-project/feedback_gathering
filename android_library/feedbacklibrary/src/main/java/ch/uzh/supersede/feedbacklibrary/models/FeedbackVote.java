@@ -1,10 +1,11 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackVoteRequestBody {
+public class FeedbackVote {
+    private long id;
     private int vote;
     private String voterUsername;
 
-    public FeedbackVoteRequestBody(int vote, String voterUsername) {
+    public FeedbackVote(int vote, String voterUsername) {
         this.vote = vote;
         this.voterUsername = voterUsername;
     }
@@ -15,14 +16,6 @@ public class FeedbackVoteRequestBody {
 
     public String getVoterUsername() {
         return voterUsername;
-    }
-
-    public void setVote(int vote) {
-        this.vote = vote;
-    }
-
-    public void setVoterUsername(String voterUsername) {
-        this.voterUsername = voterUsername;
     }
 }
 
