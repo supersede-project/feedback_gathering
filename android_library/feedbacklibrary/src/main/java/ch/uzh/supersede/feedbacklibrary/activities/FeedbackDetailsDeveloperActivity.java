@@ -49,11 +49,13 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
     private Button responseButton;
     private Button awardKarmaButton;
     private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
+    private IFeedbackServiceEventListener callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mode = READING;
+        callback = this;
         setContentView(R.layout.activity_feedback_details_developer);
         responseLayout = getView(R.id.details_developer_layout_scroll_layout, LinearLayout.class);
         scrollContainer = getView(R.id.details_developer_layout_scroll_container, ScrollView.class);
@@ -202,6 +204,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
                 public void onClick(DialogInterface dialog, int which) {
                     if (karmaInputText.getText().length()>0){
                         Integer karma = Integer.parseInt(karmaInputText.getText().toString());
+                        String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, null);
+                        FeedbackService.getInstance(getApplicationContext()).createVote(callback, getFeedbackDetailsBean(), karma, userName);
                         RepositoryStub.sendKarma(getFeedbackDetailsBean(),karma);
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_awarded,String.valueOf(karma),getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
                         dialog.cancel();

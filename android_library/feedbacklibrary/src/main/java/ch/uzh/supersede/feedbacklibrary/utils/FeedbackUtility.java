@@ -118,7 +118,7 @@ public class FeedbackUtility {
         }
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
-        Bitmap bitmap = null; //TODO bitmap
+        Bitmap bitmap = null;
         String bitmapName = null;
 
         if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
@@ -127,7 +127,6 @@ public class FeedbackUtility {
 
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
-        //TODO: Dani, we need title & tags, workaround for release 4
         if (title == null || title.length() == 0) {
             title = "#Dummy-Title#" + (imageName != null ? "* " : " ") + GeneratorStub.BagOfFeedbackTitles.pickRandom();
         } else {

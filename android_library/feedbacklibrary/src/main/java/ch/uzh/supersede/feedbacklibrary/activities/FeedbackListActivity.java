@@ -20,6 +20,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -30,6 +31,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
     private TextView loadingTextView;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,11 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
         colorViews(2, getView(R.id.list_root, ContentFrameLayout.class));
+
+        if (ACTIVE.check(this)){
+            userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
+        }
+
         onPostCreate();
     }
 
@@ -76,9 +83,9 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         loadingTextView.setVisibility(View.VISIBLE);
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getFeedbackList(this, this);
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this, userName);
         } else {
-            FeedbackService.getInstance(this).getFeedbackList(this, this);
+            FeedbackService.getInstance(this).getFeedbackList(this, this, userName);
         }
         doSearch(getSearchText().getText().toString());
         sort();

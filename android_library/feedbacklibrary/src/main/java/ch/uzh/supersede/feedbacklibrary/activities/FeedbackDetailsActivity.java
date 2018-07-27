@@ -438,7 +438,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     @Override
     protected void onPause() {
         if (!feedbackState.isEqualVoted()){
-            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted(), userName);
+            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted() ? 1: -1, userName);
         }
         if (feedbackState.isSubscribed()){
             FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
@@ -451,7 +451,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     @Override
     protected void onDestroy() {
         if (!feedbackState.isEqualVoted()){
-            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted(), userName);
+            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted()? 1: -1, userName);
         }
         if (feedbackState.isSubscribed()){
             FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
