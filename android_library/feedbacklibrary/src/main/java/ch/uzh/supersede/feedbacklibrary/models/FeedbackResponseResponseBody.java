@@ -2,14 +2,14 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import java.util.Date;
 
-public class FeedbackResponse {
+public class FeedbackResponseResponseBody {
     private long id;
     private AndroidUser user;
     private String content;
     private Date createdAt;
     private Date updatedAt;
 
-    public FeedbackResponse(AndroidUser user, String content) {
+    public FeedbackResponseResponseBody(AndroidUser user, String content) {
         this.user = user;
         this.content = content;
     }
