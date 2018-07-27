@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.os.*;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
@@ -240,7 +240,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                             nameInputText.setMaxLines(1);
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
-                                    .withMessage(getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
+                                    .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M?getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()):getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {
@@ -363,7 +363,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     private void handleAllPermissionsGranted(boolean reload) {
         updateUserLevel(true);
-        if (ACTIVE.check(this, true) && preAllocatedStringStorage[0] != null) {
+        if (ACTIVE.check(this, true)  && preAllocatedStringStorage[0] != null) {
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
             if (name == null) {
                 Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_registered, preAllocatedStringStorage[0]), Toast.LENGTH_SHORT)

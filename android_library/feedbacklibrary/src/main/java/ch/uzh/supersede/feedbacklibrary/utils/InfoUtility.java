@@ -53,7 +53,7 @@ public class InfoUtility {
             idList.add(anchorView.getId());
         }
         //Text-Size
-        int titleWidth = measureTextWidth(title,20,getDensity(activity));
+        int titleWidth = measureTextWidth(title,2,getDensity(activity));
         //X-Y Locations
         int[] xyLocations = new int[2];
         anchorView.getLocationOnScreen(xyLocations);
