@@ -182,8 +182,8 @@ public abstract class FeedbackService {
                     });
         }
 
-        private void getFeedbackList(IFeedbackServiceEventListener callback, EventType eventType, String viewMode, String ids, String relevantForUser) {
-            feedbackAPI.getFeedbackList(getToken(), language, applicationId, viewMode, ids, relevantForUser).enqueue(
+        private void getFeedbackList(IFeedbackServiceEventListener callback, EventType eventType, String viewMode, String ids, String relevantForUser, boolean onlyReported) {
+            feedbackAPI.getFeedbackList(getToken(), language, applicationId, viewMode, ids, relevantForUser, onlyReported).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, eventType) {
                     });
         }
@@ -196,37 +196,36 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_PUBLIC, null, relevantForUser);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_PUBLIC, null, relevantForUser, false);
         }
 
         @Override
         public void getFeedbackListPrivate(IFeedbackServiceEventListener callback) {
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_PRIVATE, VIEW_PRIVATE, null, null);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_PRIVATE, VIEW_PRIVATE, null, null, false);
         }
 
         @Override
         public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids, null);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids, null, false);
         }
 
         @Override
         public void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_VOTED, VIEW_PUBLIC, ids, null);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_VOTED, VIEW_PUBLIC, ids, null, false);
         }
 
         @Override
         public void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_SUBSCRIBED, VIEW_ALL, ids, null);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_SUBSCRIBED, VIEW_ALL, ids, null, false);
         }
 
         @Override
         public void getFeedbackReportList(IFeedbackServiceEventListener callback) {
-            feedbackAPI.getFeedbackReportList(getToken(), language, applicationId).enqueue(
-                    new RepositoryCallback<List<FeedbackReport>>(callback, GET_FEEDBACK_REPORT_LIST) {
-                    });
+            getFeedbackList(callback, EventType.GET_FEEDBACK_REPORT_LIST, VIEW_ALL, null, null, true);
+
         }
 
         @Override
