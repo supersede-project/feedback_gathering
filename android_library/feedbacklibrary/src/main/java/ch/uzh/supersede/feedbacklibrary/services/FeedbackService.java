@@ -24,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackServiceConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -33,10 +34,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
  * asynchronous events accordingly.
  */
 public abstract class FeedbackService {
-    private static final String VIEW_PUBLIC = "public";
-    private static final String VIEW_PRIVATE = "private";
-    private static final String VIEW_ALL = null;
-
     private static FeedbackApiService apiInstance;
     private static FeedbackMockService mockInstance;
 
@@ -92,53 +89,62 @@ public abstract class FeedbackService {
         this.token = token;
     }
 
+    public abstract void pingRepository(IFeedbackServiceEventListener callback);
+
     public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
 
     public abstract void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot);
 
     public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context);
 
-    public abstract void getPrivateFeedbackList(IFeedbackServiceEventListener callback);
-
-    public abstract void getReportedFeedbackList(IFeedbackServiceEventListener callback);
+    public abstract void getFeedbackListPrivate(IFeedbackServiceEventListener callback);
 
     public abstract void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
     public abstract void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
-    public abstract void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Context context);
+    public abstract void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context);
 
-    public abstract void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Context context);
+    public abstract void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context);
 
-    public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context);
+    public abstract void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context);
 
-    public abstract void pingRepository(IFeedbackServiceEventListener callback);
+    public abstract void getFeedbackReportList(IFeedbackServiceEventListener callback);
 
-    public abstract void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item);
+    public abstract void editFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String status);
+
+    public abstract void editFeedbackPublication(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, boolean isPublic);
 
     public abstract void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
     public abstract void createFeedbackReport(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, FeedbackReport report);
 
-    public abstract void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponse response);
+    public abstract void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String userName, String response);
 
-    public abstract void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean);
-
-    public abstract void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote,  String userName);
+    public abstract void createVote(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote, String userName);
 
     public abstract void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
-    public abstract void getFeedbackTags(IFeedbackServiceEventListener callback);
+    public abstract void getFeedbackAudio(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
+
+    public abstract void getTagList(IFeedbackServiceEventListener callback);
 
     public void createSubscription(IFeedbackServiceEventListener callback, FeedbackBean feedbackBean) {
         callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION, feedbackBean);
     }
 
-    public void getLocalFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context) {
-        callback.onEventCompleted(GET_LOCAL_FEEDBACK_SUBSCRIPTIONS, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
+    public void getLocalFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
+        callback.onEventCompleted(GET_LOCAL_FEEDBACK_LIST_SUBSCRIBED, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
     }
 
     private static class FeedbackApiService extends FeedbackService {
+
+        @Override
+        public void pingRepository(IFeedbackServiceEventListener callback) {
+            feedbackAPI.pingRepository().enqueue(
+                    new RepositoryCallback<ResponseBody>(callback, EventType.PING_REPOSITORY) {
+                    });
+        }
 
         @Override
         public void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest) {
@@ -182,6 +188,11 @@ public abstract class FeedbackService {
                     });
         }
 
+        private void editFeedback(IFeedbackServiceEventListener callback, long feedbackId, EventType eventType, Feedback feedback) {
+            feedbackAPI.editFeedback(getToken(), language, applicationId, feedbackId, feedback).enqueue(
+                    new RepositoryCallback<Feedback>(callback, eventType) {
+                    });
+        }
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Context context) {
@@ -189,49 +200,45 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getPrivateFeedbackList(IFeedbackServiceEventListener callback) {
-            getFeedbackList(callback, EventType.GET_PRIVATE_FEEDBACK_LIST, VIEW_PRIVATE, null);
+        public void getFeedbackListPrivate(IFeedbackServiceEventListener callback) {
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_PRIVATE, VIEW_PRIVATE, null);
         }
 
         @Override
-        public void getReportedFeedbackList(IFeedbackServiceEventListener callback) {
+        public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
+            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids);
+        }
+
+        @Override
+        public void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context) {
+            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_VOTED, VIEW_PUBLIC, ids);
+        }
+
+        @Override
+        public void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
+            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_SUBSCRIBED, VIEW_ALL, ids);
+        }
+
+        @Override
+        public void getFeedbackReportList(IFeedbackServiceEventListener callback) {
             feedbackAPI.getFeedbackReportList(getToken(), language, applicationId).enqueue(
                     new RepositoryCallback<List<FeedbackReport>>(callback, GET_FEEDBACK_REPORT_LIST) {
                     });
         }
 
         @Override
-        public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Context context) {
-            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
-            getFeedbackList(callback, EventType.GET_OTHERS_FEEDBACK_VOTES, VIEW_ALL, ids);
+        public void editFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String status) {
+            Feedback feedback = new Feedback.Builder().withFeedbackStatus(Enums.FEEDBACK_STATUS.valueOf(status)).build();
+            editFeedback(callback, feedbackDetailsBean.getFeedbackId(), EDIT_FEEDBACK_STATUS, feedback);
         }
 
         @Override
-        public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Context context) {
-            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
-            getFeedbackList(callback, EventType.GET_MINE_FEEDBACK_VOTES, VIEW_PUBLIC, ids);
-        }
-
-        @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context) {
-            String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS, VIEW_ALL, ids);
-        }
-
-
-        @Override
-        public void pingRepository(IFeedbackServiceEventListener callback) {
-            feedbackAPI.pingRepository().enqueue(
-                    new RepositoryCallback<ResponseBody>(callback, EventType.PING_REPOSITORY) {
-                    });
-        }
-
-        @Override
-        public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
-            if (item instanceof String) {
-                callback.onEventCompleted(CREATE_FEEDBACK_STATUS_UPDATE_MOCK, false);
-                //TODO: mbo implement when backend allows this call;
-            }
+        public void editFeedbackPublication(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, boolean isPublic) {
+            Feedback feedback = new Feedback.Builder().withIsPublic(isPublic).build();
+            editFeedback(callback, feedbackDetailsBean.getFeedbackId(), EDIT_FEEDBACK_PUBLICATION, feedback);
         }
 
         @Override
@@ -249,42 +256,39 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponse response) {
-            feedbackAPI.createFeedbackResponse(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), response).enqueue(
+        public void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String userName, String response) {
+            FeedbackResponse responseBean = new FeedbackResponse(new AndroidUser(userName), response);
+            feedbackAPI.createFeedbackResponse(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), responseBean).enqueue(
                     new RepositoryCallback<FeedbackResponse>(callback, CREATE_FEEDBACK_RESPONSE) {
                     });
         }
 
         @Override
-        public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean) {
-            Feedback feedback = new Feedback.Builder().withIsPublic(true).build();
-            feedbackAPI.editFeedback(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), feedback).enqueue(
-                    new RepositoryCallback<Feedback>(callback, CREATE_FEEDBACK_PUBLICATION) {
-                    });
-        }
-
-        @Override
-        public void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote, String userName) {
-            FeedbackVote feedbackVote = new FeedbackVote(upVote ? 1 : -1, "user");
+        public void createVote(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote, String userName) {
+            FeedbackVote feedbackVote = new FeedbackVote(upVote ? 1 : -1, userName);
             feedbackAPI.createVote(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), feedbackVote).enqueue(
-                    new RepositoryCallback<FeedbackVote>(callback, CREATE_FEEDBACK_VOTE) {
+                    new RepositoryCallback<FeedbackVote>(callback, CREATE_VOTE) {
                     });
         }
 
         @Override
-        public void getFeedbackTags(IFeedbackServiceEventListener callback) {
+        public void getTagList(IFeedbackServiceEventListener callback) {
             feedbackAPI.getTagList(getToken(), language, applicationId).enqueue(
-                    new RepositoryCallback<List<String>>(callback, EventType.GET_FEEDBACK_TAGS) {
+                    new RepositoryCallback<List<String>>(callback, GET_TAG_LIST) {
                     });
         }
 
         @Override
         public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             feedbackAPI.getFeedbackImage(getToken(), language, applicationId, feedbackDetailsBean.getBitmapName()).enqueue(
-                    new RepositoryCallback<ResponseBody>(callback, EventType.GET_FEEDBACK_IMAGE) {
+                    new RepositoryCallback<ResponseBody>(callback, GET_FEEDBACK_IMAGE) {
                     });
         }
 
+        @Override
+        public void getFeedbackAudio(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
+            //TODO implementation
+        }
     }
 
     private static class FeedbackMockService extends FeedbackService {
@@ -323,27 +327,27 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getPrivateFeedbackList(IFeedbackServiceEventListener callback) {
+        public void getFeedbackListPrivate(IFeedbackServiceEventListener callback) {
 
         }
 
         @Override
-        public void getReportedFeedbackList(IFeedbackServiceEventListener callback) {
+        public void getFeedbackReportList(IFeedbackServiceEventListener callback) {
 
         }
 
         @Override
-        public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Context context) {
+        public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
             callback.onEventCompleted(GET_MINE_FEEDBACK_VOTES_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
         }
 
         @Override
-        public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Context context) {
+        public void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context) {
             callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
         }
 
         @Override
-        public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Context context) {
+        public void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
             callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
         }
 
@@ -353,9 +357,9 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
-            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean, item);
-            callback.onEventCompleted(CREATE_FEEDBACK_STATUS_UPDATE, false);
+        public void editFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String status) {
+            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean, status);
+            callback.onEventCompleted(EDIT_FEEDBACK_STATUS, false);
         }
 
         @Override
@@ -370,28 +374,33 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void respondFeedback(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponse response) {
+        public void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean,  String userName, String response) {
             callback.onEventCompleted(CREATE_FEEDBACK_RESPONSE_MOCK, false);
         }
 
         @Override
-        public void makeFeedbackPublic(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean) {
+        public void editFeedbackPublication(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, boolean isPublic) {
             callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
         }
 
         @Override
-        public void voteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote, String userName) {
+        public void createVote(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, boolean upVote, String userName) {
             //callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
         }
 
         @Override
-        public void getFeedbackTags(IFeedbackServiceEventListener callback) {
+        public void getTagList(IFeedbackServiceEventListener callback) {
             callback.onEventCompleted(GET_FEEDBACK_TAGS_MOCK, false);
         }
 
         @Override
         public void getFeedbackImage(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             callback.onEventCompleted(GET_FEEDBACK_IMAGE_MOCK, false);
+        }
+
+        @Override
+        public void getFeedbackAudio(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
+
         }
 
     }

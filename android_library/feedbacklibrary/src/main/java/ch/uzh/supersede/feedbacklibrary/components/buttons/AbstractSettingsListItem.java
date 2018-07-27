@@ -14,8 +14,7 @@ import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -23,7 +22,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBAC
 
 public abstract class AbstractSettingsListItem extends LinearLayout  implements Comparable {
     public static final int PADDING = 10;
-    private LocalFeedbackBean feedbackBean;
+    private FeedbackDetailsBean feedbackBean;
     private LinearLayout upperWrapperLayout;
     private LinearLayout lowerWrapperLayout;
     private TextView dateView;
@@ -34,7 +33,7 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         super(context);
     }
 
-    public LocalFeedbackBean getFeedbackBean() {
+    public FeedbackDetailsBean getFeedbackBean() {
         return feedbackBean;
     }
 
@@ -60,7 +59,7 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         return titleView;
     }
 
-    public AbstractSettingsListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
+    public AbstractSettingsListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
         this.feedbackBean = feedbackBean;
         this.colors = configuration.getTopColors();
@@ -90,7 +89,7 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, PADDING, textColor);
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getCreationDate())), Gravity.END, PADDING, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, PADDING, textColor);
         int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackBean.getFeedbackStatus().getColor(), 0.4);
         TextView statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel(),
                 Gravity.START, PADDING, statusColor);

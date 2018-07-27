@@ -100,8 +100,9 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    if (isStatusNew(((AppCompatSpinner) parentView).getAdapter().getItem(position))){
-                        FeedbackService.getInstance(getApplicationContext()).updateFeedbackStatus(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean(),((AppCompatSpinner) parentView).getAdapter().getItem(position));
+                    Object feedbackStatus = ((AppCompatSpinner) parentView).getAdapter().getItem(position);
+                    if (isStatusNew(feedbackStatus)){
+                        FeedbackService.getInstance(getApplicationContext()).editFeedbackStatus(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean(), (String) feedbackStatus);
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_status_updated),Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -252,7 +253,14 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        //TODO: Implement
+        switch (eventType){
+            case CREATE_FEEDBACK_DELETION_MOCK:
+            case DELETE_FEEDBACK:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

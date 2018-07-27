@@ -54,6 +54,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     private Button makePublicButton;
     private boolean creationMode = false;
     private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
+    private String userName;
 
 
     @Override
@@ -127,6 +128,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
             downButton.setEnabled(false);
             subscribeButton.setEnabled(false);
             responseButton.setEnabled(false);
+            userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         colorViews(0,upButton,downButton,imageButton,audioButton, tagButton,subscribeButton,responseButton);
         colorViews(1,getView(R.id.details_root,ContentFrameLayout.class));
@@ -197,7 +199,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     makePublicButton.setVisibility(View.INVISIBLE);
-                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(FeedbackDetailsActivity.this,null/*feedbackDetailsBean*/);
+                    FeedbackService.getInstance(getApplicationContext()).editFeedbackPublication(FeedbackDetailsActivity.this,feedbackDetailsBean.getFeedbackBean(), true);
                     dialog.cancel();
                 }
             };
@@ -328,14 +330,14 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                     updateReportStatus((String)response);
                 }
                 break;
-            case CREATE_FEEDBACK_VOTE: //Votes only saved before destroy/pause, therefore no callback
+            case CREATE_VOTE: //Votes only saved before destroy/pause, therefore no callback
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
-            case CREATE_FEEDBACK_PUBLICATION:
+            case EDIT_FEEDBACK_PUBLICATION:
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
                 Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
                 break;
-            case CREATE_FEEDBACK_STATUS_UPDATE: //Developer view TODO: move it
+            case EDIT_FEEDBACK_STATUS: //Developer view TODO: move it
             case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
                 break;
             case GET_FEEDBACK_IMAGE:
@@ -372,15 +374,15 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 break;
             case CREATE_FEEDBACK_REPORT_MOCK:
                 break;
-            case CREATE_FEEDBACK_VOTE:
+            case CREATE_VOTE:
                 break;
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
-            case CREATE_FEEDBACK_PUBLICATION:
+            case EDIT_FEEDBACK_PUBLICATION:
                 break;
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
                 break;
-            case CREATE_FEEDBACK_STATUS_UPDATE:
+            case EDIT_FEEDBACK_STATUS:
                 break;
             case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
                 break;
@@ -412,15 +414,15 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 break;
             case CREATE_FEEDBACK_REPORT_MOCK:
                 break;
-            case CREATE_FEEDBACK_VOTE:
+            case CREATE_VOTE:
                 break;
             case CREATE_FEEDBACK_VOTE_MOCK:
                 break;
-            case CREATE_FEEDBACK_PUBLICATION:
+            case EDIT_FEEDBACK_PUBLICATION:
                 break;
             case CREATE_FEEDBACK_PUBLICATION_MOCK:
                 break;
-            case CREATE_FEEDBACK_STATUS_UPDATE:
+            case EDIT_FEEDBACK_STATUS:
                 break;
             case CREATE_FEEDBACK_STATUS_UPDATE_MOCK:
                 break;
@@ -436,7 +438,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     @Override
     protected void onPause() {
         if (!feedbackState.isEqualVoted()){
-            FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
+            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted(), userName);
         }
         if (feedbackState.isSubscribed()){
             FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());
@@ -449,7 +451,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
     @Override
     protected void onDestroy() {
         if (!feedbackState.isEqualVoted()){
-            FeedbackService.getInstance(getApplicationContext()).voteFeedback(this,feedbackDetailsBean,feedbackState.isUpVoted());
+            FeedbackService.getInstance(getApplicationContext()).createVote(this,feedbackDetailsBean,feedbackState.isUpVoted(), userName);
         }
         if (feedbackState.isSubscribed()){
             FeedbackService.getInstance(getApplicationContext()).createSubscription(this,feedbackDetailsBean.getFeedbackBean());

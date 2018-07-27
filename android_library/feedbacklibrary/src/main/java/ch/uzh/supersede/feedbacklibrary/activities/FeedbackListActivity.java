@@ -90,12 +90,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 if (response instanceof List) {
-                    for (Feedback feedback : (List<Feedback>) response) {
-                        FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-                        if (feedbackDetailsBean != null) { //Avoid NP caused by old Repository Feedback
-                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
-                        }
-                    }
+                    allFeedbackList.addAll(FeedbackUtility.createFeedbackListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(getSearchText().getText().toString());
                     loadingTextView.setVisibility(View.INVISIBLE);

@@ -73,8 +73,8 @@ public class Enums {
 
     public enum SETTINGS_VIEW {
         MINE,
-        OTHERS,
-        SUBSCRIPTIONS
+        VOTED,
+        SUBSCRIBED
     }
 
     public enum DIALOG_TYPE {
@@ -82,10 +82,5 @@ public class Enums {
         QUICK_EDIT,
         CHANGE_COLOR,
         CROP
-    }
-
-    public enum RUNNING_MODE_TYPE {
-        TEST,
-        PRODUCTIVE
     }
 }

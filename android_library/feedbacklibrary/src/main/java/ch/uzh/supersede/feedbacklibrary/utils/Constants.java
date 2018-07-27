@@ -50,6 +50,14 @@ public class Constants {
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
     public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
 
+    public static class FeedbackServiceConstants {
+        private FeedbackServiceConstants() {
+        }
+
+        public static final String VIEW_PUBLIC = "public";
+        public static final String VIEW_PRIVATE = "private";
+        public static final String VIEW_ALL = null;
+    }
 
     public static class UserConstants {
         private UserConstants() {

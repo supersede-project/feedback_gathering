@@ -172,9 +172,9 @@
     <string name="settings_feedback_title"><b>Feedback Settings</b></string>
     <string name="settings_use_stubs">Use stubs</string>
     <string name="settings_enable_notifications">Enable notifications</string>
-    <string name="settings_button_mine">Votes Sent</string>
-    <string name="settings_button_others">Votes Received</string>
-    <string name="settings_button_subscriptions">Subscriptions</string>
+    <string name="settings_button_own">Mine</string>
+    <string name="settings_button_voted">Voted</string>
+    <string name="settings_button_subscribed">Subscriptions</string>
     <string name="details_published">Published!</string>
 
     <!--Abstract-->

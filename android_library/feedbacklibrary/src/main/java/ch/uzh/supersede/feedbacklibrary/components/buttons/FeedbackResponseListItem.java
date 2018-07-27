@@ -22,6 +22,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -222,10 +223,11 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
             if (((EditText)bottomView).getText().length() < configuration.getMinResponseLength()){
                 Toast.makeText(getContext(),getContext().getString(R.string.details_response_too_short),Toast.LENGTH_SHORT).show();
             }else{
+                String userName = FeedbackDatabase.getInstance(getContext()).readString(USER_NAME, null);
                 String response = ((EditText) bottomView).getText().toString();
                 RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
                 removeFeedbackResponse();
-                FeedbackService.getInstance(getContext()).respondFeedback(eventListener,feedbackBean,null/*response*/);
+                FeedbackService.getInstance(getContext()).createFeedbackResponse(eventListener,feedbackBean,response, userName);
             }
         }
     }

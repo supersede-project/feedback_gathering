@@ -38,7 +38,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_identity);
         FeedbackService
-                .getInstance(this).getFeedbackTags(this);
+                .getInstance(this).getTagList(this);
 
         buttonNext = getView(R.id.identity_button_next, Button.class);
         buttonBack = getView(R.id.identity_button_back, Button.class);
@@ -320,7 +320,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case GET_FEEDBACK_TAGS:
+            case GET_TAG_LIST:
                 if (response instanceof List) {
                     loadedTags = TagUtility.getFeedbackTags(this, (List<String>)response);
                 }
@@ -335,7 +335,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
     public void onEventFailed(EventType eventType, Object response) {
         super.onEventFailed(eventType,response);
         switch (eventType) {
-            case GET_FEEDBACK_TAGS:
+            case GET_TAG_LIST:
                 // TODO: Error-handling
                  break;
         }
@@ -345,7 +345,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
     public void onConnectionFailed(EventType eventType) {
         super.onConnectionFailed(eventType);
         switch (eventType) {
-            case GET_FEEDBACK_TAGS:
+            case GET_TAG_LIST:
                 // TODO: Error-handling
                break;
         }

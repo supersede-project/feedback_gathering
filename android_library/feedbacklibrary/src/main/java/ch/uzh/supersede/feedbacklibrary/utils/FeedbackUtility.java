@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
@@ -15,6 +16,32 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
 public class FeedbackUtility {
     private FeedbackUtility() {
+    }
+
+    public static List<FeedbackListItem> createFeedbackListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
+        List<FeedbackListItem> feedbackDetailsBeans = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            feedbackDetailsBeans.add(new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+        }
+        return feedbackDetailsBeans;
+    }
+
+    public static List<VoteListItem> createFeedbackVotesListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
+        List<VoteListItem> feedbackDetailsBeans = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            feedbackDetailsBeans.add(new VoteListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+        }
+        return feedbackDetailsBeans;
+    }
+
+    public static List<Feedback> extractFeedbackListFromFeedbackReports(List<FeedbackReport> feedbackReportList) {
+        List<Feedback> feedbackList = new ArrayList<>();
+        for (FeedbackReport feedbackReport : feedbackReportList) {
+            feedbackList.add(feedbackReport.getFeedback());
+        }
+        return feedbackList;
     }
 
     public static Feedback createFeedback(Context context, List<AbstractFeedbackPart> feedbackPart, String feedbackTitle, String[] feedbackTags) {
@@ -82,7 +109,7 @@ public class FeedbackUtility {
 
         String description = null;
         String imageName = null;
-        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()){
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
             imageName = feedback.getScreenshotFeedbackList().get(0).getPath();
         }
 
@@ -101,10 +128,10 @@ public class FeedbackUtility {
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
         //TODO: Dani, we need title & tags, workaround for release 4
-        if (title == null || title.length() == 0){
-            title = "#Dummy-Title#"+(imageName!=null?"* ":" ")+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
-        }else{
-            title = title +(imageName!=null?"* ":" ");
+        if (title == null || title.length() == 0) {
+            title = "#Dummy-Title#" + (imageName != null ? "* " : " ") + GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        } else {
+            title = title + (imageName != null ? "* " : " ");
         }
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedback.getId())
@@ -118,7 +145,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        if (feedbackBean == null){
+        if (feedbackBean == null) {
             return null; //Avoid NP caused by old Feedback on the Repository
         }
         return new FeedbackDetailsBean.Builder()

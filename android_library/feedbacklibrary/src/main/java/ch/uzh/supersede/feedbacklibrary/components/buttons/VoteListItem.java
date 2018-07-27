@@ -8,8 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 
 public class VoteListItem extends AbstractSettingsListItem {
 
@@ -17,13 +16,13 @@ public class VoteListItem extends AbstractSettingsListItem {
         super(context);
     }
 
-    public VoteListItem(Context context, int visibleTiles, LocalFeedbackBean localFeedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
-        super(context, visibleTiles, localFeedbackBean, configuration, backgroundColor);
+    public VoteListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
+        super(context, visibleTiles, feedbackDetailsBean, configuration, backgroundColor);
 
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, PADDING);
+        ImageView voteView = createVoteView(getShortParams(), context, feedbackDetailsBean, PADDING);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());
@@ -33,14 +32,14 @@ public class VoteListItem extends AbstractSettingsListItem {
         addView(lowerWrapperLayout);
     }
 
-    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, LocalFeedbackBean localFeedbackBean, int padding) {
+    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, FeedbackDetailsBean feedbackDetailsBean, int padding) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(layoutParams);
 
-        if (localFeedbackBean.getVoted() > 0) {
+        if (feedbackDetailsBean.getUpVotes() > 0) {
             imageView.setImageResource(R.drawable.ic_vote_up);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
-        } else if (localFeedbackBean.getVoted() < 0) {
+        } else if (feedbackDetailsBean.getUpVotes() < 0) {
             imageView.setImageResource(R.drawable.ic_vote_down);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         }
@@ -53,8 +52,8 @@ public class VoteListItem extends AbstractSettingsListItem {
     @Override
     public int compareTo(@NonNull Object o) {
         if (o instanceof VoteListItem) {
-            long comparedTimestamp = ((VoteListItem) o).getFeedbackBean().getCreationDate();
-            return comparedTimestamp > getFeedbackBean().getCreationDate() ? 1 : comparedTimestamp == getFeedbackBean().getCreationDate() ? 0 : -1;
+            long comparedTimestamp = ((VoteListItem) o).getFeedbackBean().getTimeStamp();
+            return comparedTimestamp > getFeedbackBean().getTimeStamp() ? 1 : comparedTimestamp == getFeedbackBean().getTimeStamp() ? 0 : -1;
         }
         return 0;
     }

@@ -135,6 +135,31 @@ public class RepositoryStub {
                 .build();
     }
 
+    public static FeedbackBean getFeedback(Context context, FeedbackDetailsBean feedbackDetailsBean) {
+        int minUpVotes = -30; //FIXME [jfo]
+        int maxUpVotes = 50; //FIXME [jfo]
+
+        long feedbackId = feedbackDetailsBean.getFeedbackId();
+        String title = feedbackDetailsBean.getTitle();
+        FEEDBACK_STATUS feedbackStatus = feedbackDetailsBean.getFeedbackStatus();
+        int upVotes = feedbackDetailsBean.getUpVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
+        long timeStamp = feedbackDetailsBean.getTimeStamp();
+        int responses = feedbackDetailsBean.getResponses().size();
+        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
+
+        return new FeedbackBean.Builder()
+                .withFeedbackId(feedbackId)
+                .withTitle(title)
+                .withUserName(userName)
+                .withTimestamp(timeStamp)
+                .withUpVotes(upVotes)
+                .withMinUpVotes(minUpVotes)
+                .withMaxUpVotes(maxUpVotes)
+                .withResponses(responses)
+                .withStatus(feedbackStatus)
+                .build();
+    }
+
     public static FeedbackBean getFeedback(Context context, LocalFeedbackBean localFeedbackBean) {
         int minUpVotes = -30; //FIXME [jfo]
         int maxUpVotes = 50; //FIXME [jfo]

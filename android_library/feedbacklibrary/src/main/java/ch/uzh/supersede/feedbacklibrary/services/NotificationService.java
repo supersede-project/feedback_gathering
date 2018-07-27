@@ -128,7 +128,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             stopSelf();
             return;
         }
-        FeedbackService.getInstance(this).getFeedbackSubscriptions(this,this);
+        FeedbackService.getInstance(this).getFeedbackListSubscribed(this,this);
         FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
     }
 
@@ -140,7 +140,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
                     FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
                 }
                 break;
-            case GET_FEEDBACK_SUBSCRIPTIONS:
+            case GET_FEEDBACK_LIST_SUBSCRIBED:
                 List<FeedbackDetailsBean> feedbackDetailsBeans = FeedbackUtility.transformFeedbackResponse(response, this);
                 handleFeedbackSubscriptionUpdate(feedbackDetailsBeans);
                 break;
