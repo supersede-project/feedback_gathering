@@ -33,7 +33,7 @@ public interface IFeedbackAPI {
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("view") String view, @Query
-            ("ids") String ids, @Query("relevantForUser") String relevantForUser);
+            ("ids") String ids, @Query("relevantForUser") String relevantForUser, @Query("onlyReported") boolean onlyReported);
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body Feedback body);
@@ -49,9 +49,6 @@ public interface IFeedbackAPI {
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> editUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user, @Body AndroidUser body);
-
-    @GET("feedback_repository/{language}/applications/{applicationId}/reports")
-    Call<List<FeedbackReport>> getFeedbackReportList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
     @POST("feedback_repository/{language}/applications/{applicationId}/reports")
     Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReportRequestBody body);

@@ -96,7 +96,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
                 break;
             case GET_FEEDBACK_REPORT_LIST:
                 if (response instanceof List) {
-                    handleListUpdate(reportedFeedbackList, FeedbackUtility.extractFeedbackListFromFeedbackReports((List<FeedbackReport>) response));
+                    handleListUpdate(reportedFeedbackList, (List<Feedback>) response);
                 }
                 break;
             default:
