@@ -207,7 +207,7 @@ public abstract class FeedbackService {
         @Override
         public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids, null, false);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids == null ? "-1" : ids, null, false);
         }
 
         @Override
@@ -337,12 +337,12 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
-            callback.onEventCompleted(GET_MINE_FEEDBACK_VOTES_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
+            callback.onEventCompleted(GET_FEEDBACK_LIST_OWN_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
         }
 
         @Override
         public void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context) {
-            callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
+            callback.onEventCompleted(GET_FEEDBACK_LIST_VOTED_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
         }
 
         @Override

@@ -123,7 +123,7 @@
             android:weightSum="12">
 
             <Button
-                android:id="@+id/settings_button_mine"
+                android:id="@+id/settings_button_own"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
@@ -135,7 +135,7 @@
                 android:textColor="@color/white" />
 
             <Button
-                android:id="@+id/settings_button_others"
+                android:id="@+id/settings_button_voted"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
@@ -147,7 +147,7 @@
                 android:textColor="@color/indigo" />
 
             <Button
-                android:id="@+id/settings_button_settings"
+                android:id="@+id/settings_button_subscribed"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"

@@ -100,7 +100,7 @@ public class FeedbackDetailsBean implements Serializable {
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackId, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
+            if (CompareUtility.notNull(feedbackId, timeStamp, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.feedbackId = feedbackId;
                 bean.description = this.description;

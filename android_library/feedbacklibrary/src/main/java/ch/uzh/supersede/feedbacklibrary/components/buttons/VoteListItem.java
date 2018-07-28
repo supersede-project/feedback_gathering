@@ -52,8 +52,8 @@ public class VoteListItem extends AbstractSettingsListItem {
     @Override
     public int compareTo(@NonNull Object o) {
         if (o instanceof VoteListItem) {
-            long comparedTimestamp = ((VoteListItem) o).getFeedbackBean().getTimeStamp();
-            return comparedTimestamp > getFeedbackBean().getTimeStamp() ? 1 : comparedTimestamp == getFeedbackBean().getTimeStamp() ? 0 : -1;
+            long comparedTimestamp = ((VoteListItem) o).getFeedbackDetailsBean().getTimeStamp();
+            return comparedTimestamp > getFeedbackDetailsBean().getTimeStamp() ? 1 : comparedTimestamp == getFeedbackDetailsBean().getTimeStamp() ? 0 : -1;
         }
         return 0;
     }

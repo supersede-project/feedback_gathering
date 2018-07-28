@@ -42,7 +42,7 @@ public interface IFeedbackAPI {
     Call<AndroidUser> createUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users")
-    Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);
+    Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("name") String userName);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users/karma")
     Call<ResponseBody> getUserKarma(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);

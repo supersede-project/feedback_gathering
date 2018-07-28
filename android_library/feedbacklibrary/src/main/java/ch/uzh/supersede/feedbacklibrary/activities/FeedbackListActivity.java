@@ -72,6 +72,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         if (ACTIVE.check(this)){
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
+        toggleButtons(getButtons().get(MINE));
 
         onPostCreate();
     }
@@ -141,6 +142,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                 break;
         }
     }
+
 
 
     @Override

@@ -32,52 +32,43 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
-    public static RESPONSE_MODE mode = READING;
-    private FeedbackDetailsBean feedbackDetailsBean;
-    private LocalFeedbackState feedbackState;
-    private static LinearLayout responseLayout;
-    private static ScrollView scrollContainer;
-    private TextView votesText;
-    private TextView userText;
-    private TextView statusText;
-    private TextView titleText;
-    private TextView descriptionText;
+public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity implements IFeedbackServiceEventListener {
     private Button upButton;
     private Button downButton;
-    private Button imageButton;
     private Button reportButton;
-    private Button audioButton;
-    private Button tagButton;
-    private Button subscribeButton;
-    private Button responseButton;
     private Button makePublicButton;
     private boolean creationMode = false;
-    private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
     private String userName;
 
 
     @Override
+    protected void initButtons() {
+        setMode(READING);
+        setCallback(this);
+        setResponseLayout(getView(R.id.details_layout_scroll_layout, LinearLayout.class));
+        setScrollContainer(getView(R.id.details_layout_scroll_container, ScrollView.class));
+        setVotesText(getView(R.id.details_text_votes, TextView.class));
+        setUserText(getView(R.id.details_text_user, TextView.class));
+        setStatus(getView(R.id.details_text_status, Spinner.class));
+        setTitleText(getView(R.id.details_text_title, TextView.class));
+        setDescriptionText(getView(R.id.details_text_description, TextView.class));
+        setImageButton(getView(R.id.details_button_images, Button.class));
+        setAudioButton(getView(R.id.details_button_audio, Button.class));
+        setTagButton(getView(R.id.details_button_tags, Button.class));
+        setSubscribeButton(getView(R.id.details_button_subscribe, Button.class));
+        setResponseButton(getView(R.id.details_button_response, Button.class));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mode = READING;
         setContentView(R.layout.activity_feedback_details);
-        responseLayout = getView(R.id.details_layout_scroll_layout, LinearLayout.class);
-        scrollContainer = getView(R.id.details_layout_scroll_container, ScrollView.class);
-        votesText = getView(R.id.details_text_votes, TextView.class);
-        userText = getView(R.id.details_text_user, TextView.class);
-        statusText = getView(R.id.details_text_status, TextView.class);
-        titleText = getView(R.id.details_text_title, TextView.class);
-        descriptionText = getView(R.id.details_text_description, TextView.class);
+
         upButton = getView(R.id.details_button_up, Button.class);
         downButton = getView(R.id.details_button_down, Button.class);
-        imageButton = getView(R.id.details_button_images, Button.class);
-        audioButton = getView(R.id.details_button_audio, Button.class);
         reportButton = getView(R.id.details_button_report, Button.class);
-        tagButton = getView(R.id.details_button_tags, Button.class);
-        subscribeButton = getView(R.id.details_button_subscribe, Button.class);
-        responseButton = getView(R.id.details_button_response, Button.class);
         makePublicButton = getView(R.id.details_button_make_public, Button.class);
+
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION,false);
@@ -139,26 +130,19 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
         onPostCreate();
     }
 
-    private void updateFeedbackState() {
+    protected void updateFeedbackState() {
+        super.updateFeedbackState();
         if (ACTIVE.check(this,true)) {
-            feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(feedbackDetailsBean.getFeedbackBean());
-            if (feedbackState.isSubscribed() && subscribeButton.isEnabled()) {
-                subscribeButton.setText(getString(R.string.details_unsubscribe));
-                subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
-            } else if (subscribeButton.isEnabled()){
-                subscribeButton.setText(getString(R.string.details_subscribe));
-                colorViews(0,subscribeButton);
-            }
-            if (feedbackState.isUpVoted()) {
-                votesText.setTextColor(ContextCompat.getColor(this, R.color.green_4));
+            if (getFeedbackState().isUpVoted()) {
+                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.green_4));
                 upButton.setEnabled(false);
             }
-            if (feedbackState.isDownVoted()) {
-                votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
+            if (getFeedbackState().isDownVoted()) {
+                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.red_5));
                 downButton.setEnabled(false);
             }
-            if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()) {
-                colorViews(1,votesText);
+            if (getFeedbackState().isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()) {
+                colorViews(1,getVotesText());
                 upButton.setEnabled(true);
                 downButton.setEnabled(true);
             }
@@ -279,31 +263,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity implements IFe
                 disableViews(reportButton,subscribeButton);
             }
         }
-    }
-
-    private void showImageDialog(byte[] bitmap) {
-        Bitmap bitmapImage = ImageUtility.bytesToImage(bitmap);
-        if (bitmapImage != null){
-            showImageDialog(bitmapImage);
-        }
-    }
-
-    private void showImageDialog(Bitmap bitmap) {
-        final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
-        imageView.setImageBitmap(bitmap);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder.dismiss();
-            }
-        });
-        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        builder.show();
     }
 
     @Override
