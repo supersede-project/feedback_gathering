@@ -149,7 +149,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
                     handleUserUpdate((AndroidUser) response);
                 }
                 break;
-            case GET_FEEDBACK_SUBSCRIPTIONS_MOCK:
+            case GET_FEEDBACK_LIST_SUBSCRIBED_MOCK:
                 execSendNotification(NotificationUtility.getInstance(this).createDummyFeedbackUpdateNotification(this, configuration));
                 break;
             case GET_USER_MOCK:

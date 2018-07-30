@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.ContentFrameLayout;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
@@ -45,6 +46,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
 
         deleteButton = getView(R.id.details_developer_button_delete, Button.class);
         awardKarmaButton = getView(R.id.details_developer_button_award_karma, Button.class);
+
+        colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
     }
 
     @Override

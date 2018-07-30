@@ -89,6 +89,10 @@ public abstract class FeedbackService {
         this.token = token;
     }
 
+    boolean isTokenSet(){
+        return token != null;
+    }
+
     public abstract void pingRepository(IFeedbackServiceEventListener callback);
 
     public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
@@ -133,10 +137,6 @@ public abstract class FeedbackService {
         callback.onEventCompleted(CREATE_FEEDBACK_SUBSCRIPTION, feedbackBean);
     }
 
-    public void getLocalFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
-        callback.onEventCompleted(GET_LOCAL_FEEDBACK_LIST_SUBSCRIBED, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
-    }
-
     private static class FeedbackApiService extends FeedbackService {
 
         @Override
@@ -148,9 +148,11 @@ public abstract class FeedbackService {
 
         @Override
         public void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest) {
-            feedbackAPI.authenticate(authenticateRequest).enqueue(
-                    new RepositoryCallback<AuthenticateResponse>(callback, EventType.AUTHENTICATE) {
-                    });
+            if (!isTokenSet()) {
+                feedbackAPI.authenticate(authenticateRequest).enqueue(
+                        new RepositoryCallback<AuthenticateResponse>(callback, EventType.AUTHENTICATE) {
+                        });
+            }
         }
 
         @Override
@@ -347,7 +349,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
-            callback.onEventCompleted(GET_FEEDBACK_SUBSCRIPTIONS_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
+            callback.onEventCompleted(GET_FEEDBACK_LIST_SUBSCRIBED_MOCK, FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
         }
 
         @Override
@@ -364,7 +366,7 @@ public abstract class FeedbackService {
         @Override
         public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             RepositoryStub.deleteFeedback(feedbackDetailsBean);
-            callback.onEventCompleted(CREATE_FEEDBACK_DELETION_MOCK, false);
+            callback.onEventCompleted(DELETE_FEEDBACK_MOCK, false);
         }
 
         @Override
@@ -379,17 +381,17 @@ public abstract class FeedbackService {
 
         @Override
         public void editFeedbackPublication(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, boolean isPublic) {
-            callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
+            callback.onEventCompleted(EDIT_FEEDBACK_PUBLICATION_MOCK, false);
         }
 
         @Override
         public void createVote(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, int vote, String userName) {
-            //callback.onEventCompleted(CREATE_FEEDBACK_PUBLICATION_MOCK, false);
+            //callback.onEventCompleted(EDIT_FEEDBACK_PUBLICATION_MOCK, false);
         }
 
         @Override
         public void getTagList(IFeedbackServiceEventListener callback) {
-            callback.onEventCompleted(GET_FEEDBACK_TAGS_MOCK, false);
+            callback.onEventCompleted(GET_TAG_LIST_MOCK, false);
         }
 
         @Override

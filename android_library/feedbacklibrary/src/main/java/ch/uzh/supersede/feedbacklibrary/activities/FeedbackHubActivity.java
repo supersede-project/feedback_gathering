@@ -384,7 +384,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
                 if (response instanceof AuthenticateResponse) {

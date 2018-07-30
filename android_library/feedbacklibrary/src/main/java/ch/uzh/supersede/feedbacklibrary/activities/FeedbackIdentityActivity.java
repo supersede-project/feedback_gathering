@@ -5,6 +5,7 @@ import android.content.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -325,7 +326,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
                     loadedTags = TagUtility.getFeedbackTags(this, (List<String>)response);
                 }
                 break;
-            case GET_FEEDBACK_TAGS_MOCK:
+            case GET_TAG_LIST_MOCK:
                     loadedTags = RepositoryStub.getFeedbackTags(this);
                 break;
         }
@@ -333,21 +334,11 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        super.onEventFailed(eventType,response);
-        switch (eventType) {
-            case GET_TAG_LIST:
-                // TODO: Error-handling
-                 break;
-        }
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        super.onConnectionFailed(eventType);
-        switch (eventType) {
-            case GET_TAG_LIST:
-                // TODO: Error-handling
-               break;
-        }
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 }

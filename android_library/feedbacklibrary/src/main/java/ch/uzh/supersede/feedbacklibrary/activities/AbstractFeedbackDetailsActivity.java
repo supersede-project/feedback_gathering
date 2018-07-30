@@ -203,14 +203,13 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         super.onCreate(savedInstanceState);
         initViews();
         checkViewsNotNull();
+        colorViews(0, imageButton, audioButton, tagButton, subscribeButton, responseButton);
+        colorViews(2, userText, titleText, status, descriptionText);
 
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
         initPermissionCheck();
 
-        colorViews(0, imageButton, audioButton, tagButton, subscribeButton, responseButton);
-        colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
-        colorViews(2, userText, titleText, status, descriptionText);
     }
 
     protected void checkViewsNotNull() {
@@ -303,7 +302,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case CREATE_FEEDBACK_DELETION_MOCK:
+            case DELETE_FEEDBACK_MOCK:
             case DELETE_FEEDBACK:
                 onBackPressed();
                 break;

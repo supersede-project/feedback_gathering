@@ -56,14 +56,15 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         makePublicButton = getView(R.id.details_button_make_public, Button.class);
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
+
+        colorViews(0, upButton, downButton);
+        colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        colorViews(0, upButton, downButton);
-        colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
         updateReportStatus(null);
         updateOwnFeedbackCase();
         invokeVersionControl(5, getAudioButton().getId(), getTagButton().getId());
@@ -225,7 +226,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
                 }
                 break;
             case EDIT_FEEDBACK_PUBLICATION:
-            case CREATE_FEEDBACK_PUBLICATION_MOCK:
+            case EDIT_FEEDBACK_PUBLICATION_MOCK:
                 Toast.makeText(FeedbackDetailsActivity.this, R.string.details_published, Toast.LENGTH_SHORT).show();
                 break;
             default:
