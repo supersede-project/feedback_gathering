@@ -64,7 +64,7 @@ public class Feedback implements Serializable {
         private String title;
         private String userIdentification;
         private List<AudioFeedback> audioFeedbackList;
-        private List<LabelFeedback> categoryFeedbackList;
+        private List<LabelFeedback> labelFeedbackList;
         private List<RatingFeedback> ratingFeedbackList;
         private List<ScreenshotFeedback> screenshotFeedbackList;
         private List<TextFeedback> textFeedbackList;
@@ -113,9 +113,9 @@ public class Feedback implements Serializable {
         }
 
         public Builder withLabelFeedback(LabelFeedback labelFeedback) {
-            this.categoryFeedbackList = new ArrayList<>();
+            this.labelFeedbackList = new ArrayList<>();
             if (labelFeedback != null) {
-                categoryFeedbackList.add(labelFeedback);
+                labelFeedbackList.add(labelFeedback);
             }
             return this;
         }
@@ -164,11 +164,11 @@ public class Feedback implements Serializable {
             bean.contextInformationFeedback = this.contextInformationFeedback;
             bean.title = this.title;
             bean.userIdentification = this.userIdentification;
-            bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
-            bean.labelFeedbackList = new ArrayList<>(this.categoryFeedbackList);
-            bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
-            bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
-            bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
+            bean.audioFeedbackList = this.audioFeedbackList != null ? new ArrayList<>(this.audioFeedbackList) : null;
+            bean.labelFeedbackList = this.labelFeedbackList != null ? new ArrayList<>(this.labelFeedbackList) : null;
+            bean.ratingFeedbackList = this.ratingFeedbackList != null ? new ArrayList<>(this.ratingFeedbackList) : null;
+            bean.screenshotFeedbackList = this.screenshotFeedbackList != null ? new ArrayList<>(this.screenshotFeedbackList) : null;
+            bean.textFeedbackList = this.textFeedbackList != null ? new ArrayList<>(this.textFeedbackList) : null;
             bean.tags = tags;
             bean.createdAt = new Date();
             bean.feedbackStatus = this.feedbackStatus;

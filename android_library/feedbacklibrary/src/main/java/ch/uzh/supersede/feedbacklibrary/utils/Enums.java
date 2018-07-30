@@ -37,6 +37,14 @@ public class Enums {
         }
     }
 
+    public static String[] getFeedbackStatusLabels() {
+        String[] statusLabels = new String[FEEDBACK_STATUS.values().length];
+        for (int i = 0; i < FEEDBACK_STATUS.values().length; i++) {
+            statusLabels[i] = FEEDBACK_STATUS.values()[i].label;
+        }
+        return statusLabels;
+    }
+
     public static FEEDBACK_STATUS resolveFeedbackStatus(String label) {
         switch (label) {
             case LABEL_OPEN:

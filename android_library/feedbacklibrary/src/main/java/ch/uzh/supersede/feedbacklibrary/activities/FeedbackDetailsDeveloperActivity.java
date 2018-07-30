@@ -2,32 +2,24 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 
 import android.app.Dialog;
-import android.content.*;
-import android.graphics.drawable.ColorDrawable;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.*;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
-import android.view.*;
+import android.view.View;
 import android.widget.*;
 
-import java.util.*;
-
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums;
+import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
 
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_DELETION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
@@ -35,8 +27,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
     private Button awardKarmaButton;
 
     @Override
-    protected void initButtons() {
-        setMode(READING);
+    protected void initViews() {
+        setContentView(R.layout.activity_feedback_details_developer);
         setCallback(this);
         setResponseLayout(getView(R.id.details_developer_layout_scroll_layout, LinearLayout.class));
         setScrollContainer(getView(R.id.details_developer_layout_scroll_container, ScrollView.class));
@@ -50,17 +42,39 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
         setTagButton(getView(R.id.details_developer_button_tags, Button.class));
         setSubscribeButton(getView(R.id.details_developer_button_subscribe, Button.class));
         setResponseButton(getView(R.id.details_developer_button_response, Button.class));
+
+        deleteButton = getView(R.id.details_developer_button_delete, Button.class);
+        awardKarmaButton = getView(R.id.details_developer_button_award_karma, Button.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback_details_developer);
-
-        deleteButton = getView(R.id.details_developer_button_delete, Button.class);
-        awardKarmaButton = getView(R.id.details_developer_button_award_karma, Button.class);
-
+        initStatusSpinner();
         onPostCreate();
+    }
+
+    protected void initStatusSpinner() {
+        if (getFeedbackDetailsBean() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.feedback_status_spinner_layout, Enums.getFeedbackStatusLabels());
+            getStatus().setAdapter(adapter);
+            getStatus().setSelection(adapter.getPosition(getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+            getStatus().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    Object feedbackStatus = ((AppCompatSpinner) parentView).getAdapter().getItem(position);
+                    if (isStatusNew(feedbackStatus)) {
+                        FeedbackService.getInstance(getApplicationContext()).editFeedbackStatus(getCallback(), getFeedbackDetailsBean(), (String) feedbackStatus);
+                        Toast.makeText(getApplicationContext(), getString(R.string.details_developer_status_updated), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    //NOP
+                }
+            });
+        }
     }
 
     @Override
