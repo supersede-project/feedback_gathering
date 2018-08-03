@@ -14,8 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_FROM_CREATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
@@ -64,6 +63,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCallerClass(ObjectUtility.getCallerClass(getIntent()));
 
         updateReportStatus(null);
         updateOwnFeedbackCase();

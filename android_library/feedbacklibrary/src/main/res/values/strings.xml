@@ -161,6 +161,8 @@
     <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
     <string name="details_developer_delete_confirm_title">Feedback Deletion</string>
     <string name="details_developer_delete_confirm">Do you want to delete this Feedback? This action is irreversible!</string>
+    <string name="details_developer_delete_response_confirm_title">Response Deletion</string>
+    <string name="details_developer_delete_response_confirm">Do you want to delete this response? This action is irreversible!</string>
     <string name="details_developer_deleted">Feedback deleted!</string>
     <string name="details_developer_status_updated">Status updated!</string>
     <string name="details_developer_votes_title">Votes: </string>

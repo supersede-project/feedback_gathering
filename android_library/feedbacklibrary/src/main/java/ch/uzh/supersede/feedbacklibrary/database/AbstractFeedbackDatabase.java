@@ -226,7 +226,6 @@ abstract class AbstractFeedbackDatabase {
                 db.execSQL(creation);
             }
         }
-
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             for (String backup : collectTableBackup()){
                 db.execSQL(backup);

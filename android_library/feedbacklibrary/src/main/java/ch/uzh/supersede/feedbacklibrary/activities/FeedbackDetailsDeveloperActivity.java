@@ -3,7 +3,6 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.ContentFrameLayout;
@@ -16,10 +15,8 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_DELETION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -53,6 +50,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCallerClass(ObjectUtility.getCallerClass(getIntent()));
+
         initStatusSpinner();
         onPostCreate();
     }
@@ -119,12 +118,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == Dialog.BUTTON_POSITIVE) {
                         FeedbackService.getInstance(getApplicationContext()).deleteFeedback(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean());
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_deleted), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
-                        Intent intent = new Intent(getApplicationContext(), FeedbackListActivity.class);
-                        intent.putExtra(EXTRA_KEY_FEEDBACK_DELETION, true);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(FeedbackDetailsDeveloperActivity.this, FeedbackListActivity.class, true, intent);
                     }
                 }
             };

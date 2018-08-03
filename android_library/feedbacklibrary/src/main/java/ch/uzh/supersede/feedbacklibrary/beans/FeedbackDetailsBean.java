@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 public class FeedbackDetailsBean implements Serializable {
 
@@ -140,7 +139,7 @@ public class FeedbackDetailsBean implements Serializable {
     }
 
     public String getUpVotesAsText() {
-        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
+        return FeedbackUtility.getUpvotesAsText(upVotes);
     }
 
     public List<FeedbackResponseBean> getResponses() {

@@ -1,11 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.AbstractList;
 import java.util.List;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_CALLER_CLASS;
 
 public class ObjectUtility {
 
@@ -42,7 +45,7 @@ public class ObjectUtility {
 
     @SuppressWarnings("squid:S2093")
     public static <T extends Serializable> T toSerializable(byte[] bytes, Class<T> clazz) {
-        if (bytes == null){
+        if (bytes == null) {
             return null;
         }
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
@@ -50,7 +53,7 @@ public class ObjectUtility {
         try {
             in = new ObjectInputStream(bis);
             return clazz.cast(in.readObject());
-        } catch (IOException  | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             Log.i(ObjectUtility.class.getSimpleName(), "Deserialization failed: " + e.getMessage(), e);
         } finally {
             try {
@@ -66,8 +69,9 @@ public class ObjectUtility {
 
     @SuppressWarnings("unchecked")
     public static <T> List<T> asList(final Object array) {
-        if (!array.getClass().isArray())
+        if (!array.getClass().isArray()) {
             throw new IllegalArgumentException("Not an array");
+        }
         return new AbstractList<T>() {
             @Override
             public T get(int index) {
@@ -79,5 +83,15 @@ public class ObjectUtility {
                 return Array.getLength(array);
             }
         };
+    }
+
+    public static Class<?> getCallerClass(Intent intent) {
+        Class<?> callerClass = null;
+        try {
+            callerClass = Class.forName(intent.getStringExtra(EXTRA_KEY_CALLER_CLASS));
+        } catch (ClassNotFoundException e) {
+            Log.w(ObjectUtility.class.getSimpleName(), "Could not find caller class: " + e.getMessage(), e);
+        }
+        return callerClass;
     }
 }

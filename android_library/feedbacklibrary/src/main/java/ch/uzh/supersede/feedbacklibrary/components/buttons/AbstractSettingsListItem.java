@@ -12,8 +12,7 @@ import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsDeveloperActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -101,11 +100,10 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         setBackgroundColor(backgroundColor);
         lowerWrapperLayout.addView(statusView);
 
-        setOnLongClickListener(new OnLongClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 startFeedbackDetailsActivity();
-                return false;
             }
         });
     }
@@ -122,6 +120,7 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
             Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
             return;
         }
+        intent.putExtra(EXTRA_KEY_CALLER_CLASS, FeedbackSettingsActivity.class.getName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
