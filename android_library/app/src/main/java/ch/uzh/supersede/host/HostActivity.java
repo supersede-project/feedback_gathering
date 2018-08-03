@@ -109,7 +109,7 @@ public class HostActivity extends AppCompatActivity implements
     //Feedback Developer
     @Override
     public boolean isDeveloper() {
-        return true;
+        return false;
     }
 
     @Override
