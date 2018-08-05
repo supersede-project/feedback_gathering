@@ -141,7 +141,7 @@ public class FeedbackUtility {
         int maxUpVotes = feedback.getMaxVotes();
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
-        int responses = feedback.getFeedbackResponses().size();
+        int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -180,7 +180,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
+        //List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -190,7 +190,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmapName(bitmapName)
-                .withResponses(feedbackResponses)
+                //.withResponses(feedbackResponses)
                 .build();
     }
 

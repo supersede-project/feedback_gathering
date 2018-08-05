@@ -201,7 +201,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_PUBLIC, null, relevantForUser, false);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_ALL, null, relevantForUser, false);
         }
 
         @Override

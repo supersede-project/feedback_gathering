@@ -153,6 +153,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                     intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
                     intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
                     intent.putExtra(EXTRA_FROM_CREATION, true);
+                    intent.putExtra(EXTRA_KEY_CALLER_CLASS, this.getClass().getName());
                     startActivity(this,FeedbackDetailsActivity.class, true,intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {

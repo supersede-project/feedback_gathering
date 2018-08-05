@@ -48,6 +48,7 @@ public class Feedback implements Serializable {
     private int minVotes;
     private int maxVotes;
     private Enums.FEEDBACK_STATUS feedbackStatus;
+    @SerializedName("public")
     private boolean isPublic;
     private List<FeedbackResponse> feedbackResponses;
 
