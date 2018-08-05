@@ -86,6 +86,8 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         if (!(activeNetworkInfo != null && activeNetworkInfo.isConnected())) {
             //Offline, don't ping Repository
             getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+        } else {
+            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
         }
     }
 

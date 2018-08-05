@@ -85,9 +85,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         restoreHostApplicationNameToPreferences();
         onPostCreate();
         if (ACTIVE.check(this)) {
+            execDatabaseMigration();
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
-        execDatabaseMigration();
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
     }
