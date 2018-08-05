@@ -148,6 +148,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         switch (eventType) {
             case CREATE_FEEDBACK:
                 if (VersionUtility.getDateVersion() > 2 ) {
+                    if (response instanceof Feedback) {
+                        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this,(Feedback) response);
+                    }
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
