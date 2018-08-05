@@ -180,7 +180,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        //List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -190,7 +190,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmapName(bitmapName)
-                //.withResponses(feedbackResponses)
+                .withResponses(feedbackResponses)
                 .build();
     }
 
@@ -198,19 +198,22 @@ public class FeedbackUtility {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
 
-        for (FeedbackResponse feedbackResponse : feedbackResponses) {
-            String responseUserName = feedbackResponse.getUser().getName();
-            feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
-                    .withFeedbackId(feedbackId)
-                    .withResponseId(feedbackResponse.getId())
-                    .withContent(feedbackResponse.getContent())
-                    .withUserName(responseUserName)
-                    .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
-                    .isDeveloper(feedbackResponse.getUser().isDeveloper())
-                    .isFeedbackOwner(userName.equals(responseUserName))
-                    .build()
-            );
+        if (feedbackResponses != null) {
+            for (FeedbackResponse feedbackResponse : feedbackResponses) {
+                String responseUserName = feedbackResponse.getUser().getName();
+                feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
+                        .withFeedbackId(feedbackId)
+                        .withResponseId(feedbackResponse.getId())
+                        .withContent(feedbackResponse.getContent())
+                        .withUserName(responseUserName)
+                        .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
+                        .isDeveloper(feedbackResponse.getUser().isDeveloper())
+                        .isFeedbackOwner(userName.equals(responseUserName))
+                        .build()
+                );
+            }
         }
+
         return feedbackResponseBeans;
     }
 }
