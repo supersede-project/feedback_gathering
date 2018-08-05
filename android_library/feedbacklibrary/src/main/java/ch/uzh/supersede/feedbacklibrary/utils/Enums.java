@@ -37,6 +37,14 @@ public class Enums {
         }
     }
 
+    public static String[] getFeedbackStatusLabels() {
+        String[] statusLabels = new String[FEEDBACK_STATUS.values().length];
+        for (int i = 0; i < FEEDBACK_STATUS.values().length; i++) {
+            statusLabels[i] = FEEDBACK_STATUS.values()[i].label;
+        }
+        return statusLabels;
+    }
+
     public static FEEDBACK_STATUS resolveFeedbackStatus(String label) {
         switch (label) {
             case LABEL_OPEN:
@@ -73,8 +81,8 @@ public class Enums {
 
     public enum SETTINGS_VIEW {
         MINE,
-        OTHERS,
-        SUBSCRIPTIONS
+        VOTED,
+        SUBSCRIBED
     }
 
     public enum DIALOG_TYPE {
@@ -82,10 +90,5 @@ public class Enums {
         QUICK_EDIT,
         CHANGE_COLOR,
         CROP
-    }
-
-    public enum RUNNING_MODE_TYPE {
-        TEST,
-        PRODUCTIVE
     }
 }

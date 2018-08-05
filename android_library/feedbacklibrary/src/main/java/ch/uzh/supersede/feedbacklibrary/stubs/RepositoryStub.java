@@ -95,9 +95,10 @@ public class RepositoryStub {
                 .build();
     }
 
-    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
+    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, long responseId, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
         return new FeedbackResponseBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
+                .withResponseId(responseId)
                 .withContent(content)
                 .withUserName(userName)
                 .withTimestamp(System.currentTimeMillis())
@@ -135,16 +136,16 @@ public class RepositoryStub {
                 .build();
     }
 
-    public static FeedbackBean getFeedback(Context context, LocalFeedbackBean localFeedbackBean) {
+    public static FeedbackBean getFeedback(Context context, FeedbackDetailsBean feedbackDetailsBean) {
         int minUpVotes = -30; //FIXME [jfo]
         int maxUpVotes = 50; //FIXME [jfo]
 
-        long feedbackId = localFeedbackBean.getFeedbackId();
-        String title = localFeedbackBean.getTitle();
-        FEEDBACK_STATUS feedbackStatus = localFeedbackBean.getFeedbackStatus();
-        int upVotes = localFeedbackBean.getVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
-        long timeStamp = localFeedbackBean.getCreationDate();
-        int responses = localFeedbackBean.getResponses();
+        long feedbackId = feedbackDetailsBean.getFeedbackId();
+        String title = feedbackDetailsBean.getTitle();
+        FEEDBACK_STATUS feedbackStatus = feedbackDetailsBean.getFeedbackStatus();
+        int upVotes = feedbackDetailsBean.getUpVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
+        long timeStamp = feedbackDetailsBean.getTimeStamp();
+        int responses = feedbackDetailsBean.getResponses().size();
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
 
         return new FeedbackBean.Builder()

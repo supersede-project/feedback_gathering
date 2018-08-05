@@ -93,13 +93,11 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        super.onEventFailed(eventType, response);
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        super.onConnectionFailed(eventType);
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 

@@ -123,7 +123,7 @@
             android:weightSum="12">
 
             <Button
-                android:id="@+id/settings_button_mine"
+                android:id="@+id/settings_button_own"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
@@ -131,11 +131,11 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
                 android:background="@drawable/white_tab"
-                android:text="@string/settings_button_mine"
+                android:text="@string/settings_button_own"
                 android:textColor="@color/white" />
 
             <Button
-                android:id="@+id/settings_button_others"
+                android:id="@+id/settings_button_voted"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
@@ -143,11 +143,11 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
                 android:background="@drawable/white_tab"
-                android:text="@string/settings_button_others"
+                android:text="@string/settings_button_voted"
                 android:textColor="@color/indigo" />
 
             <Button
-                android:id="@+id/settings_button_settings"
+                android:id="@+id/settings_button_subscribed"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
@@ -155,7 +155,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
                 android:background="@drawable/white_tab"
-                android:text="@string/settings_button_subscriptions"
+                android:text="@string/settings_button_subscribed"
                 android:textColor="@color/indigo" />
         </LinearLayout>
 

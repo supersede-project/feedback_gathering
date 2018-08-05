@@ -19,6 +19,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.database.DatabaseMigration;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
@@ -84,6 +85,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         restoreHostApplicationNameToPreferences();
         onPostCreate();
         if (ACTIVE.check(this)) {
+            execDatabaseMigration();
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         updateUserLevel(false);
@@ -138,6 +140,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         super.onResume();
         updateUserLevel(false);
         restoreHostApplicationNameToPreferences();
+    }
+
+    private void execDatabaseMigration() {
+        new DatabaseMigration(getApplicationContext(), configuration).run();
     }
 
     private void authenticateAndStartService() {
@@ -384,7 +390,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
                 if (response instanceof AuthenticateResponse) {

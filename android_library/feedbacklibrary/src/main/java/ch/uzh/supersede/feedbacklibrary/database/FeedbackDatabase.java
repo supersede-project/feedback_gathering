@@ -12,7 +12,7 @@ import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.CONFIGURATION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.ALL;
 
 
@@ -29,10 +29,17 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return instance;
     }
 
+    public static FeedbackDatabase newInstance(Context context){
+        return instance = new FeedbackDatabase(context);
+    }
+
     private FeedbackDatabase(Context context) {
         databaseHelper = new FeedbackDbHelper(context);
     }
 
+    protected String getDatabaseName() {
+        return databaseHelper.getDatabaseName();
+    }
 
     public long writeDouble(String key, Double value) {
         ContentValues values = new ContentValues();

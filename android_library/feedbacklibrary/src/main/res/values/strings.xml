@@ -161,6 +161,8 @@
     <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
     <string name="details_developer_delete_confirm_title">Feedback Deletion</string>
     <string name="details_developer_delete_confirm">Do you want to delete this Feedback? This action is irreversible!</string>
+    <string name="details_developer_delete_response_confirm_title">Response Deletion</string>
+    <string name="details_developer_delete_response_confirm">Do you want to delete this response? This action is irreversible!</string>
     <string name="details_developer_deleted">Feedback deleted!</string>
     <string name="details_developer_status_updated">Status updated!</string>
     <string name="details_developer_votes_title">Votes: </string>
@@ -172,9 +174,9 @@
     <string name="settings_feedback_title"><b>Feedback Settings</b></string>
     <string name="settings_use_stubs">Use stubs</string>
     <string name="settings_enable_notifications">Enable notifications</string>
-    <string name="settings_button_mine">Votes Sent</string>
-    <string name="settings_button_others">Votes Received</string>
-    <string name="settings_button_subscriptions">Subscriptions</string>
+    <string name="settings_button_own">Mine</string>
+    <string name="settings_button_voted">Voted</string>
+    <string name="settings_button_subscribed">Subscriptions</string>
     <string name="details_published">Published!</string>
 
     <!--Abstract-->

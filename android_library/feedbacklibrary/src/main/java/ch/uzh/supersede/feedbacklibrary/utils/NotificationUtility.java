@@ -186,7 +186,6 @@ public class NotificationUtility {
                     int voteChange = newFeedback.getUpVotes() - oldFeedback.getVotes();
                     int responseChange = newFeedback.getResponses().size() - oldFeedback.getResponses();
                     int statusChange = newFeedback.getFeedbackStatus() != oldFeedback.getFeedbackStatus() ? 1 : 0;
-                    newResponses += responseChange;
                     newVotes += voteChange;
                     statusUpdates += statusChange;
                     if (newFeedback.getUserName().equals(userName)) {
@@ -194,7 +193,6 @@ public class NotificationUtility {
                         newOwnVotes += voteChange;
                         ownStatusUpdates += statusUpdates;
                     }
-                    //TODO [jfo] check for public/private feedback
                     FeedbackDatabase.getInstance(context).writeFeedback(newFeedback.getFeedbackBean(), Enums.SAVE_MODE.SUBSCRIBED);
                 }
             }
@@ -202,11 +200,11 @@ public class NotificationUtility {
 
         StringBuilder message = new StringBuilder();
         append(message, context, R.string.notification_feedback_responses, newResponses, R.string.notification_feedback_own, newOwnResponses);
-        message.append(HTML_LINEBREAK);
+        appendLineBeak(message, newResponses);
         append(message, context, R.string.notification_feedback_votes, newVotes, R.string.notification_feedback_own, newOwnVotes);
-        message.append(HTML_LINEBREAK);
+        appendLineBeak(message, newVotes);
         append(message, context, R.string.notification_feedback_status, statusUpdates, R.string.notification_feedback_own, ownStatusUpdates);
-        message.append(HTML_LINEBREAK);
+        appendLineBeak(message, statusUpdates);
         append(message, context, R.string.notification_feedback_visibility, visibilityUpdates);
 
         return createNotification(context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
@@ -225,6 +223,12 @@ public class NotificationUtility {
             if (valueOwn != null && resourceOwn != null && valueOwn != 0) {
                 message.append(context.getResources().getString(resourceOwn, valueOwn));
             }
+        }
+    }
+
+    private void appendLineBeak(StringBuilder message, int value){
+        if (value != 0) {
+            message.append(HTML_LINEBREAK);
         }
     }
 }

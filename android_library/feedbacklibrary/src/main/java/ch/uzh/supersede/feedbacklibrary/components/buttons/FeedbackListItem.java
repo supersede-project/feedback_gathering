@@ -36,11 +36,13 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private Enums.FEEDBACK_SORTING sorting = NONE;
     private String ownUser = USER_NAME_ANONYMOUS;
     private LocalConfigurationBean configuration;
+    private Class<?> callerClass;
 
-    public FeedbackListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
+    public FeedbackListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor, Class<?> callerClass) {
         super(context);
         this.configuration = configuration;
         this.feedbackDetailsBean = feedbackDetailsBean;
+        this.callerClass = callerClass;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                                  .getDefaultDisplay()
@@ -76,20 +78,18 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         lowerWrapperLayout.addView(pointView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
-        setOnLongClickListener(new OnLongClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 if (VersionUtility.getDateVersion() > 2) {
                     startFeedbackDetailsActivity();
                 }
-                return false;
-
             }
         });
     }
 
     private void startFeedbackDetailsActivity() {
-        Intent intent = null;
+        Intent intent;
         if (ACTIVE.check(getContext())){
             if (VersionUtility.getDateVersion()>=4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
@@ -100,6 +100,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
             Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
             return;
         }
+
+        intent.putExtra(EXTRA_KEY_CALLER_CLASS, callerClass.getName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);

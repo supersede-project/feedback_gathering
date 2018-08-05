@@ -7,6 +7,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 public class FeedbackResponseBean implements Serializable{
 
+    private long responseId;
     private long feedbackId;
     private String userName;
     private String content;
@@ -18,6 +19,7 @@ public class FeedbackResponseBean implements Serializable{
     }
 
     public static class Builder {
+        private long responseId;
         private long feedbackId;
         private String userName;
         private String content;
@@ -56,6 +58,10 @@ public class FeedbackResponseBean implements Serializable{
             this.feedbackId = feedbackId;
             return this;
         }
+        public Builder withResponseId(long responseId) {
+            this.responseId = responseId;
+            return this;
+        }
 
         public FeedbackResponseBean build() {
             if (CompareUtility.notNull(feedbackId,content,userName,timeStamp)) {
@@ -66,6 +72,7 @@ public class FeedbackResponseBean implements Serializable{
                 bean.timeStamp = this.timeStamp;
                 bean.isFeedbackOwner = this.isFeedbackOwner;
                 bean.isDeveloper = this.isDeveloper;
+                bean.responseId = this.responseId;
                 return bean;
             }
             return null;
@@ -94,5 +101,9 @@ public class FeedbackResponseBean implements Serializable{
 
     public long getFeedbackId() {
         return feedbackId;
+    }
+
+    public long getResponseId() {
+        return responseId;
     }
 }
