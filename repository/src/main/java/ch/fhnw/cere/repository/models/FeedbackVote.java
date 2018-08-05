@@ -2,6 +2,8 @@ package ch.fhnw.cere.repository.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
@@ -18,6 +20,7 @@ public class FeedbackVote {
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 

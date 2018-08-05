@@ -87,6 +87,10 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<FeedbackReport> feedbackReports;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<FeedbackVote> feedbackVotes;
+
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonSerialize(using = CustomTagSerializer.class)
     @JsonDeserialize(using = CustomTagDeserializer.class)
@@ -348,6 +352,14 @@ public class Feedback {
 
     public void setFeedbackReports(List<FeedbackReport> feedbackReports) {
         this.feedbackReports = feedbackReports;
+    }
+
+    public List<FeedbackVote> getFeedbackVotes() {
+        return feedbackVotes;
+    }
+
+    public void setFeedbackVotes(List<FeedbackVote> feedbackVotes) {
+        this.feedbackVotes = feedbackVotes;
     }
 
     public List<TextFeedback> getTextFeedbacks() {
