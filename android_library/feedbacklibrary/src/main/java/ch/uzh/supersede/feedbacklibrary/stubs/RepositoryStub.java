@@ -95,9 +95,10 @@ public class RepositoryStub {
                 .build();
     }
 
-    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
+    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, long responseId, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
         return new FeedbackResponseBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
+                .withResponseId(responseId)
                 .withContent(content)
                 .withUserName(userName)
                 .withTimestamp(System.currentTimeMillis())

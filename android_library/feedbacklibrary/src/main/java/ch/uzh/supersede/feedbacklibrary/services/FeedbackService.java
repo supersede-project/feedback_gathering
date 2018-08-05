@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackListActivity;
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
@@ -89,7 +90,7 @@ public abstract class FeedbackService {
         this.token = token;
     }
 
-    boolean isTokenSet(){
+    boolean isTokenSet() {
         return token != null;
     }
 
@@ -124,6 +125,8 @@ public abstract class FeedbackService {
     public abstract void createFeedbackReport(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, FeedbackReportRequestBody report);
 
     public abstract void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String userName, String response);
+
+    public abstract void deleteFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponseBean response);
 
     public abstract void createVote(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, int vote, String userName);
 
@@ -198,7 +201,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_PUBLIC, null, relevantForUser, false);
+            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_ALL, null, relevantForUser, false);
         }
 
         @Override
@@ -209,19 +212,25 @@ public abstract class FeedbackService {
         @Override
         public void getFeedbackListOwn(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(OWN));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids == null ? "-1" : ids, null, false);
+            if (ids != null && !ids.isEmpty()) {
+                getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_OWN, VIEW_ALL, ids, null, false);
+            }
         }
 
         @Override
         public void getFeedbackListVoted(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(VOTED));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_VOTED, VIEW_PUBLIC, ids, null, false);
+            if (ids != null && !ids.isEmpty()) {
+                getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_VOTED, VIEW_PUBLIC, ids, null, false);
+            }
         }
 
         @Override
         public void getFeedbackListSubscribed(IFeedbackServiceEventListener callback, Context context) {
             String ids = FeedbackUtility.getIds(FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED));
-            getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_SUBSCRIBED, VIEW_ALL, ids, null, false);
+            if (ids != null && !ids.isEmpty()) {
+                getFeedbackList(callback, EventType.GET_FEEDBACK_LIST_SUBSCRIBED, VIEW_ALL, ids, null, false);
+            }
         }
 
         @Override
@@ -261,6 +270,13 @@ public abstract class FeedbackService {
             FeedbackResponseRequestBody responseBean = new FeedbackResponseRequestBody(userName, response);
             feedbackAPI.createFeedbackResponse(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), responseBean).enqueue(
                     new RepositoryCallback<FeedbackResponse>(callback, CREATE_FEEDBACK_RESPONSE) {
+                    });
+        }
+
+        @Override
+        public void deleteFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponseBean response) {
+            feedbackAPI.deleteFeedbackResponse(getToken(), language, applicationId, feedbackDetailsBean.getFeedbackId(), response.getResponseId()).enqueue(
+                    new RepositoryCallback<ResponseBody>(callback, DELETE_FEEDBACK_RESPONSE) {
                     });
         }
 
@@ -320,7 +336,7 @@ public abstract class FeedbackService {
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
             for (FeedbackDetailsBean bean : RepositoryStub.getFeedback(context, 50, -30, 50, 0.1f)) {
                 if (bean != null) {
-                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, 0);
+                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, 0, FeedbackListActivity.class);
                     allFeedbackList.add(listItem);
                 }
             }
@@ -375,8 +391,13 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean,  String userName, String response) {
+        public void createFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, String userName, String response) {
             callback.onEventCompleted(CREATE_FEEDBACK_RESPONSE_MOCK, false);
+        }
+
+        @Override
+        public void deleteFeedbackResponse(IFeedbackServiceEventListener callback, FeedbackBean feedbackDetailsBean, FeedbackResponseBean response) {
+            callback.onEventCompleted(DELETE_FEEDBACK_RESPONSE_MOCK, false);
         }
 
         @Override

@@ -14,8 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_FROM_CREATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
@@ -41,7 +40,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         setScrollContainer(getView(R.id.details_layout_scroll_container, ScrollView.class));
         setVotesText(getView(R.id.details_text_votes, TextView.class));
         setUserText(getView(R.id.details_text_user, TextView.class));
-        setStatus(getView(R.id.details_text_status, Spinner.class));
+        setStatus(getView(R.id.details_spinner_status, Spinner.class));
         setTitleText(getView(R.id.details_text_title, TextView.class));
         setDescriptionText(getView(R.id.details_text_description, TextView.class));
         setImageButton(getView(R.id.details_button_images, Button.class));
@@ -57,6 +56,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
 
+        colorViews(2, statusText);
         colorViews(0, upButton, downButton);
         colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
     }
@@ -64,6 +64,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCallerClass(ObjectUtility.getCallerClass(getIntent()));
 
         updateReportStatus(null);
         updateOwnFeedbackCase();

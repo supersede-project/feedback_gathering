@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.FeedbackResponse;
+import ch.uzh.supersede.feedbacklibrary.models.FeedbackVote;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
@@ -51,6 +53,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private List<FeedbackResponseListItem> responseList = new ArrayList<>();
     private IFeedbackServiceEventListener callback;
     private String userName;
+    private Class<?> callerClass;
 
     public static Enums.RESPONSE_MODE getMode() {
         return mode;
@@ -198,6 +201,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     protected abstract void initViews();
 
+    public void setCallerClass(Class<?> callerClass) {
+        this.callerClass = callerClass;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,7 +216,6 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
         initPermissionCheck();
-
     }
 
     protected void checkViewsNotNull() {
@@ -304,7 +310,13 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         switch (eventType) {
             case DELETE_FEEDBACK_MOCK:
             case DELETE_FEEDBACK:
-                onBackPressed();
+                Toast.makeText(this, getString(R.string.details_developer_deleted), Toast.LENGTH_SHORT).show();
+
+                Class<?> callerClass = ObjectUtility.getCallerClass(getIntent());
+                Intent intent = new Intent(getApplicationContext(), callerClass);
+                intent.putExtra(EXTRA_KEY_FEEDBACK_DELETION, true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(this, callerClass, true, intent);
                 break;
             case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
@@ -320,7 +332,30 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             case CREATE_FEEDBACK_RESPONSE_MOCK:
                 if (response instanceof FeedbackResponse) {
                     Toast.makeText(this, R.string.details_response_sent, Toast.LENGTH_SHORT).show();
-                    persistFeedbackResponseLocally(((FeedbackResponse) response).getContent());
+                    persistFeedbackResponseLocally((FeedbackResponse) response);
+                }
+                break;
+            case DELETE_FEEDBACK_RESPONSE:
+            case DELETE_FEEDBACK_RESPONSE_MOCK:
+                FeedbackResponseListItem removeItem = null;
+                for (int i = 0; i < responseLayout.getChildCount(); i++) {
+                    View layoutItem = responseLayout.getChildAt(i);
+                    if (layoutItem instanceof FeedbackResponseListItem) {
+                        FeedbackResponseListItem item = (FeedbackResponseListItem) layoutItem;
+
+                        if (item.isDeleted()) {
+                            removeItem = item;
+                        }
+                    }
+                }
+                responseList.remove(removeItem);
+                responseLayout.removeView(removeItem);
+                break;
+            case CREATE_VOTE:
+            case CREATE_VOTE_MOCK:
+                if (response instanceof FeedbackVote) {
+                    int voteCount = feedbackDetailsBean.getUpVotes() + ((FeedbackVote) response).getVote();
+                    votesText.setText(FeedbackUtility.getUpvotesAsText(voteCount));
                 }
                 break;
             default:
@@ -373,10 +408,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         return false;
     }
 
-    protected void persistFeedbackResponseLocally(String feedbackResponse) {
+    protected void persistFeedbackResponseLocally(FeedbackResponse feedbackResponse) {
         boolean isDeveloper = FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(USER_IS_DEVELOPER, false);
         boolean isOwner = feedbackDetailsBean.getUserName() != null && feedbackDetailsBean.getUserName().equals(userName);
-        FeedbackResponseBean responseBean = RepositoryStub.persist(feedbackDetailsBean.getFeedbackBean(), feedbackResponse, userName, isDeveloper, isOwner);
+        FeedbackResponseBean responseBean = RepositoryStub.persist(feedbackDetailsBean.getFeedbackBean(), feedbackResponse.getId(), feedbackResponse.getContent(), userName, isDeveloper, isOwner);
         FeedbackResponseListItem item = new FeedbackResponseListItem(this, feedbackDetailsBean.getFeedbackBean(), responseBean, configuration, this, FIXED);
         //Get to the Bottom
         scrollContainer.fullScroll(View.FOCUS_DOWN);

@@ -109,7 +109,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-            feedbackListItems.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
+            feedbackListItems.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass()));
         }
         doSearch(getSearchText().getText().toString());
         sort();

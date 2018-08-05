@@ -18,11 +18,15 @@ public class FeedbackUtility {
     private FeedbackUtility() {
     }
 
-    public static List<FeedbackListItem> createFeedbackListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
+    public static String getUpvotesAsText(int votes){
+        return votes <= 0 ? String.valueOf(votes) : "+" + votes;
+    }
+
+    public static List<FeedbackListItem> createFeedbackListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor, Class<?> callerClass) {
         List<FeedbackListItem> feedbackDetailsBeans = new ArrayList<>();
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
-            feedbackDetailsBeans.add(new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+            feedbackDetailsBeans.add(new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor, callerClass));
         }
         return feedbackDetailsBeans;
     }
@@ -137,7 +141,7 @@ public class FeedbackUtility {
         int maxUpVotes = feedback.getMaxVotes();
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
-        int responses = feedback.getFeedbackResponses().size();
+        int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -176,7 +180,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getFeedbackResponses(), context);
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -190,22 +194,26 @@ public class FeedbackUtility {
                 .build();
     }
 
-    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(List<FeedbackResponse> feedbackResponses, Context context) {
+    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
 
-        for (FeedbackResponse feedbackResponse : feedbackResponses) {
-            String responseUserName = feedbackResponse.getUser().getName();
-            feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
-                    .withFeedbackId(feedbackResponse.getId())
-                    .withContent(feedbackResponse.getContent())
-                    .withUserName(responseUserName)
-                    .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
-                    .isDeveloper(feedbackResponse.getUser().isDeveloper())
-                    .isFeedbackOwner(userName.equals(responseUserName))
-                    .build()
-            );
+        if (feedbackResponses != null) {
+            for (FeedbackResponse feedbackResponse : feedbackResponses) {
+                String responseUserName = feedbackResponse.getUser().getName();
+                feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
+                        .withFeedbackId(feedbackId)
+                        .withResponseId(feedbackResponse.getId())
+                        .withContent(feedbackResponse.getContent())
+                        .withUserName(responseUserName)
+                        .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
+                        .isDeveloper(feedbackResponse.getUser().isDeveloper())
+                        .isFeedbackOwner(userName.equals(responseUserName))
+                        .build()
+                );
+            }
         }
+
         return feedbackResponseBeans;
     }
 }
