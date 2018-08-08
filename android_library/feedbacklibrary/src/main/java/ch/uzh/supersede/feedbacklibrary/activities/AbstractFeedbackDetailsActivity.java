@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ContentFrameLayout;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -216,6 +215,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
         initPermissionCheck();
+        setVisibilityAttachmentButtons();
     }
 
     protected void checkViewsNotNull() {
@@ -269,6 +269,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             handleTagButtonClicked();
         } else if (view.getId() == imageButton.getId()) {
             handleImageButtonClicked();
+        } else if (view.getId() == audioButton.getId()) {
+            handleAudioButtonClicked();
         } else if (view.getId() == subscribeButton.getId()) {
             handleSubscribeButtonClicked();
         } else if (view.getId() == responseButton.getId() && mode == READING) {
@@ -288,6 +290,17 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             FeedbackService.getInstance(getApplicationContext()).getFeedbackImage(this, feedbackDetailsBean);
         } else {
             showImageDialog(feedbackDetailsBean.getBitmap());
+        }
+    }
+
+    protected void handleAudioButtonClicked() {
+        if (feedbackDetailsBean.getAudioFileName() != null) {
+            FeedbackService.getInstance(getApplicationContext()).getFeedbackAudio(this, feedbackDetailsBean);
+        } else {
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_audio))
+                    .withoutCancel()
+                    .withMessage("No Audio").buildAndShow();
         }
     }
 
@@ -326,6 +339,12 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                     } catch (IOException e) {
                         showImageDialog(new byte[0]);
                     }
+                }
+                break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
+                if (response instanceof ResponseBody) {
+                    // TODO: play audio
                 }
                 break;
             case CREATE_FEEDBACK_RESPONSE:
@@ -370,6 +389,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             case GET_FEEDBACK_IMAGE_MOCK:
                 showImageDialog(new byte[0]);
                 break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
+                showImageDialog(new byte[0]);
+                break;
             default:
         }
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
@@ -380,6 +403,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         switch (eventType) {
             case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
+                showImageDialog(new byte[0]);
+                break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
                 showImageDialog(new byte[0]);
                 break;
             default:
@@ -418,6 +445,19 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         responseLayout.addView(item);
         //Show new Entry
         scrollContainer.fullScroll(View.FOCUS_DOWN);
+    }
+
+    protected void setVisibilityAttachmentButtons(){
+        if (getFeedbackDetailsBean().getBitmapName() == null) {
+            disableViews(imageButton);
+        }
+        if (getFeedbackDetailsBean().getTags() == null || getFeedbackDetailsBean().getTags().length == 0) {
+            disableViews(tagButton);
+        }
+        if (getFeedbackDetailsBean().getAudioFileName() == null) {
+            disableViews(audioButton);
+        }
+
     }
 
     protected void showImageDialog(byte[] bitmap) {

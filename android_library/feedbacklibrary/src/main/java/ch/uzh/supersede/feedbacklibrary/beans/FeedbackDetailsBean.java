@@ -21,6 +21,7 @@ public class FeedbackDetailsBean implements Serializable {
     private FeedbackBean feedbackBean;
     private byte[] bitmapBytes;
     private String bitmapName;
+    private String audioFileName;
     private boolean isSubscribed;
     private boolean isPublic;
 
@@ -37,6 +38,7 @@ public class FeedbackDetailsBean implements Serializable {
         private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
         private byte[] bitmap;
         private String bitmapName;
+        private String audioFileName;
         private FeedbackBean feedbackBean;
         private boolean isSubscribed;
         private boolean isPublic;
@@ -95,6 +97,11 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
+        public Builder withAudioFileName(String audioFileName) {
+            this.audioFileName = audioFileName;
+            return this;
+        }
+
         public Builder withSubscription(boolean isSubscribed){
             this.isSubscribed = isSubscribed;
             return this;
@@ -118,6 +125,7 @@ public class FeedbackDetailsBean implements Serializable {
                 bean.feedbackBean = this.feedbackBean;
                 bean.bitmapBytes = this.bitmap;
                 bean.bitmapName = this.bitmapName;
+                bean.audioFileName = this.audioFileName;
                 bean.isSubscribed = this.isSubscribed;
                 bean.isPublic = this.isPublic;
                 return bean;
@@ -176,6 +184,10 @@ public class FeedbackDetailsBean implements Serializable {
 
     public String getBitmapName() {
         return bitmapName;
+    }
+
+    public String getAudioFileName() {
+        return audioFileName;
     }
 
     public boolean isSubscribed() {

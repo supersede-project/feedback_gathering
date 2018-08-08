@@ -40,7 +40,6 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="3"
-                    android:enabled="false"
                     android:onClick="onButtonClicked"
                     android:text="@string/details_audio" />
 

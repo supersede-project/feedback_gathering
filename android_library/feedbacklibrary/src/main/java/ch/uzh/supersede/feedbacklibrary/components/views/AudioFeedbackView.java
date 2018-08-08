@@ -212,7 +212,7 @@ public class AudioFeedbackView extends AbstractFeedbackPartView implements SeekB
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.audio_maximum_length_reached_text, audioFeedback.getMaxTime()), Toast.LENGTH_SHORT);
+                            .getString(R.string.audio_maximum_length_reached_text, (int) audioFeedback.getMaxTime()), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -545,5 +545,9 @@ public class AudioFeedbackView extends AbstractFeedbackPartView implements SeekB
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }
         return 0;
+    }
+
+    public String getAudioFilePath() {
+        return audioFilePath;
     }
 }

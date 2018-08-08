@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private FeedbackDetailsBean feedbackDetailsBean;
     private String feedbackTitle;
     private String[] feedbackTags;
+    private String audioFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         for (AbstractFeedbackPartView feedbackPartView : feedbackPartViews) {
             if (feedbackPartView instanceof AudioFeedbackView) {
                 ((AudioFeedbackView) feedbackPartView).setAllButtonsClickable(true);
+                audioFilePath = ((AudioFeedbackView) feedbackPartView).getAudioFilePath();
             }
         }
     }
@@ -134,11 +137,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private void execPrepareAndSendFeedback() {
         Bitmap screenshot = ImageUtility.loadAnnotatedImageFromDatabase(this);
         screenshot = screenshot != null ? screenshot : ImageUtility.loadImageFromDatabase(this);
+        File audioFile = new File(audioFilePath);
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
 
         feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-        FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
+        FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot), audioFile);
         ImageUtility.wipeImages(this);
     }
 
