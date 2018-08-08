@@ -142,6 +142,7 @@ public class FeedbackUtility {
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
         int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
+        boolean isPublic = feedback.isPublic();
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -179,6 +180,7 @@ public class FeedbackUtility {
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
                 .withStatus(status)
+                .isPublic(isPublic)
                 .build();
         List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
@@ -191,6 +193,7 @@ public class FeedbackUtility {
                 .withUpVotes(upVotes)
                 .withBitmapName(bitmapName)
                 .withResponses(feedbackResponses)
+                .isPublic(isPublic)
                 .build();
     }
 
@@ -198,7 +201,7 @@ public class FeedbackUtility {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
 
-        if (feedbackResponses != null) {
+        if (feedbackResponses != null && !feedbackResponses.isEmpty()) {
             for (FeedbackResponse feedbackResponse : feedbackResponses) {
                 String responseUserName = feedbackResponse.getUser().getName();
                 feedbackResponseBeans.add(new FeedbackResponseBean.Builder()

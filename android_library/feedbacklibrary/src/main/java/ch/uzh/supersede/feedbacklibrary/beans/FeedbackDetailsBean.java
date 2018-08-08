@@ -22,6 +22,7 @@ public class FeedbackDetailsBean implements Serializable {
     private byte[] bitmapBytes;
     private String bitmapName;
     private boolean isSubscribed;
+    private boolean isPublic;
 
     private FeedbackDetailsBean() {
     }
@@ -38,6 +39,7 @@ public class FeedbackDetailsBean implements Serializable {
         private String bitmapName;
         private FeedbackBean feedbackBean;
         private boolean isSubscribed;
+        private boolean isPublic;
 
         public Builder() {
             //NOP
@@ -98,6 +100,11 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
+        public Builder isPublic (boolean isPublic){
+            this.isPublic = isPublic;
+            return this;
+        }
+
         public FeedbackDetailsBean build() {
             if (CompareUtility.notNull(feedbackId, timeStamp, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
@@ -112,6 +119,7 @@ public class FeedbackDetailsBean implements Serializable {
                 bean.bitmapBytes = this.bitmap;
                 bean.bitmapName = this.bitmapName;
                 bean.isSubscribed = this.isSubscribed;
+                bean.isPublic = this.isPublic;
                 return bean;
             }
             return null;
@@ -172,5 +180,9 @@ public class FeedbackDetailsBean implements Serializable {
 
     public boolean isSubscribed() {
         return isSubscribed;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
     }
 }
