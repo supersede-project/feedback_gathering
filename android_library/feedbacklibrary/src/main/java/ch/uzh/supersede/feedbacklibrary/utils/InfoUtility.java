@@ -17,17 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
-/**
- * Created by Marco Bonzanigo on 18.11.2016.
- * Utility to generate dynamic Info-Bubbles.
- */
-
 public class InfoUtility {
-    private static ArrayList<Integer> idList = new ArrayList<>();
     private int screenWidth;
     private int screenHeight;
 
@@ -36,9 +30,12 @@ public class InfoUtility {
         this.screenWidth = screenWidth;
     }
 
-    public RelativeLayout addInfoBox(RelativeLayout layout, String title, String text,Activity activity, View anchorView, final View... chainedViews) {
-        RelativeLayout infoBox = createInfoBox(title,text,activity,anchorView,chainedViews);
+    public RelativeLayout addInfoBox(RelativeLayout layout, String title, String text, float textSize, Activity activity, View anchorView, final View... chainedViews) {
+        RelativeLayout infoBox = createInfoBox(title,text,textSize,activity,anchorView,chainedViews);
         if (infoBox != null){
+            if (infoBox.getParent() != null && infoBox.getParent() instanceof ViewGroup){
+                ((ViewGroup)infoBox.getParent()).removeView(infoBox);
+            }
             layout.addView(infoBox);
             layout.bringChildToFront(infoBox);
             infoBox.bringToFront();
@@ -46,14 +43,9 @@ public class InfoUtility {
         }
         return infoBox;
     }
-    private RelativeLayout createInfoBox(String title, String text, Activity activity, View anchorView, final View... chainedViews) {
-        if (idList.contains(anchorView.getId())){
-            return null;
-        }else{
-            idList.add(anchorView.getId());
-        }
+    private RelativeLayout createInfoBox(String title, String text, float textSize, Activity activity, View anchorView, final View... chainedViews) {
         //Text-Size
-        int titleWidth = measureTextWidth(title,20,getDensity(activity));
+        int titleWidth = measureTextWidth(title,textSize,getDensity(activity));
         //X-Y Locations
         int[] xyLocations = new int[2];
         anchorView.getLocationOnScreen(xyLocations);
@@ -67,9 +59,14 @@ public class InfoUtility {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(titleWidth,ViewGroup.LayoutParams.WRAP_CONTENT);
         infoBox.setLayoutParams(layoutParams);
         //Set Text
-        ((TextView)view.findViewById(R.id.info_box_title)).setText(title);
-        ((TextView)view.findViewById(R.id.info_box_title)).setPaintFlags(((TextView)view.findViewById(R.id.info_box_title)).getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
-        ((TextView)view.findViewById(R.id.info_box_text)).setText(text);
+        TextView titleBoxTextView = (TextView) view.findViewById(R.id.info_box_title);
+        titleBoxTextView.setText(title);
+        titleBoxTextView.setPaintFlags(titleBoxTextView.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        TextView infoBoxTextView = (TextView) view.findViewById(R.id.info_box_text);
+        infoBoxTextView.setText(text);
+        //Text-Size propagation
+        titleBoxTextView.setTextSize(textSize);
+        infoBoxTextView.setTextSize(textSize-2);
         //Layouting
         int anchorWidth = anchorView.getWidth();
         int anchorHeight = anchorView.getHeight();
@@ -119,7 +116,7 @@ public class InfoUtility {
         return infoBox;
     }
 
-    private static int measureTextWidth(String text, int size, float density) {
+    private static int measureTextWidth(String text, float size, float density) {
         Paint paint = new Paint();
         Rect bounds = new Rect();
         float scaledPx = size * density;

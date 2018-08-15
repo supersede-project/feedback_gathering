@@ -51,6 +51,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ScalingUtility.init(this);
         userLevel = PermissionUtility.getUserLevel(getApplicationContext());
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -139,7 +140,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     }
 
     protected void colorViews(int colorIndex, View... views) {
-        if (configuration.getTopColors().length >= colorIndex) {
+        if (configuration.getTopColors().length > colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
             for (View view : color != null ? views : new View[0]) {
                 if (view == null) {
@@ -293,7 +294,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        createInfoBubbles();
+        if (hasFocus){
+            createInfoBubbles();
+        }
     }
 
     protected void createInfoBubbles() {

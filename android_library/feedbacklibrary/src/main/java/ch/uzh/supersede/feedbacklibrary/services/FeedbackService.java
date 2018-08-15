@@ -334,11 +334,17 @@ public abstract class FeedbackService {
         public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
             LocalConfigurationBean configuration = ConfigurationUtility.getConfigurationFromDatabase(context);
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
+            ArrayList<String> labels = new ArrayList<>();
             for (FeedbackDetailsBean bean : RepositoryStub.getFeedback(context, 50, -30, 50, 0.1f)) {
                 if (bean != null) {
                     FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, 0, FeedbackListActivity.class);
+                    listItem.addAllLabels(labels);
                     allFeedbackList.add(listItem);
                 }
+            }
+            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
+            for (FeedbackListItem listItem : allFeedbackList){
+                listItem.equalizeTextSize(textSize);
             }
             callback.onEventCompleted(GET_FEEDBACK_LIST_MOCK, allFeedbackList);
         }

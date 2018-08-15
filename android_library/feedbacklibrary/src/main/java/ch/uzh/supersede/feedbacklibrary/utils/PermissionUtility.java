@@ -3,12 +3,14 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
+import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
@@ -48,7 +50,7 @@ public class PermissionUtility {
             if (context == null) {
                 return false;
             }
-            boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
+            boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
             boolean noMissingPermissions = getMissing(context).length == 0;
             return ignoreDatabaseCheck ? contributor && noMissingPermissions : contributor && noMissingPermissions && checkForUsername(context);
         }
@@ -81,6 +83,10 @@ public class PermissionUtility {
     }
 
     public static USER_LEVEL getUserLevel(Context context, boolean ignoreDatabaseCheck) {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !ACTIVE.check(context, false)) {
+            context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
+            return PASSIVE;
+        }
         if (ADVANCED.check(context, ignoreDatabaseCheck)) {
             return ADVANCED;
         }

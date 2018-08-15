@@ -127,6 +127,11 @@ public class DefaultConfiguration implements
     }
 
     @Override
+    public int[] getConfiguredCustomStyle() {
+        return new int[0];
+    }
+
+    @Override
     public double getConfiguredAudioFeedbackMaxTime() {
         return 15.0;
     }
