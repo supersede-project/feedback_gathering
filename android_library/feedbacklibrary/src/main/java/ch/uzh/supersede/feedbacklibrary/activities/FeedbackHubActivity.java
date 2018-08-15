@@ -8,8 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.*;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
-import android.text.InputFilter;
+import android.text.*;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +48,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
+    private final String inputDefaultText = "... Insert User-Name here ...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +96,19 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
-            RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_status_label), getString(R.string.hub_feedback_status_info), this, statusText);
-            RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_create_label), getString(R.string.hub_feedback_create_info), this, feedbackButton, mLayout);
-            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_settings_label), getString(R.string.hub_feedback_settings_info), this, settingsButton, llLayout);
-            RelativeLayout ulLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_list_label), getString(R.string.hub_feedback_list_info), this, listButton, lrLayout);
-            RelativeLayout urLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_user_lvl_label), getString(R.string.hub_feedback_user_lvl_info), this, levelButton, ulLayout);
-            RelativeLayout umLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_info_label), getString(R.string.hub_feedback_info_info), this, spaceTop, urLayout);
+            String statusLabel = getString(R.string.hub_feedback_status_label);
+            String createLabel = getString(R.string.hub_feedback_create_label);
+            String settingsLabel = getString(R.string.hub_feedback_settings_label);
+            String listLabel = getString(R.string.hub_feedback_list_label);
+            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label);
+            String infoLabel = getString(R.string.hub_feedback_info_label);
+            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20,75,0.45,statusLabel,createLabel,settingsLabel,listLabel,lvlLabel,infoLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize,this, statusText);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, createLabel, getString(R.string.hub_feedback_create_info), textSize, this, feedbackButton, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, settingsLabel, getString(R.string.hub_feedback_settings_info), textSize, this, settingsButton, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.hub_feedback_list_info), textSize, this, listButton, lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, lvlLabel, getString(R.string.hub_feedback_user_lvl_info), textSize, this, levelButton, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, infoLabel, getString(R.string.hub_feedback_info_info), textSize, this, spaceTop, urLayout);
             mLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -165,7 +172,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
             int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
             if (configuration.hasAtLeastNTopColors(2)) {
-                statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
+                Spanned statusText = Html.fromHtml(getString(R.string.hub_status, userName,
                         userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
@@ -175,16 +182,22 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
                                 ColorUtility.getBackgroundColorOfView(backgroundLayout),
                                 configuration.getTopColors()[1],
-                                0.3)))));
+                                0.3))));
+                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText.toString(), 20, 0, 0.4);
+                this.statusText.setTextSize(textSize);
+                this.statusText.setText(statusText);
             } else {
-                statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
+                String statusText = Html.fromHtml(getString(R.string.hub_status, userName,
                         userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
                         upVotedFeedbackBeans,
                         downVotedFeedbackBeans)
                         .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING, DARK_BLUE)));
+                        .replace(SECONDARY_COLOR_STRING, DARK_BLUE)).toString();
+                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText, 20, 0, 0.4);
+                this.statusText.setTextSize(textSize);
+                this.statusText.setText(statusText);
             }
 
             boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
@@ -238,6 +251,25 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                             )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
+                            nameInputText.setText(inputDefaultText);
+                            nameInputText.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    if (s.toString().contains(inputDefaultText)){
+                                        nameInputText.setText(s.toString().replace(inputDefaultText,""));
+                                        nameInputText.setSelection(1);
+                                    }
+                                }
+                            });
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
                                     .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M?getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()):getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
@@ -281,7 +313,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                     respondedFeedbackBeans.size() + " responded Feedback-Entries.",
                             Toast.LENGTH_SHORT).show();
                     userName = null;
-                    statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName, 0, 0, 0, 0, 0).replace(PRIMARY_COLOR_STRING, DARK_BLUE)));
+                    String statusText = Html.fromHtml(getString(R.string.hub_status, userName, 0, 0, 0, 0, 0).replace(PRIMARY_COLOR_STRING, DARK_BLUE)).toString();
+                    float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText, 20, 0, 0.4);
+                    this.statusText.setTextSize(textSize);
+                    this.statusText.setText(statusText);
                     updateUserLevel(false);
                 }
             }
@@ -309,6 +344,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         return;
                     }
                     if (inputString.length() > configuration.getMaxUserNameLength()) {
+                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText)){
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -417,5 +456,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     @Override
     public void onConnectionFailed(EventType eventType) {
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

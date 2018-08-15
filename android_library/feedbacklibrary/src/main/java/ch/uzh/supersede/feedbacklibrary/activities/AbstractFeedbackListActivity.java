@@ -20,6 +20,7 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
+import ch.uzh.supersede.feedbacklibrary.components.views.SpacerListItem;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -108,6 +109,7 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
         scrollView.scrollTo(0, 0);
         for (LinearLayout item : getActiveList()) {
             scrollListLayout.addView(item);
+//            scrollListLayout.addView(new SpacerListItem(this,5,getTopColor(1)));
         }
     }
 

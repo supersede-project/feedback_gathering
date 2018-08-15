@@ -131,7 +131,12 @@ public class HostActivity extends AppCompatActivity implements
     //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return FEEDBACK_STYLE.DARK;
+        return FEEDBACK_STYLE.CUSTOM;
+    }
+
+    @Override
+    public int[] getConfiguredCustomStyle() {
+        return new int[]{-179768107,-12768107};
     }
 
     @Override

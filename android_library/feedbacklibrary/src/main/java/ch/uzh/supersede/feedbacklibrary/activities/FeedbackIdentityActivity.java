@@ -16,8 +16,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.TagUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
@@ -295,12 +294,20 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
             editTitle.setEnabled(false);
             editTag.setEnabled(false);
             RelativeLayout root = getView(R.id.identity_root, RelativeLayout.class);
-            RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_cancel), getString(R.string.identity_tutorial_content_cancel), this, buttonBack);
-            RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_continue),getString(R.string.identity_tutorial_content_continue), this, buttonNext, mLayout);
-            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_selected_tags), getString(R.string.identity_tutorial_content_selected_tags), this, tagContainer, llLayout);
-            RelativeLayout ulLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_recommendations), getString(R.string.identity_tutorial_content_recommendations), this, recommendationContainer, lrLayout);
-            RelativeLayout urLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_tag_input), getString(R.string.identity_tutorial_content_tag_input, configuration.getMaxTagNumber(), configuration.getMinTagNumber(), configuration.getMinTagLength(), configuration.getMaxTagLength()), this, editTag, ulLayout);
-            RelativeLayout umLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_title_input), getString(R.string.identity_tutorial_content_title_input,configuration.getMinTitleLength(), configuration.getMaxTitleLength()), this, editTitle, urLayout);
+
+            String cancelLabel = getString(R.string.identity_tutorial_title_cancel);
+            String continueLabel = getString(R.string.identity_tutorial_title_continue);
+            String selectedTagsLabel = getString(R.string.identity_tutorial_title_selected_tags);
+            String recommendationLabel = getString(R.string.identity_tutorial_title_recommendations);
+            String inputTagLabel = getString(R.string.identity_tutorial_title_tag_input);
+            String inputTitleLabel = getString(R.string.identity_tutorial_title_title_input);
+            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20,75, 0.45,cancelLabel,continueLabel,selectedTagsLabel,recommendationLabel,inputTagLabel,inputTitleLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, cancelLabel, getString(R.string.identity_tutorial_content_cancel), textSize,this, buttonBack);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, continueLabel,getString(R.string.identity_tutorial_content_continue), textSize,this, buttonNext, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, selectedTagsLabel, getString(R.string.identity_tutorial_content_selected_tags), textSize,this, tagContainer, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, recommendationLabel, getString(R.string.identity_tutorial_content_recommendations), textSize,this, recommendationContainer, lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, inputTagLabel, getString(R.string.identity_tutorial_content_tag_input, configuration.getMaxTagNumber(), configuration.getMinTagNumber(), configuration.getMinTagLength(), configuration.getMaxTagLength()), textSize,this, editTag, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, inputTitleLabel, getString(R.string.identity_tutorial_content_title_input,configuration.getMinTitleLength(), configuration.getMaxTitleLength()), textSize,this, editTitle, urLayout);
             mLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

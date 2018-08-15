@@ -90,11 +90,18 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 if (response instanceof List) {
+                    ArrayList<String> labels = new ArrayList<>();
                     for (Feedback feedback : (List<Feedback>) response) {
                         FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
                         if (feedbackDetailsBean != null) { //Avoid NP caused by old Repository Feedback
-                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0)));
+                            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0));
+                            listItem.addAllLabels(labels);
+                            allFeedbackList.add(listItem);
                         }
+                    }
+                    float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
+                    for (FeedbackListItem listItem : allFeedbackList){
+                        listItem.equalizeTextSize(textSize);
                     }
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(getSearchText().getText().toString());

@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -11,6 +12,8 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
+import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
@@ -58,16 +61,14 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                                 .getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
         int padding = 10;
-        int headerHeight = 150;
-        int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
+
+        int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.91f); //weighted 20/22
         LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         masterParams.setMargins(5, 5, 5, 5);
         setLayoutParams(masterParams);
         setOrientation(VERTICAL);
-        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, LayoutParams.WRAP_CONTENT);
-        LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, headerHeight);
-        LinearLayoutCompat.LayoutParams shortWrapperParams = new LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        setBackgroundColor(resolveBackgroundColor(feedbackResponseBean));
+        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, LayoutParams.WRAP_CONTENT);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, getContext(), HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, getContext(), HORIZONTAL);
         generateElements(feedbackResponseBean, padding, longParams, shortParams);
@@ -76,6 +77,9 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         lowerWrapperLayout.addView(bottomView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, resolveBackgroundColor(feedbackResponseBean));
+        setBackground(gradientDrawable);
     }
 
     @SuppressWarnings({"squid:S2696"})
@@ -161,7 +165,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
         }else{
-            return ColorUtility.isDark(configuration.getTopColors()[2])? Color.WHITE:Color.BLACK;
+            return ColorUtility.isDark(configuration.getLastColor())? Color.WHITE:Color.BLACK;
         }
     }
     private int resolveBackgroundColor(FeedbackResponseBean feedbackResponseBean) {
@@ -170,9 +174,10 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);
         }else{
-            return configuration.getTopColors()[2];
+            return ColorUtility.isDark(configuration.getLastColor())? Color.WHITE:Color.BLACK;
         }
     }
+
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {
         LinearLayout linearLayout = new LinearLayout(context);
@@ -183,18 +188,17 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
 
     private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, String text, int gravity, int padding, int textColor, int backgroundColor) {
         TextView textView = new TextView(getContext());
-        textView.setLayoutParams(layoutParams);
         textView.setText(text);
+        textView.setLayoutParams(layoutParams);
         textView.setGravity(gravity);
         textView.setTextColor(textColor);
-        textView.setBackgroundColor(backgroundColor);
         textView.setPadding(padding, padding, padding, padding);
         return textView;
     }
     private EditText createEditTextView(LinearLayoutCompat.LayoutParams layoutParams, int gravity, int padding, int textColor, int backgroundColor) {
         EditText editText = new EditText(getContext());
-        editText.setMaxLines(Integer.MAX_VALUE);
         editText.setLayoutParams(layoutParams);
+        editText.setMaxLines(Integer.MAX_VALUE);
         editText.setGravity(gravity);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxResponseLength())});
         editText.setTextColor(textColor);

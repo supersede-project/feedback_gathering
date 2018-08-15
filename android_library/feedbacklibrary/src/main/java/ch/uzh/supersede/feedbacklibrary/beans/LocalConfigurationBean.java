@@ -3,10 +3,12 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Locale;
 
+import ch.uzh.supersede.feedbacklibrary.components.exceptions.InvalidConfigurationException;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE;
 import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
@@ -239,6 +241,18 @@ public class LocalConfigurationBean implements Serializable {
             topColors = new Integer[]{
                     WIN95_GRAY, WIN95_BLUE, WHITE
             };
+        } else if (style == CUSTOM){
+            int[] colors = configuration.getConfiguredCustomStyle();
+            if (colors.length == 3 ) {
+                topColors = new Integer[]{colors[0],colors[1],colors[2]};
+            }else if (colors.length == 2 ) {
+                topColors = new Integer[]{colors[0],colors[1]};
+            }else{
+                Log.e("Wrong Configuration","Custom Styles must contain 2 or 3 colors! Fallback to Dark-Theme!");
+                topColors = new Integer[]{
+                        ANTHRACITE_DARK, GRAY_DARK, GRAY
+                };
+            }
         }
     }
 
@@ -395,6 +409,8 @@ public class LocalConfigurationBean implements Serializable {
     public Integer[] getTopColors() {
         return topColors;
     }
+
+    public Integer getLastColor() {return topColors[topColors.length-1];}
 
     public boolean isColoringVertical() {
         return isColoringVertical;

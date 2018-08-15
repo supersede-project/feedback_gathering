@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -36,6 +37,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private Enums.FEEDBACK_SORTING sorting = NONE;
     private String ownUser = USER_NAME_ANONYMOUS;
     private LocalConfigurationBean configuration;
+    private ArrayList<String> labels = new ArrayList<>();
 
     public FeedbackListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
@@ -50,11 +52,11 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         int padding = 10;
         int partHeight = NumberUtility.divide(screenHeight, visibleTiles + 3);
         int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
-        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight);
+        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight);
         masterParams.setMargins(5, 5, 5, 5);
         setLayoutParams(masterParams);
         setOrientation(VERTICAL);
-        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth, partHeight / 2);
+        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
         int textColor = ColorUtility.getTextColor(context, backgroundColor);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
@@ -64,9 +66,10 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         }
         titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, padding, textColor);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(getFeedbackBean().getTimeStamp())), Gravity.END, padding, textColor);
-        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackDetailsBean.getFeedbackStatus().getColor(),0.4);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
         statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel()
-                .concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
+                                                                             .concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding,
+                statusColor);
         pointView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackBean().getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor();
         setBackgroundColor(backgroundColor);
@@ -76,28 +79,29 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         lowerWrapperLayout.addView(pointView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
-        setOnLongClickListener(new OnLongClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 if (VersionUtility.getDateVersion() > 2) {
                     startFeedbackDetailsActivity();
                 }
-                return false;
-
             }
         });
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, getResources().getColor(R.color.white));
+        setBackground(gradientDrawable);
     }
 
     private void startFeedbackDetailsActivity() {
         Intent intent = null;
-        if (ACTIVE.check(getContext())){
-            if (VersionUtility.getDateVersion()>=4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+        if (ACTIVE.check(getContext())) {
+            if (VersionUtility.getDateVersion() >= 4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
-            }else{
+            } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
             }
-        }else {
-            Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.list_alert_user_level, Toast.LENGTH_SHORT).show();
             return;
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -118,13 +122,14 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         return linearLayout;
     }
 
-    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity,int padding, int textColor) {
+    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity, int padding, int textColor) {
         TextView textView = new TextView(context);
         textView.setLayoutParams(layoutParams);
         textView.setText(text);
         textView.setGravity(gravity);
         textView.setPadding(padding, padding, padding, padding);
         textView.setTextColor(textColor);
+        labels.add(text);
         return textView;
     }
 
@@ -163,8 +168,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     public void setSorting(Enums.FEEDBACK_SORTING sorting, List<Enums.FEEDBACK_STATUS> allowedStatuses) {
         if (sorting != MINE || StringUtility.equals(getFeedbackBean().getUserName(), ownUser)) {
             this.setVisibility(GONE);
-            for (Enums.FEEDBACK_STATUS status : allowedStatuses){
-                if (status == getFeedbackBean().getFeedbackStatus()){
+            for (Enums.FEEDBACK_STATUS status : allowedStatuses) {
+                if (status == getFeedbackBean().getFeedbackStatus()) {
                     this.setVisibility(VISIBLE);
                 }
             }
@@ -172,5 +177,16 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
             this.setVisibility(GONE);
         }
         this.sorting = sorting;
+    }
+
+    public void addAllLabels(ArrayList<String> labels) {
+        labels.addAll(this.labels);
+    }
+
+    public void equalizeTextSize(float textSize) {
+        titleView.setTextSize(textSize);
+        dateView.setTextSize(textSize);
+        statusView.setTextSize(textSize);
+        pointView.setTextSize(textSize);
     }
 }
