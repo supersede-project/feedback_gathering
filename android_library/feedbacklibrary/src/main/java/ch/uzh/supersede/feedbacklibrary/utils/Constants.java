@@ -14,6 +14,8 @@ public class Constants {
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";
     public static final String CONFIGURATION = "localConfigurationBean";
+    public static final String DATABASE_VERSION = "databaseVersion";
+    public static final double DATABASE_VERSION_NUMBER = 2;
 
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
@@ -31,6 +33,7 @@ public class Constants {
     public static final String EXTRA_KEY_FEEDBACK_DELETION = "feedbackDeletion";
     public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
     public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
+    public static final String EXTRA_KEY_CALLER_CLASS = "callerClass";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
@@ -50,6 +53,14 @@ public class Constants {
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
     public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
 
+    public static class FeedbackServiceConstants {
+        private FeedbackServiceConstants() {
+        }
+
+        public static final String VIEW_PUBLIC = "public";
+        public static final String VIEW_PRIVATE = "private";
+        public static final String VIEW_ALL = null;
+    }
 
     public static class UserConstants {
         private UserConstants() {

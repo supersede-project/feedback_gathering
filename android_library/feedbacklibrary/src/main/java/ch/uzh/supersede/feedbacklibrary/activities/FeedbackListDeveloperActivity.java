@@ -14,6 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.FeedbackReport;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -74,25 +75,29 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
         getActiveList().clear();
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getPrivateFeedbackList(this);
-            FeedbackService.getInstance(this, true).getReportedFeedbackList(this);
+            FeedbackService.getInstance(this, true).getFeedbackListPrivate(this);
+            FeedbackService.getInstance(this, true).getFeedbackReportList(this);
         } else {
-            FeedbackService.getInstance(this).getPrivateFeedbackList(this);
-            FeedbackService.getInstance(this).getReportedFeedbackList(this);
+            FeedbackService.getInstance(this).getFeedbackListPrivate(this);
+            FeedbackService.getInstance(this).getFeedbackReportList(this);
         }
         doSearch(getSearchText().getText().toString());
         sort();
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case GET_PRIVATE_FEEDBACK_LIST:
-                handleListUpdate(privateFeedbackList, response);
+            case GET_FEEDBACK_LIST_PRIVATE:
+                if (response instanceof List) {
+                    handleListUpdate(privateFeedbackList, (List<Feedback>) response);
+                }
                 break;
-            case GET_REPORTED_FEEDBACK_LIST:
-                handleListUpdate(reportedFeedbackList, response);
+            case GET_FEEDBACK_REPORT_LIST:
+                if (response instanceof List) {
+                    handleListUpdate(reportedFeedbackList, (List<Feedback>) response);
+                }
                 break;
             default:
                 break;
@@ -100,13 +105,13 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
     }
 
     @SuppressWarnings("unchecked")
-    private void handleListUpdate(List<FeedbackListItem> feedbackListItems, Object response) {
+    private void handleListUpdate(List<FeedbackListItem> feedbackListItems, List<Feedback> feedbackList) {
         if (response instanceof List) {
             ArrayList<String> labels = new ArrayList<>();
             feedbackListItems.clear();
             for (Feedback feedback : (List<Feedback>) response) {
                 FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-                FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0));
+                FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0),getClass());
                 listItem.addAllLabels(labels);
                 feedbackListItems.add(listItem);
             }

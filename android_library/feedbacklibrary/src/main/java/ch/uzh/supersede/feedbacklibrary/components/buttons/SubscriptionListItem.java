@@ -20,13 +20,13 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
         return this;
     }
 
-    public SubscriptionListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
-        super(context, visibleTiles, feedbackBean, configuration, backgroundColor);
+    public SubscriptionListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
+        super(context, visibleTiles, feedbackDetailsBean, configuration, backgroundColor);
 
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        Switch subscribeToggle = createSwitch(getShortParams(), context, Gravity.START, feedbackBean, PADDING);
+        Switch subscribeToggle = createSwitch(getShortParams(), context, Gravity.START, feedbackDetailsBean, PADDING);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());
@@ -36,11 +36,11 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
         addView(lowerWrapperLayout);
     }
 
-    private Switch createSwitch(LinearLayoutCompat.LayoutParams layoutParams, final Context context, int gravity, final LocalFeedbackBean feedbackBean, int padding) {
+    private Switch createSwitch(LinearLayoutCompat.LayoutParams layoutParams, final Context context, int gravity, final FeedbackDetailsBean feedbackBean, int padding) {
         Switch toggle = new Switch(context);
         toggle.setLayoutParams(layoutParams);
         toggle.setPadding(padding, padding, padding, padding);
-        toggle.setChecked(feedbackBean.getSubscribed() == 1);
+        toggle.setChecked(feedbackBean.isSubscribed());
         toggle.setGravity(gravity);
 
         toggle.getThumbDrawable().setColorFilter(getForegroundColor(), PorterDuff.Mode.MULTIPLY);
@@ -48,9 +48,8 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isSubscribed) {
-                FeedbackBean feedback = RepositoryStub.getFeedback(context, feedbackBean);
-                RepositoryStub.sendSubscriptionChange(context, feedback, isSubscribed);
-                FeedbackService.getInstance(context).createSubscription(getListener(), feedback);
+                RepositoryStub.sendSubscriptionChange(context, feedbackBean.getFeedbackBean(), isSubscribed);
+                FeedbackService.getInstance(context).createSubscription(getListener(), feedbackBean.getFeedbackBean());
             }
         });
 
@@ -64,9 +63,9 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
                 if (response instanceof FeedbackBean) {
                     boolean isSubscribed = FeedbackDatabase.getInstance(getContext()).getFeedbackState((FeedbackBean) response).isSubscribed();
                     if (isSubscribed) {
-                        Toast.makeText(getContext(), "Subscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Subscribed to " + getFeedbackDetailsBean().getTitle(), Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackBean().getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackDetailsBean().getTitle(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

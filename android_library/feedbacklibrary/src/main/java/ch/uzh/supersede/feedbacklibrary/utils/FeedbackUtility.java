@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
@@ -15,6 +16,68 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
 public class FeedbackUtility {
     private FeedbackUtility() {
+    }
+
+    public static String getUpvotesAsText(int votes){
+        return votes <= 0 ? String.valueOf(votes) : "+" + votes;
+    }
+
+    public static List<FeedbackListItem> createFeedbackListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor, Class<?> callerClass) {
+        List<FeedbackListItem> feedbackDetailsBeans = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            feedbackDetailsBeans.add(new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor, callerClass));
+        }
+        return feedbackDetailsBeans;
+    }
+
+    public static List<VoteListItem> createFeedbackVotesListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
+        List<VoteListItem> voteListItems = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            voteListItems.add(new VoteListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+        }
+        return voteListItems;
+    }
+
+    public static List<SubscriptionListItem> createFeedbackSubscriptionListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
+        List<SubscriptionListItem> subscriptionListItems = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            subscriptionListItems.add(new SubscriptionListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+        }
+        return subscriptionListItems;
+    }
+
+    public static List<FeedbackDetailsBean> localFeedbackBeanToFeedbackDetailsBean(List<LocalFeedbackBean> localFeedbackBeans, Context context) {
+        List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
+        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
+
+        for (LocalFeedbackBean bean : localFeedbackBeans) {
+
+            FeedbackBean feedbackBean = new FeedbackBean.Builder()
+                    .withFeedbackId(bean.getFeedbackId())
+                    .withTitle(bean.getTitle())
+                    .withUserName(bean.getOwner() > 0 ? userName : null)
+                    .withTimestamp(bean.getCreationDate())
+                    .withUpVotes(bean.getVotes())
+                    .withResponses(bean.getResponses())
+                    .withStatus(bean.getFeedbackStatus())
+                    .build();
+
+            FeedbackDetailsBean feedbackDetailsBean = new FeedbackDetailsBean.Builder()
+                    .withFeedbackId(feedbackBean.getFeedbackId())
+                    .withFeedbackBean(feedbackBean)
+                    .withUserName(bean.getOwner() > 0 ? userName : null)
+                    .withTimestamp(bean.getCreationDate())
+                    .withStatus(bean.getFeedbackStatus())
+                    .withUpVotes(bean.getVotes())
+                    .withSubscription(bean.getSubscribed() > 0)
+                    .build();
+
+            feedbackDetailsBeans.add(feedbackDetailsBean);
+        }
+        return feedbackDetailsBeans;
     }
 
     public static Feedback createFeedback(Context context, List<AbstractFeedbackPart> feedbackPart, String feedbackTitle, String[] feedbackTags) {
@@ -78,34 +141,33 @@ public class FeedbackUtility {
         int maxUpVotes = feedback.getMaxVotes();
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
-        int responses = 0; // TODO not yet implemented
+        int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
 
         String description = null;
-        String imageName = null;
-        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()){
-            imageName = feedback.getScreenshotFeedbackList().get(0).getPath();
-        }
-
         if (!feedback.getTextFeedbackList().isEmpty()) {
             description = feedback.getTextFeedbackList().get(0).getText();
         }
+        String imageName = null;
+        if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
+            imageName = feedback.getScreenshotFeedbackList().get(0).getPath();
+        }
+
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
-        Bitmap bitmap = null; //TODO bitmap
-        String bitmapName = null;
 
+        String bitmapName = null;
         if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
             bitmapName = feedback.getScreenshotFeedbackList().get(0).getPath();
         }
 
         String title = feedback.getTitle();
-        String[] tags = feedback.getTags();
-        //TODO: Dani, we need title & tags, workaround for release 4
-        if (title == null || title.length() == 0){
-            title = "#Dummy-Title#"+(imageName!=null?"* ":" ")+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
-        }else{
-            title = title +(imageName!=null?"* ":" ");
+        if (title == null || title.length() == 0) {
+            title = "#Dummy-Title#" + (imageName != null ? "* " : " ") + GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        } else {
+            title = title + (imageName != null ? "* " : " ");
         }
+        String[] tags = feedback.getTags();
+
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withTitle(title)
@@ -118,19 +180,40 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        if (feedbackBean == null){
-            return null; //Avoid NP caused by old Feedback on the Repository
-        }
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackId(feedbackBean.getFeedbackId())
+                .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
                 .withDescription(description)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
-                .withBitmap(bitmap)
                 .withBitmapName(bitmapName)
+                .withResponses(feedbackResponses)
                 .build();
+    }
+
+    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
+        List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
+        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
+
+        if (feedbackResponses != null) {
+            for (FeedbackResponse feedbackResponse : feedbackResponses) {
+                String responseUserName = feedbackResponse.getUser().getName();
+                feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
+                        .withFeedbackId(feedbackId)
+                        .withResponseId(feedbackResponse.getId())
+                        .withContent(feedbackResponse.getContent())
+                        .withUserName(responseUserName)
+                        .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
+                        .isDeveloper(feedbackResponse.getUser().isDeveloper())
+                        .isFeedbackOwner(userName.equals(responseUserName))
+                        .build()
+                );
+            }
+        }
+
+        return feedbackResponseBeans;
     }
 }

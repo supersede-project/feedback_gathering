@@ -11,10 +11,13 @@ import android.widget.*;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.ServiceUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -29,15 +32,15 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     private LinearLayout scrollListLayout;
     private SETTINGS_VIEW currentViewState = MINE;
 
-    private Button myButton;
-    private Button othersButton;
-    private Button settingsButton;
+    private Button ownButton;
+    private Button votedButton;
+    private Button subscribedButton;
 
     private LinearLayout focusSink;
 
-    private ArrayList<AbstractSettingsListItem> myFeedbackList = new ArrayList<>();
-    private ArrayList<AbstractSettingsListItem> othersFeedbackList = new ArrayList<>();
-    private ArrayList<AbstractSettingsListItem> settingsFeedbackList = new ArrayList<>();
+    private ArrayList<AbstractSettingsListItem> feedbackListOwn = new ArrayList<>();
+    private ArrayList<AbstractSettingsListItem> feedbackListVoted = new ArrayList<>();
+    private ArrayList<AbstractSettingsListItem> feedbackListSubscribed = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +50,9 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
         scrollListLayout = getView(R.id.settings_layout_scroll, LinearLayout.class);
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
 
-        myButton = setOnClickListener(getView(R.id.settings_button_mine, Button.class));
-        othersButton = setOnClickListener(getView(R.id.settings_button_others, Button.class));
-        settingsButton = setOnClickListener(getView(R.id.settings_button_settings, Button.class));
+        ownButton = setOnClickListener(getView(R.id.settings_button_own, Button.class));
+        votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
+        subscribedButton = setOnClickListener(getView(R.id.settings_button_subscribed, Button.class));
 
         ToggleButton useStubsToggle = getView(R.id.settings_toggle_use_stubs, ToggleButton.class);
         useStubsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(USE_STUBS, false));
@@ -82,8 +85,8 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 getView(R.id.settings_toggle_use_stubs, ToggleButton.class),
                 getView(R.id.settings_toggle_enable_notifications, ToggleButton.class),
                 getView(R.id.settings_toggle_feature_3, ToggleButton.class));
-        colorShape(0, myButton, othersButton, settingsButton);
-        colorShape(1, myButton);
+        colorShape(0, ownButton, votedButton, subscribedButton);
+        colorShape(1, ownButton);
         colorViews(1,
                 getView(R.id.settings_layout_color_1, LinearLayout.class),
                 getView(R.id.settings_layout_color_2, LinearLayout.class),
@@ -107,34 +110,32 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case GET_MINE_FEEDBACK_VOTES:
-                myFeedbackList.clear();
-                //TODO [jfo]: parse server response
+            case GET_FEEDBACK_LIST_VOTED:
+                feedbackListVoted.clear();
+                feedbackListVoted.addAll(FeedbackUtility.createFeedbackVotesListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
                 break;
-            case GET_MINE_FEEDBACK_VOTES_MOCK:
-                myFeedbackList.clear();
-                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                    myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+            case GET_FEEDBACK_LIST_VOTED_MOCK:
+                feedbackListVoted.clear();
+                for (FeedbackDetailsBean bean : FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean((List<LocalFeedbackBean>) response, this)) {
+                    feedbackListVoted.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
-                Collections.sort(myFeedbackList);
+                Collections.sort(feedbackListVoted);
                 break;
-            case GET_OTHERS_FEEDBACK_VOTES:
-                othersFeedbackList.clear();
-                //TODO [jfo]: parse server response
+            case GET_FEEDBACK_LIST_OWN:
+                feedbackListOwn.clear();
+                feedbackListOwn.addAll(FeedbackUtility.createFeedbackVotesListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
                 break;
-            case GET_OTHERS_FEEDBACK_VOTES_MOCK:
-                othersFeedbackList.clear();
-                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                    othersFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+            case GET_FEEDBACK_LIST_OWN_MOCK:
+                feedbackListOwn.clear();
+                for (FeedbackDetailsBean bean : FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean((List<LocalFeedbackBean>) response, this)) {
+                    feedbackListOwn.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
-                Collections.sort(othersFeedbackList);
+                Collections.sort(feedbackListOwn);
                 break;
-            case GET_LOCAL_FEEDBACK_SUBSCRIPTIONS:
-                settingsFeedbackList.clear();
-                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                    settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
-                }
-                Collections.sort(settingsFeedbackList);
+            case GET_FEEDBACK_LIST_SUBSCRIBED:
+                feedbackListSubscribed.clear();
+                feedbackListSubscribed.addAll(FeedbackUtility.createFeedbackSubscriptionListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
+                Collections.sort(feedbackListSubscribed);
                 break;
             default:
         }
@@ -151,9 +152,9 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     }
 
     private void execFillFeedbackList() {
-        FeedbackService.getInstance(this).getOthersFeedbackVotes(this, this);
-        FeedbackService.getInstance(this).getMineFeedbackVotes(this, this);
-        FeedbackService.getInstance(this).getLocalFeedbackSubscriptions(this, this);
+        FeedbackService.getInstance(this).getFeedbackListVoted(this, this);
+        FeedbackService.getInstance(this).getFeedbackListOwn(this, this);
+        FeedbackService.getInstance(this).getFeedbackListSubscribed(this, this);
     }
 
     private void execStartNotificationService(boolean isEnabled) {
@@ -175,18 +176,18 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     }
 
     private void toggleButtons(View v) {
-        setInactive(myButton, othersButton, settingsButton);
+        setInactive(ownButton, votedButton, subscribedButton);
         colorShape(1, v);
 
-        if (v.getId() == myButton.getId()) {
-            load(myFeedbackList);
+        if (v.getId() == ownButton.getId()) {
+            load(feedbackListOwn);
             currentViewState = MINE;
-        } else if (v.getId() == othersButton.getId()) {
-            load(othersFeedbackList);
-            currentViewState = OTHERS;
-        } else if (v.getId() == settingsButton.getId()) {
-            load(settingsFeedbackList);
-            currentViewState = SUBSCRIPTIONS;
+        } else if (v.getId() == votedButton.getId()) {
+            load(feedbackListVoted);
+            currentViewState = VOTED;
+        } else if (v.getId() == subscribedButton.getId()) {
+            load(feedbackListSubscribed);
+            currentViewState = SUBSCRIBED;
         }
 
         //handle focus and keyboard
@@ -199,13 +200,13 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
 
     private View getViewByState(SETTINGS_VIEW state) {
         switch (state) {
-            case OTHERS:
-                return othersButton;
-            case SUBSCRIPTIONS:
-                return settingsButton;
+            case VOTED:
+                return votedButton;
+            case SUBSCRIBED:
+                return subscribedButton;
             case MINE:
             default:
-                return myButton;
+                return ownButton;
         }
     }
 

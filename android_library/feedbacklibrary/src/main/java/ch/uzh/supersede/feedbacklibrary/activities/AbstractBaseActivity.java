@@ -35,7 +35,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public abstract class AbstractBaseActivity extends AppCompatActivity implements IFeedbackServiceEventListener {
+public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected USER_LEVEL userLevel = LOCKED;
     protected final String[] preAllocatedStringStorage = new String[]{null};
     protected int screenWidth;
@@ -84,12 +84,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         } catch (Exception e) {
             Log.e("Network", e.getMessage());
         }
-        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-            //Online, ping Repository and wait for Callback
-            FeedbackService.getInstance(getApplicationContext()).pingRepository(this);
-        } else {
+        if (!(activeNetworkInfo != null && activeNetworkInfo.isConnected())) {
             //Offline, don't ping Repository
             getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+        } else {
+            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
         }
     }
 
@@ -302,41 +301,5 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     protected void createInfoBubbles() {
         //NOP
-    }
-
-
-    @Override
-    public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case PING_REPOSITORY:
-                if (RestUtility.responseEquals(response, "pong")) {
-                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
-                } else {
-                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onEventFailed(EventType eventType, Object response) {
-        switch (eventType) {
-            case PING_REPOSITORY:
-                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
-                break;
-            default:
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(EventType eventType) {
-        switch (eventType) {
-            case PING_REPOSITORY:
-                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
-                break;
-            default:
-        }
     }
 }

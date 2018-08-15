@@ -6,12 +6,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
 public class Feedback implements Serializable {
@@ -52,6 +48,9 @@ public class Feedback implements Serializable {
     private int minVotes;
     private int maxVotes;
     private Enums.FEEDBACK_STATUS feedbackStatus;
+    @SerializedName("public")
+    private boolean isPublic;
+    private List<FeedbackResponse> feedbackResponses;
 
 
     private Feedback() {
@@ -66,12 +65,14 @@ public class Feedback implements Serializable {
         private String title;
         private String userIdentification;
         private List<AudioFeedback> audioFeedbackList;
-        private List<LabelFeedback> categoryFeedbackList;
+        private List<LabelFeedback> labelFeedbackList;
         private List<RatingFeedback> ratingFeedbackList;
         private List<ScreenshotFeedback> screenshotFeedbackList;
         private List<TextFeedback> textFeedbackList;
         private String[] tags;
         private Enums.FEEDBACK_STATUS feedbackStatus;
+        private boolean isPublic;
+        private List<FeedbackResponse> feedbackResponses;
 
         public Builder() {
             //NOP
@@ -113,9 +114,9 @@ public class Feedback implements Serializable {
         }
 
         public Builder withLabelFeedback(LabelFeedback labelFeedback) {
-            this.categoryFeedbackList = new ArrayList<>();
+            this.labelFeedbackList = new ArrayList<>();
             if (labelFeedback != null) {
-                categoryFeedbackList.add(labelFeedback);
+                labelFeedbackList.add(labelFeedback);
             }
             return this;
         }
@@ -143,28 +144,38 @@ public class Feedback implements Serializable {
             }
             return this;
         }
+
         public Builder withFeedbackStatus(Enums.FEEDBACK_STATUS feedbackStatus) {
             this.feedbackStatus = feedbackStatus;
             return this;
         }
 
+        public Builder withIsPublic(boolean isPublic) {
+            this.isPublic = isPublic;
+            return this;
+        }
+
+        public Builder withFeedbackResponses(List<FeedbackResponse> feedbackResponses){
+            this.feedbackResponses = feedbackResponses;
+            return this;
+        }
+
         public Feedback build() {
-            if (CompareUtility.notNull(userIdentification)) {
-                Feedback bean = new Feedback();
-                bean.contextInformationFeedback = this.contextInformationFeedback;
-                bean.title = this.title;
-                bean.userIdentification = this.userIdentification;
-                bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
-                bean.labelFeedbackList = new ArrayList<>(this.categoryFeedbackList);
-                bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
-                bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
-                bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
-                bean.tags = tags;
-                bean.createdAt = new Date();
-                bean.feedbackStatus = this.feedbackStatus;
-                return bean;
-            }
-            return null;
+            Feedback bean = new Feedback();
+            bean.contextInformationFeedback = this.contextInformationFeedback;
+            bean.title = this.title;
+            bean.userIdentification = this.userIdentification;
+            bean.audioFeedbackList = this.audioFeedbackList != null ? new ArrayList<>(this.audioFeedbackList) : null;
+            bean.labelFeedbackList = this.labelFeedbackList != null ? new ArrayList<>(this.labelFeedbackList) : null;
+            bean.ratingFeedbackList = this.ratingFeedbackList != null ? new ArrayList<>(this.ratingFeedbackList) : null;
+            bean.screenshotFeedbackList = this.screenshotFeedbackList != null ? new ArrayList<>(this.screenshotFeedbackList) : null;
+            bean.textFeedbackList = this.textFeedbackList != null ? new ArrayList<>(this.textFeedbackList) : null;
+            bean.tags = tags;
+            bean.createdAt = new Date();
+            bean.feedbackStatus = this.feedbackStatus;
+            bean.isPublic = this.isPublic;
+            bean.feedbackResponses = this.feedbackResponses;
+            return bean;
         }
 
     }
@@ -245,5 +256,17 @@ public class Feedback implements Serializable {
 
     public Enums.FEEDBACK_STATUS getFeedbackStatus() {
         return feedbackStatus;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public List<FeedbackResponse> getFeedbackResponses() {
+        return feedbackResponses;
     }
 }

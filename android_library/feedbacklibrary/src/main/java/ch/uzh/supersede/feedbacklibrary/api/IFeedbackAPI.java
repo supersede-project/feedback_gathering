@@ -26,11 +26,14 @@ public interface IFeedbackAPI {
             List<MultipartBody.Part> files);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
-    Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, long feedbackId);
+    Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId,  @Path("feedbackId") long feedbackId);
+
+    @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
+    Call<ResponseBody> deleteFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("view") String view, @Query
-            ("ids") String ids);
+            ("ids") String ids, @Query("relevantForUser") String relevantForUser, @Query("onlyReported") boolean onlyReported);
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body Feedback body);
@@ -39,7 +42,7 @@ public interface IFeedbackAPI {
     Call<AndroidUser> createUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users")
-    Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);
+    Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("name") String userName);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users/karma")
     Call<ResponseBody> getUserKarma(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user);
@@ -47,11 +50,8 @@ public interface IFeedbackAPI {
     @PUT("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> editUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user, @Body AndroidUser body);
 
-    @GET("feedback_repository/{language}/applications/{applicationId}/reports")
-    Call<List<FeedbackReport>> getFeedbackReportList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
-
     @POST("feedback_repository/{language}/applications/{applicationId}/reports")
-    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReport body);
+    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReportRequestBody body);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
     Call<List<FeedbackResponse>> getFeedbackResponseList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
@@ -59,18 +59,17 @@ public interface IFeedbackAPI {
 
     @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
     Call<FeedbackResponse> createFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long
-            feedbackId, @Body FeedbackResponse body);
+            feedbackId, @Body FeedbackResponseRequestBody body);
 
     @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses/{responseId}")
-    void deleteFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
+    Call<ResponseBody> deleteFeedbackResponse(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
             long feedbackId, @Path("responseId") long responseId);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/tags")
     Call<List<String>> getTagList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/votes")
-    Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
-            FeedbackVote body);
+    Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body FeedbackVoteRequestBody body);
 
     //Retrieves a specific Screenshot/Image
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name_ext}")

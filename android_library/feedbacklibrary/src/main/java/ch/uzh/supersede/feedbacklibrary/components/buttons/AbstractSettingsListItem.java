@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
@@ -13,17 +12,19 @@ import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public abstract class AbstractSettingsListItem extends LinearLayout  implements Comparable {
     public static final int PADDING = 10;
-    private LocalFeedbackBean feedbackBean;
+    private FeedbackDetailsBean feedbackDetailsBean;
+    private LocalConfigurationBean configuration;
     private LinearLayout upperWrapperLayout;
     private LinearLayout lowerWrapperLayout;
     private TextView dateView;
@@ -34,8 +35,8 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         super(context);
     }
 
-    public LocalFeedbackBean getFeedbackBean() {
-        return feedbackBean;
+    public FeedbackDetailsBean getFeedbackDetailsBean() {
+        return feedbackDetailsBean;
     }
 
     public LinearLayoutCompat.LayoutParams getShortParams() {
@@ -60,10 +61,11 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         return titleView;
     }
 
-    public AbstractSettingsListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
+    public AbstractSettingsListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
-        this.feedbackBean = feedbackBean;
+        this.feedbackDetailsBean = feedbackDetailsBean;
         this.colors = configuration.getTopColors();
+        this.configuration = configuration;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
@@ -89,32 +91,41 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
 
         upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, PADDING, textColor);
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getCreationDate())), Gravity.END, PADDING, textColor);
-        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackBean.getFeedbackStatus().getColor(), 0.4);
-        TextView statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel(),
+        titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, PADDING, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackDetailsBean.getTimeStamp())), Gravity.END, PADDING, textColor);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
+        TextView statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel(),
                 Gravity.START, PADDING, statusColor);
 
         setBackgroundColor(backgroundColor);
         lowerWrapperLayout.addView(statusView);
 
-        setOnLongClickListener(new OnLongClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 startFeedbackDetailsActivity();
-                return false;
             }
         });
     }
 
     private void startFeedbackDetailsActivity() {
-        if (VersionUtility.getDateVersion() > 2) {
-            Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, RepositoryStub.getFeedback(getContext(), feedbackBean));
-            getContext().startActivity(intent);
-            ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        Intent intent;
+        if (ACTIVE.check(getContext())){
+            if (VersionUtility.getDateVersion()>=4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+                intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
+            }else{
+                intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+            }
+        }else {
+            Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
+            return;
         }
+        intent.putExtra(EXTRA_KEY_CALLER_CLASS, FeedbackSettingsActivity.class.getName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+        getContext().startActivity(intent);
+        ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {
