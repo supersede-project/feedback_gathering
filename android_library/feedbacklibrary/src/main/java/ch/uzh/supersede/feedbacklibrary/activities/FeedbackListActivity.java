@@ -98,7 +98,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 if (response instanceof List) {
-                    allFeedbackList.addAll(FeedbackUtility.createFeedbackListItems((List<Feedback>) response, this, configuration, getTopColor(0), getClass()));
+                    allFeedbackList.addAll(FeedbackUtility.createFeedbackListItems((List<Feedback>) response, this, configuration, getTopColor(1), getClass()));
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(getSearchText().getText().toString());
                     loadingTextView.setVisibility(View.INVISIBLE);
@@ -142,8 +142,6 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                 break;
         }
     }
-
-
 
     @Override
     protected void handleButtonToggle(View v) {

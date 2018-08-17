@@ -24,9 +24,16 @@ public class FeedbackUtility {
 
     public static List<FeedbackListItem> createFeedbackListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor, Class<?> callerClass) {
         List<FeedbackListItem> feedbackDetailsBeans = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
-            feedbackDetailsBeans.add(new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor, callerClass));
+            FeedbackListItem listItem = new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor, callerClass);
+            listItem.addAllLabels(labels);
+            feedbackDetailsBeans.add(listItem);
+        }
+        float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
+        for (FeedbackListItem listItem : feedbackDetailsBeans){
+            listItem.equalizeTextSize(textSize);
         }
         return feedbackDetailsBeans;
     }
@@ -206,8 +213,10 @@ public class FeedbackUtility {
     private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
-
-        if (feedbackResponses != null && !feedbackResponses.isEmpty()) {
+        if (userName == null){
+            return Collections.emptyList();
+        }
+        if (feedbackResponses != null) {
             for (FeedbackResponse feedbackResponse : feedbackResponses) {
                 String responseUserName = feedbackResponse.getUser().getName();
                 feedbackResponseBeans.add(new FeedbackResponseBean.Builder()
@@ -222,7 +231,6 @@ public class FeedbackUtility {
                 );
             }
         }
-
         return feedbackResponseBeans;
     }
 }

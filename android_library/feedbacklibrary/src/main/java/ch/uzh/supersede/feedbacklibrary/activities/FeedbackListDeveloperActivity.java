@@ -104,12 +104,20 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void handleListUpdate(List<FeedbackListItem> feedbackListItems, List<Feedback> feedbackList) {
         feedbackListItems.clear();
+        ArrayList<String> labels = new ArrayList<>();
 
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-            feedbackListItems.add(new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass()));
+            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass());
+            listItem.addAllLabels(labels);
+            feedbackListItems.add(listItem);
+        }
+        float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
+        for (FeedbackListItem listItem : feedbackListItems){
+            listItem.equalizeTextSize(textSize);
         }
         doSearch(getSearchText().getText().toString());
         sort();

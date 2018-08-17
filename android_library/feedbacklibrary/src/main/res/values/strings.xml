@@ -100,6 +100,7 @@
     <string name="hub_confirm">Confirm</string>
     <string name="hub_access_2">Accessing Level 2</string>
     <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least %1$d and at most %2$d Characters!</string>
+    <string name="hub_access_2_and_3_description">Level 2 and 3 grant you the ability to create Feedback yourself and allows you access to more advanced Feedback Mechanisms such as Notifications. These features require a User-Name with at least %1$d and at most %2$d Characters!</string>
     <string name="hub_access_2_fail">The connection to the Server could not be established. Try again later.</string>
     <string name="hub_warning_username_too_short">User-Name too short!</string>
     <string name="hub_access_3">Accessing Level 3</string>
@@ -173,10 +174,10 @@
     <string name="settings_general_title"><b>General Settings</b></string>
     <string name="settings_feedback_title"><b>Feedback Settings</b></string>
     <string name="settings_use_stubs">Use stubs</string>
-    <string name="settings_enable_notifications">Enable notifications</string>
+    <string name="settings_enable_notifications">Notifications</string>
     <string name="settings_button_own">Mine</string>
     <string name="settings_button_voted">Voted</string>
-    <string name="settings_button_subscribed">Subscriptions</string>
+    <string name="settings_button_subscribed">Subs</string>
     <string name="details_published">Published!</string>
 
     <!--Abstract-->

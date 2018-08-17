@@ -121,7 +121,9 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="5dp" />
+                    android:padding="0dp"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp"/>
 
                 <TextView
                     android:id="@+id/details_text_status"
@@ -137,15 +139,19 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="5dp" />
+                    android:padding="0dp"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp"/>
 
                 <Spinner
                     android:id="@+id/details_spinner_status"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="0dp"
-                    android:layout_weight="0"
-                    android:padding="0dp"/>
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:padding="0dp"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp"/>
 
             </LinearLayout>
         </LinearLayout>

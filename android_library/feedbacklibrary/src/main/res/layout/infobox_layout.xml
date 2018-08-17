@@ -9,14 +9,11 @@
         android:id="@+id/info_box_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textStyle=""
-        android:textSize="20sp"/>
+        android:textColor="@color/white"/>
     <TextView
         android:id="@+id/info_box_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:textSize="12sp"
         android:layout_below="@+id/info_box_title" />
 </RelativeLayout>
