@@ -513,6 +513,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             audioFilePath = getApplicationContext().getDir(AUDIO_DIR, Context.MODE_PRIVATE).getAbsolutePath() + PATH_DELIMITER + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
             FileOutputStream stream = new FileOutputStream(audioFilePath);
             stream.write(audio);
+            stream.close();
             File audioFile = new File(audioFilePath);
             if(audioFile.length() != 0) {
                 if (mediaPlayer == null) {
