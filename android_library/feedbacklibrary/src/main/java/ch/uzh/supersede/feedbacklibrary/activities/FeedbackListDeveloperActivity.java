@@ -106,22 +106,21 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
     @SuppressWarnings("unchecked")
     private void handleListUpdate(List<FeedbackListItem> feedbackListItems, List<Feedback> feedbackList) {
-        if (response instanceof List) {
-            ArrayList<String> labels = new ArrayList<>();
-            feedbackListItems.clear();
-            for (Feedback feedback : (List<Feedback>) response) {
-                FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-                FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0),getClass());
-                listItem.addAllLabels(labels);
-                feedbackListItems.add(listItem);
-            }
-            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
-            for (FeedbackListItem listItem : feedbackListItems){
-                listItem.equalizeTextSize(textSize);
-            }
-            doSearch(getSearchText().getText().toString());
-            sort();
+        feedbackListItems.clear();
+        ArrayList<String> labels = new ArrayList<>();
+
+        for (Feedback feedback : feedbackList) {
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass());
+            listItem.addAllLabels(labels);
+            feedbackListItems.add(listItem);
         }
+        float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
+        for (FeedbackListItem listItem : feedbackListItems){
+            listItem.equalizeTextSize(textSize);
+        }
+        doSearch(getSearchText().getText().toString());
+        sort();
     }
 
     @Override

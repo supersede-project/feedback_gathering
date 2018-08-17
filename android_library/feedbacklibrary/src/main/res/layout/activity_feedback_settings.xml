@@ -88,7 +88,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
-                    android:text="#upcoming feature 3#"/>
+                    android:text="#feature 3#"/>
 
                 <ToggleButton
                     android:id="@+id/settings_toggle_feature_3"
