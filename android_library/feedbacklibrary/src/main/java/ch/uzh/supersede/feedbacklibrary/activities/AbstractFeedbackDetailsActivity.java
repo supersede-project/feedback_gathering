@@ -1,9 +1,11 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +13,9 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -28,6 +33,9 @@ import okhttp3.ResponseBody;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_DIR;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_EXTENSION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_FILENAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -53,6 +61,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private IFeedbackServiceEventListener callback;
     private String userName;
     private Class<?> callerClass;
+    private String audioFilePath;
+    private boolean isAudioPlaying;
+    private boolean isAudioStopped;
+    private MediaPlayer mediaPlayer;
 
     public static Enums.RESPONSE_MODE getMode() {
         return mode;
@@ -295,7 +307,11 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     protected void handleAudioButtonClicked() {
         if (feedbackDetailsBean.getAudioFileName() != null) {
-            FeedbackService.getInstance(getApplicationContext()).getFeedbackAudio(this, feedbackDetailsBean);
+            if(isAudioPlaying) {
+               stopAudio();
+            } else {
+                FeedbackService.getInstance(getApplicationContext()).getFeedbackAudio(this, feedbackDetailsBean);
+            }
         } else {
             new PopUp(this)
                     .withTitle(getString(R.string.details_audio))
@@ -344,7 +360,11 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             case GET_FEEDBACK_AUDIO:
             case GET_FEEDBACK_AUDIO_MOCK:
                 if (response instanceof ResponseBody) {
-                    // TODO: play audio
+                    try {
+                        playAudio(((ResponseBody) response).bytes());
+                    } catch (IOException e) {
+                        Log.e("PlayAudio", "playing audio failed");
+                    }
                 }
                 break;
             case CREATE_FEEDBACK_RESPONSE:
@@ -488,6 +508,35 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         builder.show();
     }
 
+    protected void playAudio(byte[] audio) {
+        try {
+            audioFilePath = getApplicationContext().getDir(AUDIO_DIR, Context.MODE_PRIVATE).getAbsolutePath() + PATH_DELIMITER + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
+            FileOutputStream stream = new FileOutputStream(audioFilePath);
+            stream.write(audio);
+            File audioFile = new File(audioFilePath);
+            if(audioFile.length() != 0) {
+                if (mediaPlayer == null) {
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setDataSource(audioFilePath);
+                    mediaPlayer.prepare();
+                }
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        stopAudio();
+                    }
+                });
+                mediaPlayer.start();
+                audioButton.setText(R.string.details_audio_stop);
+                isAudioPlaying = true;
+            }
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onPause() {
         execFinalize();
@@ -497,6 +546,9 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     @Override
     protected void onDestroy() {
         execFinalize();
+        if(isAudioPlaying) {
+            stopAudio();
+        }
         super.onDestroy();
     }
 
@@ -505,5 +557,14 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, getFeedbackState().isUpVoted() ? 1 : -1, userName);
         }
         FeedbackService.getInstance(getApplicationContext()).createSubscription(this, feedbackDetailsBean.getFeedbackBean());
+    }
+
+    private void stopAudio() {
+        mediaPlayer.stop();
+        isAudioStopped = true;
+        isAudioPlaying = false;
+        audioButton.setText(R.string.details_audio);
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 }
