@@ -23,6 +23,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USE
 public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
     private Button deleteButton;
     private Button awardKarmaButton;
+    private Spinner statusSpinner;
 
     @Override
     protected void initViews() {
@@ -32,7 +33,6 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
         setScrollContainer(getView(R.id.details_developer_layout_scroll_container, ScrollView.class));
         setVotesText(getView(R.id.details_developer_text_votes, TextView.class));
         setUserText(getView(R.id.details_developer_text_user, TextView.class));
-        setStatus(getView(R.id.details_developer_spinner_status, Spinner.class));
         setTitleText(getView(R.id.details_developer_text_title, TextView.class));
         setDescriptionText(getView(R.id.details_developer_text_description, TextView.class));
         setImageButton(getView(R.id.details_developer_button_images, Button.class));
@@ -43,8 +43,10 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
 
         deleteButton = getView(R.id.details_developer_button_delete, Button.class);
         awardKarmaButton = getView(R.id.details_developer_button_award_karma, Button.class);
+        statusSpinner = getView(R.id.details_developer_spinner_status, Spinner.class);
 
         colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
+        colorViews(configuration.getLastColorIndex(), statusSpinner);
     }
 
     @Override
@@ -53,15 +55,16 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
         setCallerClass(ObjectUtility.getCallerClass(getIntent()));
 
         initStatusSpinner();
+        drawLayoutOutlines(R.id.details_developer_layout_up,R.id.details_developer_layout_mid,R.id.details_developer_layout_low,R.id.details_developer_layout_scroll_container,R.id.details_developer_layout_button);
         onPostCreate();
     }
 
     protected void initStatusSpinner() {
         if (getFeedbackDetailsBean() != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.feedback_status_spinner_layout, Enums.getFeedbackStatusLabels());
-            getStatus().setAdapter(adapter);
-            getStatus().setSelection(adapter.getPosition(getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
-            getStatus().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            statusSpinner.setAdapter(adapter);
+            statusSpinner.setSelection(adapter.getPosition(getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+            statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     Object feedbackStatus = ((AppCompatSpinner) parentView).getAdapter().getItem(position);

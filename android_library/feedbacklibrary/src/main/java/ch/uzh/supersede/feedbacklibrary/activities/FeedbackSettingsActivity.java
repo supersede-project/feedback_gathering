@@ -87,6 +87,9 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 getView(R.id.settings_toggle_feature_3, ToggleButton.class));
         colorShape(0, ownButton, votedButton, subscribedButton);
         colorShape(1, ownButton);
+        if (getColorCount() == 3){
+            colorShape(configuration.getLastColorIndex(), getView(R.id.settings_layout_button,LinearLayout.class));
+        }
         colorViews(1,
                 getView(R.id.settings_layout_color_1, LinearLayout.class),
                 getView(R.id.settings_layout_color_2, LinearLayout.class),

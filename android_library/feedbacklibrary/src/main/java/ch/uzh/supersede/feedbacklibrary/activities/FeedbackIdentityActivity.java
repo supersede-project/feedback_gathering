@@ -2,8 +2,11 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
 import android.content.*;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.*;
 import android.util.Log;
 import android.view.*;
@@ -44,24 +47,36 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         buttonBack = getView(R.id.identity_button_back, Button.class);
         tagContainer = getView(R.id.identity_container_tags, FlowLayout.class);
         recommendationContainer = getView(R.id.identity_container_recommendations, FlowLayout.class);
-        colorViews(0,getView(R.id.identity_root,RelativeLayout.class));
-        colorTextOnly(0,
+        colorViews(1,getView(R.id.identity_root,RelativeLayout.class));
+        colorTextOnly(1,
                 getView(R.id.identity_text_info_1, TextView.class),
                 getView(R.id.identity_text_info_2, TextView.class),
                 getView(R.id.identity_text_info_3, TextView.class),
                 getView(R.id.identity_edit_tag, EditText.class),
                 getView(R.id.identity_edit_title, EditText.class));
-        colorViews(1, buttonBack, buttonNext);
+        colorViews(0, buttonBack, buttonNext);
         getView(R.id.identity_focus_sink, LinearLayout.class).requestFocus();
         createEditableFields();
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
         tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
+        drawLayoutOutlines(recommendationContainer.getId(),tagContainer.getId());
         onPostCreate();
+    }
+
+    private void drawLayoutOutlines(int... layouts) {
+        GradientDrawable gradientDrawable = null;
+        for (int layout : layouts){
+            gradientDrawable = new GradientDrawable();
+            gradientDrawable.setStroke(1,ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+            findViewById(layout).setBackground(gradientDrawable);
+        }
     }
 
     private void createEditableFields() {
         editTitle = getView(R.id.identity_edit_title, EditText.class);
+        ScalingUtility.getInstance().updateEditText(editTitle);
         editTag = getView(R.id.identity_edit_tag, EditText.class);
+        ScalingUtility.getInstance().updateEditText(editTag);
         editTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -179,6 +194,9 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         for (String matchingTag : findings){
             Button b = new Button(this);
             b.setText(matchingTag);
+            ScalingUtility.getInstance().updateButtonText(b);
+            b.setPadding(5,0,5,0);
+            b.setBackground(null);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -200,7 +218,10 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
     private void addTag(String s) {
         createdTags.add(s.toLowerCase());
         Button b = new Button(this);
+        ScalingUtility.getInstance().updateButtonText(b);
         b.setText(s);
+        b.setPadding(5,0,5,0);
+        b.setBackground(null);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

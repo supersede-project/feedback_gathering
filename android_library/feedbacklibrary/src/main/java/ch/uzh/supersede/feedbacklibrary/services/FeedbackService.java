@@ -100,7 +100,7 @@ public abstract class FeedbackService {
 
     public abstract void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot);
 
-    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser);
+    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor);
 
     public abstract void getFeedbackListPrivate(IFeedbackServiceEventListener callback);
 
@@ -200,7 +200,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor) {
             getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_ALL, null, relevantForUser, false);
         }
 
@@ -331,13 +331,13 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor) {
             LocalConfigurationBean configuration = ConfigurationUtility.getConfigurationFromDatabase(context);
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
             ArrayList<String> labels = new ArrayList<>();
             for (FeedbackDetailsBean bean : RepositoryStub.getFeedback(context, 50, -30, 50, 0.1f)) {
                 if (bean != null) {
-                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, 0, FeedbackListActivity.class);
+                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, backgroundColor, FeedbackListActivity.class);
                     listItem.addAllLabels(labels);
                     allFeedbackList.add(listItem);
                 }

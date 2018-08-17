@@ -68,6 +68,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
         colorViews(2, getView(R.id.list_root, ContentFrameLayout.class));
+        colorViews(0, getView(R.id.list_layout_scroll, LinearLayout.class));
 
         if (ACTIVE.check(this)){
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
@@ -84,9 +85,9 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         loadingTextView.setVisibility(View.VISIBLE);
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getFeedbackList(this, this, userName);
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this, userName,getTopColor(0));
         } else {
-            FeedbackService.getInstance(this).getFeedbackList(this, this, userName);
+            FeedbackService.getInstance(this).getFeedbackList(this, this, userName, getTopColor(0));
         }
         doSearch(getSearchText().getText().toString());
         sort();
@@ -98,7 +99,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
                 if (response instanceof List) {
-                    allFeedbackList.addAll(FeedbackUtility.createFeedbackListItems((List<Feedback>) response, this, configuration, getTopColor(1), getClass()));
+                    allFeedbackList.addAll(FeedbackUtility.createFeedbackListItems((List<Feedback>) response, this, configuration, getTopColor(0), getClass()));
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(getSearchText().getText().toString());
                     loadingTextView.setVisibility(View.INVISIBLE);

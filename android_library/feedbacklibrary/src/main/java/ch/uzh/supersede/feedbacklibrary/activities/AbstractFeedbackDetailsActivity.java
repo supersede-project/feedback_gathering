@@ -2,12 +2,11 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ContentFrameLayout;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -42,7 +41,6 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private static ScrollView scrollContainer;
     private TextView votesText;
     private TextView userText;
-    private Spinner status;
     private TextView titleText;
     private TextView descriptionText;
     private Button imageButton;
@@ -101,14 +99,6 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     public void setUserText(TextView userText) {
         this.userText = userText;
-    }
-
-    public Spinner getStatus() {
-        return status;
-    }
-
-    public void setStatus(Spinner status) {
-        this.status = status;
     }
 
     public TextView getTitleText() {
@@ -211,15 +201,24 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         initViews();
         checkViewsNotNull();
         colorViews(0, imageButton, audioButton, tagButton, subscribeButton, responseButton);
-        colorViews(2, userText, titleText, status, descriptionText);
+        colorViews(getColorCount()==2?1:2, userText, titleText, descriptionText);
 
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
         initPermissionCheck();
     }
 
+    protected void drawLayoutOutlines(int... layouts) {
+        GradientDrawable gradientDrawable = null;
+        for (int layout : layouts){
+            gradientDrawable = new GradientDrawable();
+            gradientDrawable.setStroke(1,ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+            findViewById(layout).setBackground(gradientDrawable);
+        }
+    }
+
     protected void checkViewsNotNull() {
-        if (CompareUtility.notNull(responseButton, responseLayout, scrollContainer, votesText, userText, status, titleText, descriptionText, imageButton, audioButton, tagButton, subscribeButton)) {
+        if (CompareUtility.notNull(responseButton, responseLayout, scrollContainer, votesText, userText, titleText, descriptionText, imageButton, audioButton, tagButton, subscribeButton)) {
             return;
         }
         Log.e(getClass().getSimpleName(), "Could not start activity duet to a configuration error.");

@@ -187,7 +187,7 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
-        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -201,12 +201,9 @@ public class FeedbackUtility {
                 .build();
     }
 
-    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
+    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(FeedbackBean feedbackBean, long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
-        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
-        if (userName == null){
-            return Collections.emptyList();
-        }
+
         if (feedbackResponses != null) {
             for (FeedbackResponse feedbackResponse : feedbackResponses) {
                 String responseUserName = feedbackResponse.getUser().getName();
@@ -217,7 +214,7 @@ public class FeedbackUtility {
                         .withUserName(responseUserName)
                         .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
                         .isDeveloper(feedbackResponse.getUser().isDeveloper())
-                        .isFeedbackOwner(userName.equals(responseUserName))
+                        .isFeedbackOwner(feedbackBean.getUserName().equals(responseUserName))
                         .build()
                 );
             }

@@ -9,14 +9,12 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,9 +54,22 @@ public class AudioFeedbackView extends AbstractFeedbackPartView implements SeekB
     private Runnable updateSeekBarTask;
     private Runnable updateSeekBarTaskRecorder;
     private long currentRecordDuration = 1L;
-
     private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
 
+    @Override
+    protected void colorPrimary(int color) {
+        getEnclosingLayout().setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorSecondary(int color) {
+        ((CardView)((LinearLayout)getEnclosingLayout()).getChildAt(0)).setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorTertiary(int color) {
+
+    }
     public AudioFeedbackView(LayoutInflater layoutInflater, AudioFeedback audioFeedback, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.viewOrder = audioFeedback.getOrder();

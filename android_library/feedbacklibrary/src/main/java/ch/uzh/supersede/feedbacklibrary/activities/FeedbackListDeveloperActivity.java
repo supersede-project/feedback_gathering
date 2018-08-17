@@ -111,7 +111,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass());
+            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(1), getClass());
             listItem.addAllLabels(labels);
             feedbackListItems.add(listItem);
         }

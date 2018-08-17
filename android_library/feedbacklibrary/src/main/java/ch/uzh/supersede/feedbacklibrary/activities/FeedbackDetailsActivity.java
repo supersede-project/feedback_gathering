@@ -2,6 +2,8 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ContentFrameLayout;
@@ -27,20 +29,18 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
     private Button downButton;
     private Button reportButton;
     private Button makePublicButton;
-    private boolean creationMode = false;
     private TextView statusText;
+    private boolean creationMode = false;
 
     @Override
     protected void initViews() {
         setContentView(R.layout.activity_feedback_details);
-
         setMode(READING);
         setCallback(this);
         setResponseLayout(getView(R.id.details_layout_scroll_layout, LinearLayout.class));
         setScrollContainer(getView(R.id.details_layout_scroll_container, ScrollView.class));
         setVotesText(getView(R.id.details_text_votes, TextView.class));
         setUserText(getView(R.id.details_text_user, TextView.class));
-        setStatus(getView(R.id.details_spinner_status, Spinner.class));
         setTitleText(getView(R.id.details_text_title, TextView.class));
         setDescriptionText(getView(R.id.details_text_description, TextView.class));
         setImageButton(getView(R.id.details_button_images, Button.class));
@@ -56,9 +56,10 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
 
-        colorViews(2, statusText);
         colorViews(0, upButton, downButton);
         colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
+        colorViews(0, getView(R.id.details_layout_scroll_layout, LinearLayout.class));
+        colorViews(configuration.getLastColorIndex(), statusText);
     }
 
     @Override
@@ -69,8 +70,14 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         updateReportStatus(null);
         updateOwnFeedbackCase();
         invokeVersionControl(5, getAudioButton().getId(), getTagButton().getId());
+        initStatusText();
+        drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
 
         onPostCreate();
+    }
+
+    private void initStatusText() {
+        statusText.setText(getString(R.string.details_status,getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
     }
 
     @Override

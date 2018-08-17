@@ -17,6 +17,9 @@
 
     <color name="green">#009933</color>
     <color name="lime">#996633</color>
+    <color name="lv_1">#4E3A33</color>
+    <color name="lv_2">#987A52</color>
+    <color name="lv_3">#F4DD9A</color>
     <color name="gold">#ffe100</color>
 
     <color name="transparent">#00000000</color>

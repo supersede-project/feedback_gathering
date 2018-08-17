@@ -14,8 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +53,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         feedbackTitle = getIntent().getStringExtra(EXTRA_KEY_FEEDBACK_TITLE);
         feedbackTags = getIntent().getStringArrayExtra(EXTRA_KEY_FEEDBACK_TAGS);
         initView();
+        colorViews(1,getView(R.id.feedback_root, ScrollView.class));
         onPostCreate();
     }
 

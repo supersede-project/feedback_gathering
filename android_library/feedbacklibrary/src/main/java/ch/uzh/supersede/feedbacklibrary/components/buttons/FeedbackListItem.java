@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -69,11 +70,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, padding, textColor);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(getFeedbackBean().getTimeStamp())), Gravity.END, padding, textColor);
         int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
-        statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel()
-                                                                             .concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding,
-                statusColor);
+        statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel().concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
         pointView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackBean().getVotesAsText(), Gravity.END, padding, textColor);
-        updatePercentageColor();
+        updatePercentageColor(backgroundColor,true);
         setBackgroundColor(backgroundColor);
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
@@ -90,7 +89,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
             }
         });
         GradientDrawable gradientDrawable = new GradientDrawable();
-        gradientDrawable.setStroke(1, getResources().getColor(R.color.white));
+        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
         setBackground(gradientDrawable);
     }
 
@@ -155,7 +154,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         return 0;
     }
 
-    public void updatePercentageColor() {
+    public void updatePercentageColor(int backgroundColor, boolean fancy) {
         float percent;
         if (getFeedbackBean().getUpVotes() < 0) {
             percent = 1f / (2 * getFeedbackBean().getMinUpVotes()) * (getFeedbackBean().getMinUpVotes() - getFeedbackBean().getUpVotes());
@@ -165,7 +164,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         } else {
             percent = 1f / (2 * getFeedbackBean().getMaxUpVotes()) * (getFeedbackBean().getMaxUpVotes() + getFeedbackBean().getUpVotes());
         }
-        pointView.setTextColor(ColorUtility.percentToColor(percent));
+        if (fancy){
+            pointView.setTextColor(ColorUtility.adjustColorToBackground(backgroundColor,ColorUtility.percentToColor(percent),0.4d));
+        }
     }
 
     @Override

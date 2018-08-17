@@ -191,7 +191,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
         }else{
-            return ColorUtility.isDark(configuration.getLastColor())? Color.WHITE:Color.BLACK;
+            return ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK;
         }
     }
 
@@ -201,7 +201,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);
         }else{
-            return ColorUtility.isDark(configuration.getLastColor())? Color.WHITE:Color.BLACK;
+            return ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK;
         }
     }
 
@@ -230,7 +230,6 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         editText.setGravity(gravity);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxResponseLength())});
         editText.setTextColor(textColor);
-        editText.setBackgroundColor(backgroundColor);
         editText.setPadding(padding, padding, padding, padding);
         return editText;
     }
@@ -242,7 +241,6 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         button.setGravity(Gravity.CENTER);
         button.setPadding(0, 0, 0, 0);
         button.setTextColor(backgroundColor);
-        button.setBackgroundColor(textColor);
         button.setText(label);
         button.setPadding(padding, padding, padding, padding);
         button.setOnClickListener(listener);

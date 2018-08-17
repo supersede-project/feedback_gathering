@@ -235,7 +235,7 @@
     <string name="notification_feedback_title">&#8226; Your subscribed feedback have received updates.</string>
     <string name="notification_feedback_responses">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new responses.</string>
     <string name="notification_feedback_votes">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new votes.</string>
-    <string name="notification_feedback_status">&#8226; The status of &lt;b&gt;%1$d&lt;/b&gt; subscribed feedback have changed.</string>
+    <string name="notification_feedback_status">&#8226; The statusSpinner of &lt;b&gt;%1$d&lt;/b&gt; subscribed feedback have changed.</string>
     <string name="notification_feedback_visibility">&#8226; The visibility of &lt;b&gt;%1$d&lt;/b&gt; of your own feedback have changed.</string>
     <string name="notification_feedback_own">&lt;b&gt;%1$d&lt;/b&gt; of your own. </string>
 

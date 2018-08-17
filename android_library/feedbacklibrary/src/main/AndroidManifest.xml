@@ -28,7 +28,6 @@
             android:theme="@style/AppTheme.FeedbackLibrary" />
         <activity
             android:name=".activities.FeedbackActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:windowSoftInputMode="adjustPan" />
