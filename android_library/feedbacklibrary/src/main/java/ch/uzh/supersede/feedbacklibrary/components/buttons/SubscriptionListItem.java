@@ -45,6 +45,7 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
         toggle.getThumbDrawable().setColorFilter(getForegroundColor(), PorterDuff.Mode.MULTIPLY);
         toggle.getTrackDrawable().setColorFilter(getForegroundColor(), PorterDuff.Mode.MULTIPLY);
+        toggle.setChecked(true);
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isSubscribed) {
@@ -52,7 +53,6 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
                 FeedbackService.getInstance(context).createSubscription(getListener(), feedbackBean.getFeedbackBean());
             }
         });
-
         return toggle;
     }
 
@@ -63,9 +63,9 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
                 if (response instanceof FeedbackBean) {
                     boolean isSubscribed = FeedbackDatabase.getInstance(getContext()).getFeedbackState((FeedbackBean) response).isSubscribed();
                     if (isSubscribed) {
-                        Toast.makeText(getContext(), "Subscribed to " + getFeedbackDetailsBean().getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Re-Subscribed to \"" + getFeedbackDetailsBean().getTitle()+"\".", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Unsubscribed to " + getFeedbackDetailsBean().getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Unsubscribed from \"" + getFeedbackDetailsBean().getTitle()+"\". Subscription will be gone on reload.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

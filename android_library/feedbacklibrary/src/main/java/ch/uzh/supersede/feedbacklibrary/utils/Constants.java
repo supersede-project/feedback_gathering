@@ -43,6 +43,9 @@ public class Constants {
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_LANGUAGE_FALLBACK = "en";
     public static final String SHARED_PREFERENCES_TUTORIAL_HUB = "hubTutorial";
     public static final String SHARED_PREFERENCES_TUTORIAL_IDENTITY = "identityTutorial";
+    public static final String SHARED_PREFERENCES_TUTORIAL_SETTINGS = "settingsTutorial";
+    public static final String SHARED_PREFERENCES_TUTORIAL_LIST = "listTutorial";
+    public static final String SHARED_PREFERENCES_TUTORIAL_DETAILS = "detailsTutorial";
     public static final String SHARED_PREFERENCES_ONLINE = "isOnline";
     public static final String SHARED_PREFERENCES_ENDPOINT_URL = "endpointUrl";
     public static final String SHARED_PREFERENCES_ENDPOINT_URL_FALLBACK = "https://www.google.com";

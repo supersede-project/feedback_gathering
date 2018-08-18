@@ -121,6 +121,15 @@
     <string name="list_alert_event">Could not process the Event from to the Server.</string>
     <string name="list_alert_server">Could not establish a Connection to the Server.</string>
     <string name="list_alert_user_level">Increase your User-Level to participate!</string>
+    <string name="list_tutorial_title_category">Category Tabs</string>
+    <string name="list_tutorial_title_search">Search Field</string>
+    <string name="list_tutorial_title_filter">Filter Option</string>
+    <string name="list_tutorial_title_list">Feedback List</string>
+    <string name="list_tutorial_content_list">Here you will see a list of already created Feedback. In this case, the list is empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
+    <string name="list_tutorial_content_filter">This option lets you filter out statuses.</string>
+    <string name="list_tutorial_content_search">You can search within the provided feedback list by entering a search term here.</string>
+    <string name="list_tutorial_content_category">There are four available categories: Mine, Top, Hot and New. The first one shows only feedback that you provided while the other ones sort all the existing feedback according to number of comments, number of votes or date.</string>
+
     <!--Developer List-->
     <string name="developer_list_button_private">Private</string>
     <string name="developer_list_button_reported">Reported</string>

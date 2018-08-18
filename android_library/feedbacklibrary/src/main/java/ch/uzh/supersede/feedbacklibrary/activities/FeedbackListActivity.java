@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
@@ -31,14 +31,17 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
     private TextView loadingTextView;
-    String userName;
+    private boolean tutorialFinished = false;
+    private boolean tutorialInitialized = false;
+    private String userName;
+    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_list);
         loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
-        ContentFrameLayout rootLayout = getView(R.id.list_root, ContentFrameLayout.class);
+        RelativeLayout rootLayout = getView(R.id.list_root, RelativeLayout.class);
         rootLayout.addView(loadingTextView);
         setScrollListLayout(getView(R.id.list_layout_scroll, LinearLayout.class));
         setScrollView(getView(R.id.list_view_scroll, ScrollView.class));
@@ -48,7 +51,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         getButtons().put(HOT, setOnClickListener(getView(R.id.list_button_hot, Button.class)));
         getButtons().put(NEW, setOnClickListener(getView(R.id.list_button_new, Button.class)));
 
-        Button filterButton = getView(R.id.list_button_filter, Button.class);
+        filterButton = getView(R.id.list_button_filter, Button.class);
         filterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,14 +70,15 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                 getView(R.id.list_layout_color_3, LinearLayout.class),
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
-        colorViews(2, getView(R.id.list_root, ContentFrameLayout.class));
+        colorViews(2, getView(R.id.list_root, RelativeLayout.class));
         colorViews(0, getView(R.id.list_layout_scroll, LinearLayout.class));
 
         if (ACTIVE.check(this)){
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         toggleButtons(getButtons().get(MINE));
-
+        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
+        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
         onPostCreate();
     }
 
@@ -203,5 +207,48 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
     private void loadMyFeedback() {
         setSorting(MINE);
         doSearch(searchTerm);
+    }
+
+    @Override
+    protected void createInfoBubbles() {
+        if (!tutorialFinished && !tutorialInitialized) {
+            getButtons().get(MINE).setEnabled(false);
+            getButtons().get(HOT).setEnabled(false);
+            getButtons().get(TOP).setEnabled(false);
+            getButtons().get(NEW).setEnabled(false);
+            filterButton.setEnabled(false);
+            searchText.setEnabled(false);
+
+            RelativeLayout root = getView(R.id.list_root, RelativeLayout.class);
+
+            String categoriesLabel = getString(R.string.list_tutorial_title_category);
+            String searchLabel = getString(R.string.list_tutorial_title_search);
+            String filterLabel = getString(R.string.list_tutorial_title_filter);
+            String listLabel = getString(R.string.list_tutorial_title_list);
+            float textSize = ScalingUtility
+                    .getInstance()
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, categoriesLabel,searchLabel,filterLabel,listLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.list_tutorial_content_list), textSize, this, scrollListLayout);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, filterLabel, getString(R.string.list_tutorial_content_filter), textSize, this, filterButton, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, searchLabel, getString(R.string.list_tutorial_content_search), textSize, this, searchText, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, categoriesLabel, getString(R.string.list_tutorial_content_category), textSize, this, getButtons().get(TOP), lrLayout);
+            mLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, true).apply();
+                    getButtons().get(MINE).setEnabled(true);
+                    getButtons().get(HOT).setEnabled(true);
+                    getButtons().get(TOP).setEnabled(true);
+                    getButtons().get(NEW).setEnabled(true);
+                    filterButton.setEnabled(true);
+                    searchText.setEnabled(true);
+                    tutorialFinished = true;
+                    return false;
+                }
+            });
+            colorShape(1, lrLayout, llLayout, mLayout, ulLayout);
+            tutorialInitialized = true;
+        }
     }
 }

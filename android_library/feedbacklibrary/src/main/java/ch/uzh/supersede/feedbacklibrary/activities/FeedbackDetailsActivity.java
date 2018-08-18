@@ -21,6 +21,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_FROM_CREATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.UP_VOTED;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -107,25 +109,6 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         }
     }
 
-    protected void updateFeedbackState() {
-        super.updateFeedbackState();
-        if (ACTIVE.check(this, true)) {
-            if (getFeedbackState().isUpVoted()) {
-                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.green_4));
-                upButton.setEnabled(false);
-            }
-            if (getFeedbackState().isDownVoted()) {
-                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.red_5));
-                downButton.setEnabled(false);
-            }
-            if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
-                colorViews(1, getVotesText());
-                upButton.setEnabled(true);
-                downButton.setEnabled(true);
-            }
-        }
-    }
-
     @Override
     public void onButtonClicked(View view) {
         super.onButtonClicked(view);
@@ -141,13 +124,34 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         updateFeedbackState();
     }
 
+    protected void updateFeedbackState() {
+        super.updateFeedbackState();
+        if (ACTIVE.check(this, true)) {
+            if (getFeedbackState().isUpVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.green_4),0.4));
+                upButton.setEnabled(false);
+                downButton.setEnabled(true);
+            }
+            if (getFeedbackState().isDownVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.red_5),0.4));
+                downButton.setEnabled(false);
+                upButton.setEnabled(true);
+            }
+            if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.black),0.4));
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+            }
+        }
+    }
+
     protected void handleUpVoteButtonClicked() {
-        RepositoryStub.sendUpVote(this, getFeedbackDetailsBean().getFeedbackBean());
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), UP_VOTED);
         getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().upVote());
     }
 
     protected void handleDownVoteButtonClicked() {
-        RepositoryStub.sendDownVote(this, getFeedbackDetailsBean().getFeedbackBean());
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), DOWN_VOTED);
         getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().downVote());
     }
 

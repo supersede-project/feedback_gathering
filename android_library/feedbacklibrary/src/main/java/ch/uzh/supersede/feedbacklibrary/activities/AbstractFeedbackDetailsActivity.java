@@ -52,6 +52,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private IFeedbackServiceEventListener callback;
     private String userName;
     private Class<?> callerClass;
+    private boolean initiallyVoted = false;
 
     public static Enums.RESPONSE_MODE getMode() {
         return mode;
@@ -201,7 +202,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         initViews();
         checkViewsNotNull();
         colorViews(0, imageButton, audioButton, tagButton, subscribeButton, responseButton);
-        colorViews(getColorCount()==2?1:2, userText, titleText, descriptionText);
+        colorViews(configuration.getLastColorIndex(), userText, titleText, descriptionText);
 
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
@@ -234,6 +235,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     protected void initFeedbackDetailView() {
         if (getFeedbackDetailsBean() != null) {
             updateFeedbackState();
+            initiallyVoted = !getFeedbackState().isEqualVoted();
             for (FeedbackResponseBean bean : getFeedbackDetailsBean().getResponses()) {
                 FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, getFeedbackDetailsBean().getFeedbackBean(), bean, configuration, this, FIXED);
                 responseList.add(feedbackResponseListItem);
@@ -462,6 +464,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private void execFinalize() {
         if (!getFeedbackState().isEqualVoted()) {
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, getFeedbackState().isUpVoted() ? 1 : -1, userName);
+        }else if (getFeedbackState().isEqualVoted() && initiallyVoted){
+            FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, 0, userName);
         }
         FeedbackService.getInstance(getApplicationContext()).createSubscription(this, feedbackDetailsBean.getFeedbackBean());
     }

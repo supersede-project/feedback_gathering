@@ -149,6 +149,7 @@ public class FeedbackUtility {
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
         int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
+        boolean isPublic = feedback.isPublic();
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -186,6 +187,7 @@ public class FeedbackUtility {
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
                 .withStatus(status)
+                .isPublic(isPublic)
                 .build();
         List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
