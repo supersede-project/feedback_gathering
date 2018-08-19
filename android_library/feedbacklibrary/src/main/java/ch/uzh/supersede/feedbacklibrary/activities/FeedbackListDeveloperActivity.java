@@ -138,7 +138,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
     @Override
     protected List<FeedbackListItem> getActiveList() {
-        return getActiveListByState(currentViewState);
+        return activeFeedbackList;
     }
 
     private List<FeedbackListItem> getActiveListByState(Enums.FEEDBACK_SORTING state) {
@@ -154,7 +154,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
     @Override
     protected void doSearch(String s) {
-        List<FeedbackListItem> sortedFeedbackList = new ArrayList<>(getActiveList());
+        List<FeedbackListItem> sortedFeedbackList = new ArrayList<>(getActiveListByState(currentViewState));
         activeFeedbackList.clear();
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
             for (FeedbackListItem item : sortedFeedbackList) {
@@ -164,7 +164,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
             }
             searchTerm = s;
         } else {
-            activeFeedbackList = new ArrayList<>(getActiveList());
+            activeFeedbackList = new ArrayList<>(getActiveListByState(currentViewState));
             searchTerm = null;
         }
         sort();

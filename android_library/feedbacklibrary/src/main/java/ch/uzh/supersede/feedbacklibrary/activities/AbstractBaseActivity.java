@@ -302,4 +302,5 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected void createInfoBubbles() {
         //NOP
     }
+
 }

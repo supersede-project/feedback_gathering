@@ -111,7 +111,7 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
     }
 
     protected void sort() {
-        for (FeedbackListItem item : getActiveList()) {
+         for (FeedbackListItem item : getActiveList()) {
             item.setSorting(sorting, getAllowedStatuses());
         }
         Collections.sort(getActiveList());

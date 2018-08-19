@@ -221,18 +221,18 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
 
             RelativeLayout root = getView(R.id.list_root, RelativeLayout.class);
 
-            String categoriesLabel = getString(R.string.list_tutorial_title_category);
-            String searchLabel = getString(R.string.list_tutorial_title_search);
-            String filterLabel = getString(R.string.list_tutorial_title_filter);
-            String listLabel = getString(R.string.list_tutorial_title_list);
+            String categoriesLabel = getString(R.string.list_tutorial_title_category)+StringUtility.generateSpace(10);
+            String searchLabel = getString(R.string.list_tutorial_title_search)+StringUtility.generateSpace(10);
+            String filterLabel = getString(R.string.list_tutorial_title_filter)+StringUtility.generateSpace(10);
+            String listLabel = getString(R.string.list_tutorial_title_list)+StringUtility.generateSpace(10);
             float textSize = ScalingUtility
                     .getInstance()
                     .getMinTextSizeScaledForWidth(20, 75, 0.45, categoriesLabel,searchLabel,filterLabel,listLabel);
-            RelativeLayout mLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.list_tutorial_content_list), textSize, this, scrollListLayout);
-            RelativeLayout llLayout = infoUtility.addInfoBox(root, filterLabel, getString(R.string.list_tutorial_content_filter), textSize, this, filterButton, mLayout);
-            RelativeLayout lrLayout = infoUtility.addInfoBox(root, searchLabel, getString(R.string.list_tutorial_content_search), textSize, this, searchText, llLayout);
-            RelativeLayout ulLayout = infoUtility.addInfoBox(root, categoriesLabel, getString(R.string.list_tutorial_content_category), textSize, this, getButtons().get(TOP), lrLayout);
-            mLayout.setOnTouchListener(new View.OnTouchListener() {
+            RelativeLayout lisLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.list_tutorial_content_list), textSize, this, scrollListLayout);
+            RelativeLayout filLayout = infoUtility.addInfoBox(root, filterLabel, getString(R.string.list_tutorial_content_filter), textSize, this, filterButton, lisLayout);
+            RelativeLayout seaLayout = infoUtility.addInfoBox(root, searchLabel, getString(R.string.list_tutorial_content_search), textSize, this, searchText, filLayout);
+            RelativeLayout catLayout = infoUtility.addInfoBox(root, categoriesLabel, getString(R.string.list_tutorial_content_category), textSize, this, getButtons().get(TOP), seaLayout);
+            lisLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
@@ -247,7 +247,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
                     return false;
                 }
             });
-            colorShape(1, lrLayout, llLayout, mLayout, ulLayout);
+            colorShape(1, seaLayout, filLayout, lisLayout, catLayout);
             tutorialInitialized = true;
         }
     }

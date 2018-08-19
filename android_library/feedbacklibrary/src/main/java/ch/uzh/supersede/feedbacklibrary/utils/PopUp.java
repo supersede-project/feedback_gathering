@@ -4,7 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.widget.EditText;
+import android.graphics.Color;
+import android.view.Gravity;
+import android.widget.*;
+
+import java.lang.reflect.Field;
+
+import ch.uzh.supersede.feedbacklibrary.R;
 
 public class PopUp {
 
@@ -51,6 +57,15 @@ public class PopUp {
 
     public PopUp withInput(final EditText inputText) {
         this.inputText = inputText;
+        this.inputText.setTextColor(Color.WHITE);
+        this.inputText.setGravity(Gravity.CENTER);
+        Field f = null;
+        try {
+            f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(this.inputText, R.drawable.white_cursor);
+        } catch (Exception e) {
+        }
         return this;
     }
 
@@ -95,8 +110,19 @@ public class PopUp {
     }
 
     public PopUp buildAndShow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DarkDialog);
+
+        TextView titleView = new TextView(context);
+        // You Can Customise your Title here
+        titleView.setText(title);
+        titleView.setBackgroundColor(Color.DKGRAY);
+        titleView.setPadding(10, 10, 10, 10);
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextColor(Color.WHITE);
+        titleView.setTextSize(20);
+
+        builder.setCustomTitle(titleView);
+
         builder.setMessage(message);
 
         if (inputText != null) {

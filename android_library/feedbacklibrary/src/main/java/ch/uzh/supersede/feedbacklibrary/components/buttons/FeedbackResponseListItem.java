@@ -149,8 +149,8 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                         deleteListener,
                         new int[]{0, 0, 0, 0},
                         padding,
-                        resolveTextColor(feedbackResponseBean),
-                        resolveBackgroundColor(feedbackResponseBean));
+                        ColorUtility.isDark(configuration.getTopColors()[0])?Color.WHITE:Color.BLACK,
+                        ColorUtility.isDark(configuration.getTopColors()[0])?Color.WHITE:Color.BLACK);
             } else {
                 upperRightView = createTextView(shortParams,
                         getContext().getString(R.string.list_date, DateUtility.getDateFromLong(mode == FIXED ? feedbackResponseBean.getTimeStamp() : System.currentTimeMillis())),
@@ -240,7 +240,10 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         button.setLayoutParams(layoutParams);
         button.setGravity(Gravity.CENTER);
         button.setPadding(0, 0, 0, 0);
-        button.setTextColor(backgroundColor);
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, backgroundColor);
+        button.setBackground(gradientDrawable);
+        button.setTextColor(textColor);
         button.setText(label);
         button.setPadding(padding, padding, padding, padding);
         button.setOnClickListener(listener);

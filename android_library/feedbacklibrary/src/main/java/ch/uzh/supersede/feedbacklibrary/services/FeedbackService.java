@@ -177,7 +177,9 @@ public abstract class FeedbackService {
         public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio) {
             List<MultipartBody.Part> multipartFiles = new ArrayList<>();
             multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), screenshot)));
-            multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/m4a"), audio)));
+            if (audio != null){
+                multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/m4a"), audio)));
+            }
 
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             String jsonString = gson.toJson(feedback);

@@ -48,16 +48,16 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private FeedbackDetailsBean feedbackDetailsBean;
     private LocalFeedbackState feedbackState;
     private static LinearLayout responseLayout;
-    private static ScrollView scrollContainer;
-    private TextView votesText;
-    private TextView userText;
-    private TextView titleText;
-    private TextView descriptionText;
-    private Button imageButton;
-    private Button audioButton;
-    private Button tagButton;
-    private Button subscribeButton;
-    private Button responseButton;
+    protected static ScrollView scrollContainer;
+    protected TextView votesText;
+    protected TextView userText;
+    protected TextView titleText;
+    protected TextView descriptionText;
+    protected Button imageButton;
+    protected Button audioButton;
+    protected Button tagButton;
+    protected Button subscribeButton;
+    protected Button responseButton;
     private List<FeedbackResponseListItem> responseList = new ArrayList<>();
     private IFeedbackServiceEventListener callback;
     private String userName;
@@ -532,6 +532,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                     }
                 });
                 mediaPlayer.start();
+                mediaPlayer.setVolume(50,50);
                 audioButton.setText(R.string.details_audio_stop);
                 isAudioPlaying = true;
             }

@@ -10,8 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.*;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import java.util.List;
@@ -98,11 +97,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
-            String statusLabel = getString(R.string.hub_feedback_status_label);
+            String statusLabel = getString(R.string.hub_feedback_status_label)+StringUtility.generateSpace(10);
             String createLabel = getString(R.string.hub_feedback_create_label);
             String settingsLabel = getString(R.string.hub_feedback_settings_label);
             String listLabel = getString(R.string.hub_feedback_list_label);
-            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label);
+            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label)+StringUtility.generateSpace(10);
             String infoLabel = getString(R.string.hub_feedback_info_label);
             float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20, 75, 0.45, statusLabel, createLabel, settingsLabel, listLabel, lvlLabel, infoLabel);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize, this, statusText);
@@ -253,29 +252,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
                             //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
-                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
-                            )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
-                            nameInputText.setText(inputDefaultText);
-                            nameInputText.addTextChangedListener(new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-                                    if (s.toString().contains(inputDefaultText)) {
-                                        nameInputText.setText(s.toString().replace(inputDefaultText, ""));
-                                        nameInputText.setSelection(1);
-                                    }
-                                }
-                            });
+                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            )});
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
                                     .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(),
@@ -302,7 +282,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 }
             } else {
                 //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
-                tapCounter++;
+//                tapCounter++;
                 if (tapCounter >= 5 && ACTIVE.check(this)) {
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, null);
@@ -355,7 +335,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText)) {
+                    String[] textParts = inputDefaultText.split("-");
+                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText) || inputString.contains(textParts[0])|| inputString.contains(textParts[1])) {
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }

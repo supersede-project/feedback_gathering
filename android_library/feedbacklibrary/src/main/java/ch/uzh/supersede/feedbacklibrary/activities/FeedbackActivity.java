@@ -137,7 +137,11 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private void execPrepareAndSendFeedback() {
         Bitmap screenshot = ImageUtility.loadAnnotatedImageFromDatabase(this);
         screenshot = screenshot != null ? screenshot : ImageUtility.loadImageFromDatabase(this);
-        File audioFile = new File(audioFilePath);
+        File audioFile = null;
+
+        if (audioFilePath != null){
+            audioFile = new File(audioFilePath);
+        }
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
 

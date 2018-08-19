@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ContentFrameLayout;
 import android.text.InputFilter;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -18,7 +18,7 @@ import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_FROM_CREATION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
@@ -33,6 +33,8 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
     private Button makePublicButton;
     private TextView statusText;
     private boolean creationMode = false;
+    private boolean tutorialFinished = false;
+    private boolean tutorialInitialized = false;
 
     @Override
     protected void initViews() {
@@ -58,8 +60,8 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
 
-        colorViews(0, upButton, downButton);
-        colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
+        colorViews(0, upButton, downButton,makePublicButton);
+        colorViews(1, getView(R.id.details_root, RelativeLayout.class));
         colorViews(0, getView(R.id.details_layout_scroll_layout, LinearLayout.class));
         colorViews(configuration.getLastColorIndex(), statusText);
     }
@@ -74,7 +76,8 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         invokeVersionControl(4, getAudioButton().getId(), getTagButton().getId());
         initStatusText();
         drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
-
+        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
         onPostCreate();
     }
 
@@ -222,7 +225,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
      */
     public void updateOwnFeedbackCase() {
         if (ACTIVE.check(getApplicationContext()) && getFeedbackDetailsBean().getUserName().equals(getUserName())) {
-            disableViews(reportButton, getSubscribeButton());
+            disableViews(reportButton, getSubscribeButton(),upButton,downButton);
         }
     }
 
@@ -242,6 +245,58 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
                 Toast.makeText(FeedbackDetailsActivity.this, R.string.details_published, Toast.LENGTH_SHORT).show();
                 break;
             default:
+        }
+    }
+
+    @Override
+    protected void createInfoBubbles() {
+        if (!tutorialFinished && !tutorialInitialized) {
+            imageButton.setEnabled(false);
+            audioButton.setEnabled(false);
+            tagButton.setEnabled(false);
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
+            makePublicButton.setEnabled(false);
+            reportButton.setEnabled(false);
+            responseButton.setEnabled(false);
+            subscribeButton.setEnabled(false);
+
+            RelativeLayout root = getView(R.id.details_root, RelativeLayout.class);
+
+            String votesLabel = getString(R.string.detail_tutorial_title_votes);
+            String publicLabel = getString(R.string.detail_tutorial_title_public);
+            String multimediaLabel = getString(R.string.detail_tutorial_title_multimedia);
+            String subscribeLabel = getString(R.string.detail_tutorial_title_subs);
+            String replyLabel = getString(R.string.detail_tutorial_title_reply);
+            float textSize = ScalingUtility
+                    .getInstance()
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, votesLabel,publicLabel,multimediaLabel, replyLabel, subscribeLabel);
+            RelativeLayout repLayout = infoUtility.addInfoBox(root, replyLabel, getString(R.string.detail_tutorial_content_reply), textSize, this, responseButton);
+            RelativeLayout subLayout = infoUtility.addInfoBox(root, subscribeLabel, getString(R.string.detail_tutorial_content_subs), textSize, this, subscribeButton, repLayout);
+            RelativeLayout mulLayout = infoUtility.addInfoBox(root, multimediaLabel, getString(R.string.detail_tutorial_content_multimedia), textSize, this, audioButton, subLayout);
+            RelativeLayout pubtLayout = infoUtility.addInfoBox(root, publicLabel, getString(R.string.detail_tutorial_content_public), textSize, this, downButton, mulLayout);
+            RelativeLayout votLayout = infoUtility.addInfoBox(root, votesLabel, getString(R.string.detail_tutorial_content_votes), textSize, this, votesText, pubtLayout);
+            repLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, true).apply();
+                    imageButton.setEnabled(true);
+                    audioButton.setEnabled(true);
+                    tagButton.setEnabled(true);
+                    upButton.setEnabled(true);
+                    downButton.setEnabled(true);
+                    makePublicButton.setEnabled(true);
+                    reportButton.setEnabled(true);
+                    responseButton.setEnabled(true);
+                    subscribeButton.setEnabled(true);
+                    tutorialFinished = true;
+                    updateFeedbackState();
+                    return false;
+                }
+            });
+            colorShape(1, mulLayout, subLayout, repLayout, pubtLayout, votLayout);
+            tutorialInitialized = true;
         }
     }
 }
