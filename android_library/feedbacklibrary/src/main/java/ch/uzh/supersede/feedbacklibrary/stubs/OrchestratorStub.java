@@ -29,7 +29,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 
-public class OrchestratorStub {
+public final class OrchestratorStub {
     private ArrayList<AbstractFeedbackPartView> feedbackPartViews;
     private ArrayList<AbstractFeedbackPart> feedbackParts;
     private int id;
@@ -49,8 +49,7 @@ public class OrchestratorStub {
         return id;
     }
 
-    public static void receiveFeedback(Activity activity, View view) {
-        //TODO: Evaluation, Store etc
+    public static void receiveFeedback(Activity activity) {
         Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
         toast.show();
         ImageUtility.wipeImages(activity);
@@ -132,6 +131,7 @@ public class OrchestratorStub {
             throw new UnsupportedOperationException("Not yet implemented!");
         }
 
+        @SuppressWarnings("unhecked")
         public OrchestratorStub build(List<AbstractFeedbackPartView> feedbackPartViews) {
             OrchestratorStub stub = new OrchestratorStub();
             Collections.sort(this.feedbackPartViews);

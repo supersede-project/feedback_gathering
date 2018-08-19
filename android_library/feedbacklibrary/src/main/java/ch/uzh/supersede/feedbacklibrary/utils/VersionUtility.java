@@ -2,8 +2,9 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 
-public class VersionUtility {
+public final class VersionUtility {
     private static final int BASE_VERSION = 1;
+    private static final int MAX_VERSION = 6;
 
     private VersionUtility() {
     }
@@ -19,15 +20,19 @@ public class VersionUtility {
            modifier=1;
         }
 
-        if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 31) || DateUtility.getMonth() >= 9){
-            return 5+modifier;
-        }else if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 10) || DateUtility.getMonth() >= 9){
-            return 4+modifier;
-        }else if ((DateUtility.getMonth() == 7 && DateUtility.getDay() >= 20) || DateUtility.getMonth() >= 8){
-            return 3+modifier;
-        }else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7){
-            return 2+modifier;
+        if (DateUtility.getYear() <= 2018) {
+            if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 31) || DateUtility.getMonth() >= 9) {
+                return BASE_VERSION + 4 + modifier;
+            } else if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 10) || DateUtility.getMonth() >= 9) {
+                return BASE_VERSION + 3 + modifier;
+            } else if ((DateUtility.getMonth() == 7 && DateUtility.getDay() >= 20) || DateUtility.getMonth() >= 8) {
+                return BASE_VERSION + 2 + modifier;
+            } else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7) {
+                return BASE_VERSION + 1 + modifier;
+            }
+            return BASE_VERSION+modifier;
+        }else{
+            return MAX_VERSION;
         }
-        return BASE_VERSION+modifier;
     }
 }

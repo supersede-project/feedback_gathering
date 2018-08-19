@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.google.gson.annotations.Expose;
@@ -11,11 +12,11 @@ import com.google.gson.annotations.Expose;
 import java.util.Calendar;
 import java.util.Locale;
 
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.NOT_YET_IMPLEMENTED_EXCEPTION;
 
-public class ContextInformationFeedback extends AbstractFeedbackPart {
+public final class ContextInformationFeedback extends AbstractFeedbackPart {
     @Expose
     private String resolution;
     @Expose
@@ -28,10 +29,6 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
     private String country;
     @Expose
     private String metaData;
-    private String userAgent;
-    private String devicePixelRatio;
-    private String region;
-    private String url;
 
     public ContextInformationFeedback() {
         // NOP
@@ -45,10 +42,6 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
         private String timeZone;
         private String country;
         private String metaData;
-        private String userAgent;
-        private String devicePixelRatio;
-        private String region;
-        private String url;
 
         public Builder() {
         }
@@ -62,7 +55,8 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
             if (windowManager != null) {
                 Point screen = new Point();
                 windowManager.getDefaultDisplay().getRealSize(screen);
-                this.resolution = screen.x + "x" + screen.y;
+                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+                this.resolution = screen.x + " x " + screen.y + ", density: "+metrics.density+ ", densityDpi: "+metrics.densityDpi;
             }
             return this;
         }
@@ -104,7 +98,12 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
         }
 
         public Builder withMetaData() {
-            this.metaData = Build.MODEL;
+            this.metaData = "MANUFACTURER:"+StringUtility.nulLSafe(Build.MANUFACTURER)+
+                    ";HARDWARE:"+ StringUtility.nulLSafe(Build.HARDWARE)+
+                    ";MODEL:"+StringUtility.nulLSafe(Build.MODEL)+
+                    ";DEVICE:"+StringUtility.nulLSafe(Build.DEVICE)+
+                    ";BRAND:"+StringUtility.nulLSafe(Build.BRAND)+
+                    ";TYPE:"+StringUtility.nulLSafe(Build.TYPE);
             return this;
         }
 
@@ -127,9 +126,6 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
         return resolution;
     }
 
-    public String getUserAgent() {
-        return userAgent;
-    }
 
     public String getAndroidVersion() {
         return androidVersion;
@@ -143,20 +139,8 @@ public class ContextInformationFeedback extends AbstractFeedbackPart {
         return timeZone;
     }
 
-    public String getDevicePixelRatio() {
-        return devicePixelRatio;
-    }
-
     public String getCountry() {
         return country;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getMetaData() {

@@ -20,7 +20,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.SUBSCRIBED;
 
-public class NotificationUtility {
+public final class NotificationUtility {
     private static NotificationUtility instance;
 
     private String userName;

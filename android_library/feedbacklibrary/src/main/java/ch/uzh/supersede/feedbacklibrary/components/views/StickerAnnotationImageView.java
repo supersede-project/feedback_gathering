@@ -12,7 +12,7 @@ import static android.view.Gravity.*;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.*;
 
-public class StickerAnnotationImageView extends AbstractAnnotationView {
+public final class StickerAnnotationImageView extends AbstractAnnotationView {
     private float scaleOrgX;
     private float scaleOrgY;
     private double centerX;

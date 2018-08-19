@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.*;
 
-public class ColorPickerView extends View {
+public final class ColorPickerView extends View {
     private TextView textView;
     private Paint mPaint;
     private Paint mCenterPaint;

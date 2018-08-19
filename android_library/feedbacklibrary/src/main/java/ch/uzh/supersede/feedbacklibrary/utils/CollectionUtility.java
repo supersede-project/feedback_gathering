@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import java.lang.reflect.Array;
 import java.util.List;
 
-public class CollectionUtility {
+public final class CollectionUtility {
 
     private CollectionUtility() {
     }
@@ -27,6 +27,7 @@ public class CollectionUtility {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public static  <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end){
         if (source.size() <= end || end <= begin){
             return (T[]) Array.newInstance(clazz, 0);

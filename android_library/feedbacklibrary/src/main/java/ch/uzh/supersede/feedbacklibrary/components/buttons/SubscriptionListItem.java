@@ -14,7 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
-public class SubscriptionListItem extends AbstractSettingsListItem implements IFeedbackServiceEventListener {
+public final class SubscriptionListItem extends AbstractSettingsListItem implements IFeedbackServiceEventListener {
 
     public IFeedbackServiceEventListener getListener() {
         return this;
@@ -58,19 +58,15 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case CREATE_FEEDBACK_SUBSCRIPTION:
-                if (response instanceof FeedbackBean) {
-                    boolean isSubscribed = FeedbackDatabase.getInstance(getContext()).getFeedbackState((FeedbackBean) response).isSubscribed();
-                    if (isSubscribed) {
-                        Toast.makeText(getContext(), "Re-Subscribed to \"" + getFeedbackDetailsBean().getTitle()+"\".", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Unsubscribed from \"" + getFeedbackDetailsBean().getTitle()+"\". Subscription will be gone on reload.", Toast.LENGTH_SHORT).show();
-                    }
+        if (eventType == EventType.CREATE_FEEDBACK_SUBSCRIPTION) {
+            if (response instanceof FeedbackBean) {
+                boolean isSubscribed = FeedbackDatabase.getInstance(getContext()).getFeedbackState((FeedbackBean) response).isSubscribed();
+                if (isSubscribed) {
+                    Toast.makeText(getContext(), "Re-Subscribed to \"" + getFeedbackDetailsBean().getTitle() + "\".", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Unsubscribed from \"" + getFeedbackDetailsBean().getTitle() + "\". Subscription will be gone on reload.", Toast.LENGTH_SHORT).show();
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
 

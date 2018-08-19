@@ -10,7 +10,7 @@ import java.util.List;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_CALLER_CLASS;
 
-public class ObjectUtility {
+public final class ObjectUtility {
 
     private ObjectUtility() {
     }

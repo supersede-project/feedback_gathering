@@ -4,7 +4,7 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 
-class PersistentDataSingleton {
+final class PersistentDataSingleton {
     private List<FeedbackDetailsBean> persistedFeedback = new ArrayList<>();
     private HashMap<Long,List<FeedbackResponseBean>> persistedFeedbackResponses = new HashMap<>();
 

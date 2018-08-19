@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-public class CompareUtility {
+public final class CompareUtility {
     private CompareUtility() {
     }
 

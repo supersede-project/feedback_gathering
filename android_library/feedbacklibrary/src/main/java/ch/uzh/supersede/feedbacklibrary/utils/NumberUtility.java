@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-public class NumberUtility {
+public final class NumberUtility {
 
     private NumberUtility() {
     }
@@ -55,7 +55,6 @@ public class NumberUtility {
      * Creates an ID from the Application id (package+application-name)
      * The generation of this ID is based on the documented logic below and is persistent.
      *
-     * @param applicationString
      * @return applicationId
      * Max Long:
      * 9 223 372 036 854 775 807

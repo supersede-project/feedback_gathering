@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 
-public class VoteListItem extends AbstractSettingsListItem {
+public final class VoteListItem extends AbstractSettingsListItem {
 
     public VoteListItem(Context context) {
         super(context);

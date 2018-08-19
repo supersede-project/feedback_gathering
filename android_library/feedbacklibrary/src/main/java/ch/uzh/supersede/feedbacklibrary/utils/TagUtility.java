@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
-public class TagUtility {
+public final class TagUtility {
     private TagUtility() {
     }
     public static Map<String,String> getFeedbackTags(Context context, List<String> loadedTags) {

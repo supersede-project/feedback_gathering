@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackReport {
+public final class FeedbackReport {
     private long id;
     private Feedback feedback;
     private AndroidUser reporter;

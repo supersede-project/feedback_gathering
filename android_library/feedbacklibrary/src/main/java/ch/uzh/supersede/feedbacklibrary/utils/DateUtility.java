@@ -4,7 +4,7 @@ import android.text.format.DateUtils;
 
 import java.util.Calendar;
 
-public class DateUtility {
+public final class DateUtility {
 
     private DateUtility() {
     }

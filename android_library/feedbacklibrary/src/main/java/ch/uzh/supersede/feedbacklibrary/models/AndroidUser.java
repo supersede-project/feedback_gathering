@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AndroidUser {
+public final class AndroidUser {
     private long id;
     private String name;
     private long applicationId;

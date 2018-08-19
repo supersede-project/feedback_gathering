@@ -11,7 +11,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.ConfigurationUtility;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.DATABASE_VERSION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.DATABASE_VERSION_NUMBER;
 
-public class DatabaseMigration implements Runnable {
+public final class DatabaseMigration implements Runnable {
     private final Context context;
     private final LocalConfigurationBean configuration;
 

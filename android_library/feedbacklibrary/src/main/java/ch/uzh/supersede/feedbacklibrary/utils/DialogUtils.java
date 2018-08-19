@@ -1,25 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.*;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-
-public class DialogUtils {
+public final class DialogUtils {
 
     private DialogUtils(){
     }

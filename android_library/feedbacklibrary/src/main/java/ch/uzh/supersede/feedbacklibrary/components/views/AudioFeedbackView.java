@@ -25,7 +25,7 @@ import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
-public class AudioFeedbackView extends AbstractFeedbackPartView implements SeekBar.OnSeekBarChangeListener {
+public final class AudioFeedbackView extends AbstractFeedbackPartView implements SeekBar.OnSeekBarChangeListener {
     private int recordAnimationColorStart;
     private int recordAnimationColorEnd;
     private String audioFilePath;
@@ -63,12 +63,12 @@ public class AudioFeedbackView extends AbstractFeedbackPartView implements SeekB
 
     @Override
     protected void colorSecondary(int color) {
-        ((CardView)((LinearLayout)getEnclosingLayout()).getChildAt(0)).setBackgroundColor(color);
+        ((LinearLayout)getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
     }
 
     @Override
     protected void colorTertiary(int color) {
-
+        //NOP
     }
     public AudioFeedbackView(LayoutInflater layoutInflater, AudioFeedback audioFeedback, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);

@@ -17,7 +17,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class RepositoryStub {
+public final class RepositoryStub {
 
     private RepositoryStub() {
     }
@@ -58,9 +58,7 @@ public class RepositoryStub {
     public static FeedbackDetailsBean getFeedbackDetails(Context context, FeedbackBean feedbackBean) {
         String[] content = generateDescriptionAndTitle();
         String description = content[0];
-        String title = content[1];
         String userName = feedbackBean.getUserName();
-        String[] labels = GeneratorStub.BagOfTags.pickRandom(5);
         int upVotes = feedbackBean.getUpVotes();
         long timeStamp = generateTimestamp();
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
@@ -137,8 +135,8 @@ public class RepositoryStub {
     }
 
     public static FeedbackBean getFeedback(Context context, FeedbackDetailsBean feedbackDetailsBean) {
-        int minUpVotes = -30; //FIXME [jfo]
-        int maxUpVotes = 50; //FIXME [jfo]
+        int minUpVotes = -30;
+        int maxUpVotes = 50;
 
         long feedbackId = feedbackDetailsBean.getFeedbackId();
         String title = feedbackDetailsBean.getTitle();
@@ -188,7 +186,7 @@ public class RepositoryStub {
         if (own) {
             return FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
         }
-        return RepositoryStub.registerAndGetUniqueName(GeneratorStub.BagOfNames.pickRandom(), false);
+        return RepositoryStub.registerAndGetUniqueName(GeneratorStub.BagOfNames.pickRandom());
     }
 
     @NonNull
@@ -208,7 +206,7 @@ public class RepositoryStub {
 
     //Should be generated on the Server
     //Return value is something like Jake --> Jake#12345678 (random 8 digits)
-    public static String registerAndGetUniqueName(String name, boolean isDeveloper) {
+    public static String registerAndGetUniqueName(String name) {
         return name.concat("#").concat(String.valueOf(NumberUtility.multiply(99999999, Math.random())));
     }
 
@@ -233,13 +231,12 @@ public class RepositoryStub {
     }
 
     public static FeedbackDetailsBean feedbackToFeedbackBean(Context context, Feedback feedback) {
-        int minUpVotes = -30; //FIXME [jfo]
-        int maxUpVotes = 50; //FIXME [jfo]
+        int minUpVotes = -30;
+        int maxUpVotes = 50;
 
 
         long feedbackId = NumberUtility.randomLong();
         String title = null;
-        String description = null;
         String[] content = new String[0];
         if (!feedback.getTextFeedbackList().isEmpty()) {
             title = feedback.getTextFeedbackList().get(0).getText();
@@ -265,13 +262,12 @@ public class RepositoryStub {
                 .withStatus(OPEN)
                 .build();
 
-        String[] labels = GeneratorStub.BagOfTags.pickRandom(5);
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
-                .withDescription(description == null ? content[0] : description)
+                .withDescription(content[0])
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
@@ -318,10 +314,8 @@ public class RepositoryStub {
     }
 
     public static void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
-        //TODO: MBO lokal implementieren
     }
 
     public static void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
-        //TODO: MBO lokal implementieren
     }
 }

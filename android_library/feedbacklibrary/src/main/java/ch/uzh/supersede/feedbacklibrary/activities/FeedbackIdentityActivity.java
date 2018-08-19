@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.text.*;
 import android.util.Log;
 import android.view.*;
@@ -17,14 +16,13 @@ import com.nex3z.flowlayout.FlowLayout;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-public class FeedbackIdentityActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
+public final class FeedbackIdentityActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     private Map<String,String> loadedTags = new TreeMap<>();
     private List<String> createdTags = new ArrayList<>();
     private Button buttonNext;
@@ -64,7 +62,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
     }
 
     private void drawLayoutOutlines(int... layouts) {
-        GradientDrawable gradientDrawable = null;
+        GradientDrawable gradientDrawable;
         for (int layout : layouts){
             gradientDrawable = new GradientDrawable();
             gradientDrawable.setStroke(1,ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
@@ -148,7 +146,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
                         }else if (s.length()>configuration.getMaxTagLength()){
                             Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
                         }else{
-                            if (createdTags.contains(s.toString().toLowerCase())){
+                            if (createdTags.contains(s.toLowerCase())){
                                 Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
                             }else{
                                 addTag(s);
@@ -346,17 +344,15 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity implements IF
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case GET_TAG_LIST:
-                if (response instanceof List) {
-                    loadedTags = TagUtility.getFeedbackTags(this, (List<String>)response);
-                }
-                break;
-            case GET_TAG_LIST_MOCK:
-                    loadedTags = RepositoryStub.getFeedbackTags(this);
-                break;
+        if (eventType == EventType.GET_TAG_LIST) {
+            if (response instanceof List) {
+                loadedTags = TagUtility.getFeedbackTags(this, (List<String>) response);
+            }
+        } else if (eventType == EventType.GET_TAG_LIST_MOCK) {
+            loadedTags = RepositoryStub.getFeedbackTags(this);
         }
     }
 

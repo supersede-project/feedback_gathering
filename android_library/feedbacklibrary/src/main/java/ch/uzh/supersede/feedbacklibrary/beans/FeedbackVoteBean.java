@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
-public class FeedbackVoteBean implements Serializable {
+public final class FeedbackVoteBean implements Serializable {
     private int vote;
     private String userName;
     private String technicalUserName;

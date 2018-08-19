@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
-public class GeneratorStub {
+public final class GeneratorStub {
 
     private GeneratorStub() {
     }

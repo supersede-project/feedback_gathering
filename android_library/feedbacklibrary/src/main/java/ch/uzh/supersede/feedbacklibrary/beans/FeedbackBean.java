@@ -12,7 +12,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class FeedbackBean implements Serializable {
+public final class FeedbackBean implements Serializable {
 
     private long feedbackId;
     private String title;
@@ -199,10 +199,7 @@ public class FeedbackBean implements Serializable {
     }
 
     public boolean isOwnFeedback(Context context) {
-        if (ACTIVE.check(context, false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME, ""))) {
-            return true;
-        }
-        return false;
+        return ACTIVE.check(context, false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME, ""));
     }
 
     public String getBitmapName() {

@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class AuthenticateResponse {
+public final class AuthenticateResponse {
     private String token;
 
     public AuthenticateResponse(String token) {

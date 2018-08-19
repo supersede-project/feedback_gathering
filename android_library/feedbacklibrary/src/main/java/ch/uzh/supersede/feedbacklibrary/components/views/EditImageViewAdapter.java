@@ -18,12 +18,12 @@ import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 
-public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
+public final class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
 
     private List<EditImageItem> items;
     private Context context;
 
-    public EditImageViewAdapter (List<EditImageItem> items){
+    EditImageViewAdapter (List<EditImageItem> items){
         this.items = items;
     }
 

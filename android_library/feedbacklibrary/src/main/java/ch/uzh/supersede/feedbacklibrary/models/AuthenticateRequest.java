@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class AuthenticateRequest {
+public final class AuthenticateRequest {
     private String name;
     private String password;
 

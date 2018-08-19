@@ -17,7 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UtilsConstants.*;
 
-public class ImageUtility {
+public final class ImageUtility {
 
     private ImageUtility() {
     }
@@ -82,9 +82,6 @@ public class ImageUtility {
     /**
      * Returns an average color-intensity, stepDensity defines the coverage of pixels
      *
-     * @param bitmap
-     * @param stepDensity
-     * @return
      */
     public static double calculateAverageColorIntensity(Bitmap bitmap, double stepDensity) {
         double density = (stepDensity <= 0 || stepDensity > 0.5) ? 0.5 : stepDensity;
@@ -95,9 +92,6 @@ public class ImageUtility {
     /**
      * Returns an average color-intensity, stepSize defines the probing distance
      *
-     * @param bitmap
-     * @param stepSize
-     * @return intensity
      */
     private static double calculateAverageColorIntensity(Bitmap bitmap, int stepSize) {
         long redBucket = 0;

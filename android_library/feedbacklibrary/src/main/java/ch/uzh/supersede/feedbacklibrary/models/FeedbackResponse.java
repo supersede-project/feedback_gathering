@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import java.util.Date;
 
-public class FeedbackResponse {
+public final class FeedbackResponse {
     private long id;
     private AndroidUser user;
     private String content;

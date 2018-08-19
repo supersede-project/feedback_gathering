@@ -16,11 +16,11 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.ALL;
 
 
-public class FeedbackDatabase extends AbstractFeedbackDatabase {
+public final class FeedbackDatabase extends AbstractFeedbackDatabase {
 
 
     private static FeedbackDatabase instance = null;
-    private FeedbackDbHelper databaseHelper = null;
+    private FeedbackDbHelper databaseHelper;
 
     public static FeedbackDatabase getInstance(Context context) {
         if (instance == null) {
@@ -326,7 +326,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         if (i == null) {
             return valueIfNull;
         }
-        return i == 1 ? true : false;
+        return i == 1;
     }
 
     public Integer readInteger(String key, Integer valueIfNull) {

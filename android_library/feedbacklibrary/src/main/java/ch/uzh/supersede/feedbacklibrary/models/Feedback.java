@@ -10,7 +10,7 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
-public class Feedback implements Serializable {
+public final class Feedback implements Serializable {
 
     @Expose
     @SerializedName("contextInformation")

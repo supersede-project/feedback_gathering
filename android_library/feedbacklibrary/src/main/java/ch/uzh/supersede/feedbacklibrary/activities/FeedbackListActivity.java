@@ -1,17 +1,15 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.widget.ContentFrameLayout;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
@@ -19,14 +17,13 @@ import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackListActivity extends AbstractFeedbackListActivity {
+public final class FeedbackListActivity extends AbstractFeedbackListActivity {
     private String searchTerm;
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
@@ -171,7 +168,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         activeFeedbackList.clear();
         if (getSorting() == MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase
                 .getInstance(getApplicationContext())
-                .readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4) {
+                .readBoolean(USER_IS_DEVELOPER, false)) {
             sort();
             return;
         }
@@ -209,6 +206,7 @@ public class FeedbackListActivity extends AbstractFeedbackListActivity {
         doSearch(searchTerm);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
         if (!tutorialFinished && !tutorialInitialized) {

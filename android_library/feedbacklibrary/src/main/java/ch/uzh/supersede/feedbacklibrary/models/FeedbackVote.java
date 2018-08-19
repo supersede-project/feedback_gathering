@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackVote {
+public final class FeedbackVote {
     private int id;
     private int vote;
 

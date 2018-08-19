@@ -4,7 +4,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
-public class ScreenshotFeedback extends AbstractMultipartFeedback {
+public final class ScreenshotFeedback extends AbstractMultipartFeedback {
     private boolean isEditable;
     private List<String> textAnnotations;
 

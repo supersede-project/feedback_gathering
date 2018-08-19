@@ -111,7 +111,7 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
     private void startFeedbackDetailsActivity() {
         Intent intent;
         if (ACTIVE.check(getContext())){
-            if (VersionUtility.getDateVersion()>=4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
             }else{
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);

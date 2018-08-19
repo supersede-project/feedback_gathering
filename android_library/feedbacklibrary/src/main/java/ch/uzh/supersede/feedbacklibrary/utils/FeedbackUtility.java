@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
-public class FeedbackUtility {
+public final class FeedbackUtility {
     private FeedbackUtility() {
     }
 
@@ -26,7 +25,7 @@ public class FeedbackUtility {
         List<FeedbackListItem> feedbackDetailsBeans = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
         for (Feedback feedback : feedbackList) {
-            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
             FeedbackListItem listItem = new FeedbackListItem(context, 8, feedbackDetailsBean, configuration, topColor, callerClass);
             listItem.addAllLabels(labels);
             feedbackDetailsBeans.add(listItem);
@@ -41,7 +40,7 @@ public class FeedbackUtility {
     public static List<VoteListItem> createFeedbackVotesListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
         List<VoteListItem> voteListItems = new ArrayList<>();
         for (Feedback feedback : feedbackList) {
-            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
             voteListItems.add(new VoteListItem(context, 8, feedbackDetailsBean, configuration, topColor));
         }
         return voteListItems;
@@ -50,7 +49,7 @@ public class FeedbackUtility {
     public static List<SubscriptionListItem> createFeedbackSubscriptionListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
         List<SubscriptionListItem> subscriptionListItems = new ArrayList<>();
         for (Feedback feedback : feedbackList) {
-            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
             subscriptionListItems.add(new SubscriptionListItem(context, 8, feedbackDetailsBean, configuration, topColor));
         }
         return subscriptionListItems;
@@ -122,7 +121,7 @@ public class FeedbackUtility {
         List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
         if (response instanceof List) {
             for (Feedback feedback : (List<Feedback>) response) {
-                FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback);
+                FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
                 if (feedbackDetailsBean != null) { //Avoid NP caused by old Repository Feedback
                     feedbackDetailsBeans.add(feedbackDetailsBean);
                 }
@@ -143,13 +142,15 @@ public class FeedbackUtility {
         return StringUtility.join(ids, ",");
     }
 
-    public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback) {
+    public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Feedback feedback) {
         int minUpVotes = feedback.getMinVotes();
         int maxUpVotes = feedback.getMaxVotes();
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
         int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
         boolean isPublic = feedback.isPublic();
+
+        String contextData = buildContextData(feedback.getContextInformationFeedback());
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -175,9 +176,7 @@ public class FeedbackUtility {
 
         String title = feedback.getTitle();
         if (title == null || title.length() == 0) {
-            title = "#Dummy-Title#" + (imageName != null ? "* " : " ") + GeneratorStub.BagOfFeedbackTitles.pickRandom();
-        } else {
-            title = title + (imageName != null ? "* " : " ");
+            title = "#Dummy-Title#"+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
         }
         String[] tags = feedback.getTags();
 
@@ -194,7 +193,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .isPublic(isPublic)
                 .build();
-        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses(), context);
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses());
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -206,11 +205,55 @@ public class FeedbackUtility {
                 .withBitmapName(bitmapName)
                 .withAudioFileName(audioFileName)
                 .withResponses(feedbackResponses)
+                .withContext(contextData)
                 .isPublic(isPublic)
                 .build();
     }
 
-    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(FeedbackBean feedbackBean, long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
+    private static String buildContextData(ContextInformationFeedback contextInformation) {
+        StringBuilder sb = new StringBuilder();
+        String newLine = "\n";
+        if (contextInformation != null){
+            sb.append("Android Version: ").append(StringUtility.nulLSafe(contextInformation.getAndroidVersion())).append(newLine);
+            sb.append("Resolution: ").append(StringUtility.nulLSafe(contextInformation.getResolution())).append(newLine);
+            sb.append(parseMetaData(contextInformation.getMetaData()));
+            sb.append("Country: ").append(StringUtility.nulLSafe(contextInformation.getCountry())).append(newLine);
+            sb.append("Local Time: ").append(StringUtility.nulLSafe(contextInformation.getLocalTime())).append(newLine);
+            sb.append("Timezone: ").append(StringUtility.nulLSafe(contextInformation.getTimeZone())).append(newLine);
+        }
+        return sb.toString();
+    }
+
+    private static String parseMetaData(String metaData) {
+        String manufacturer = "MANUFACTURER";
+        String hardware = "HARDWARE";
+        String model = "MODEL";
+        String device = "DEVICE";
+        String brand = "BRAND";
+        String type = "TYPE";
+        if (StringUtility.contains(metaData,manufacturer,hardware,model,device,brand,type)){
+            try {
+                StringBuilder sb = new StringBuilder();
+                for (String data : metaData.split(";")) {
+                    if (data.contains(":")) {
+                        sb.append(formatData(data));
+                    }
+                }
+                return sb.toString();
+            }catch (Exception e){
+                //NOP Fall-Through
+            }
+        }
+        return "Metadata: "+StringUtility.nulLSafe(metaData)+"\n";
+    }
+
+    private static String formatData(String data) {
+        String[] tokens = data.split(":");
+        String formatted = tokens[0].substring(0,1).concat(tokens[0].substring(1,tokens[0].length()).toLowerCase());
+        return formatted.concat(": ").concat(tokens[1]).concat("\n");
+    }
+
+    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(FeedbackBean feedbackBean, long feedbackId, List<FeedbackResponse> feedbackResponses) {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
 
         if (feedbackResponses != null) {

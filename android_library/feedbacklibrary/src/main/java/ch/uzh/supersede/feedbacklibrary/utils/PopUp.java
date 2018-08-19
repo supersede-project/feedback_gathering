@@ -12,10 +12,10 @@ import java.lang.reflect.Field;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
-public class PopUp {
+public final class PopUp {
 
     public enum DialogueOption {
-        OK, CANCEL;
+        OK, CANCEL
     }
 
     private Context context;
@@ -59,12 +59,13 @@ public class PopUp {
         this.inputText = inputText;
         this.inputText.setTextColor(Color.WHITE);
         this.inputText.setGravity(Gravity.CENTER);
-        Field f = null;
+        Field f;
         try {
             f = TextView.class.getDeclaredField("mCursorDrawableRes");
             f.setAccessible(true);
             f.set(this.inputText, R.drawable.white_cursor);
         } catch (Exception e) {
+            //NOP
         }
         return this;
     }

@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 
-public class DefaultConfiguration implements
+public final class DefaultConfiguration implements
         IFeedbackBehaviorConfiguration,
         IFeedbackStyleConfiguration,
         IFeedbackSettingsConfiguration,

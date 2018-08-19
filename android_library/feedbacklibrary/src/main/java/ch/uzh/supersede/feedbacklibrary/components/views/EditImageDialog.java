@@ -26,7 +26,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 
-public class EditImageDialog extends DialogFragment {
+public final class EditImageDialog extends DialogFragment {
 
     private List<EditImageItem> items;
     private Map<String, EditImageItem> allImageEditItems;

@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LabelFeedback extends AbstractFeedbackPart {
+public final class LabelFeedback extends AbstractFeedbackPart {
     private List<String> selectedLabels = new ArrayList<>();
     private List<String> labels = new ArrayList<>();
 

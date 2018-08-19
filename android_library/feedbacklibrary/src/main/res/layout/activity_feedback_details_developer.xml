@@ -74,13 +74,14 @@
                     android:orientation="horizontal"
                     android:weightSum="9">
 
-                    <TextView
-                        android:id="@+id/details_developer_text_votes_title"
+                    <Button
+                        android:id="@+id/details_developer_button_context"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:text="@string/details_developer_votes_title" />
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_developer_context" />
 
                     <TextView
                         android:id="@+id/details_developer_text_votes"

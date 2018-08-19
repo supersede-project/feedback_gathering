@@ -1,9 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.*;
+import android.content.*;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -11,19 +9,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputFilter;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.View;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
-import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -32,7 +26,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class FeedbackResponseListItem extends LinearLayout implements Comparable {
+public final class FeedbackResponseListItem extends LinearLayout implements Comparable {
     private boolean isDeveloper;
     private boolean isDeleted;
     private View upperLeftView;
@@ -57,7 +51,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
             eventListener, RESPONSE_MODE mode) {
         super(context);
         this.eventListener = eventListener;
-        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4;
+        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER, false);
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;
@@ -149,8 +143,8 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                         deleteListener,
                         new int[]{0, 0, 0, 0},
                         padding,
-                        ColorUtility.isDark(configuration.getTopColors()[0])?Color.WHITE:Color.BLACK,
-                        ColorUtility.isDark(configuration.getTopColors()[0])?Color.WHITE:Color.BLACK);
+                        resolveTextColor(feedbackResponseBean),
+                        resolveBackgroundColor(feedbackResponseBean));
             } else {
                 upperRightView = createTextView(shortParams,
                         getContext().getString(R.string.list_date, DateUtility.getDateFromLong(mode == FIXED ? feedbackResponseBean.getTimeStamp() : System.currentTimeMillis())),

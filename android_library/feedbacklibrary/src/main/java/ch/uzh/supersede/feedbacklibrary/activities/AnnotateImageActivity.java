@@ -5,7 +5,7 @@ import android.content.*;
 import android.graphics.*;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.*;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -163,7 +163,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
 
     @Override
     @SuppressWarnings("squid:S2095")
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public final void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -510,7 +510,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if (convertView == null) {

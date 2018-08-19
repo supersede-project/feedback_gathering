@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
-public class AudioFeedback extends AbstractMultipartFeedback {
+public final class AudioFeedback extends AbstractMultipartFeedback {
     private String audioPath;
     private double maxTime;
     @Expose

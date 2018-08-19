@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
-public class RatingFeedback extends AbstractFeedbackPart {
+public final class RatingFeedback extends AbstractFeedbackPart {
     private String ratingIcon;
     private int maxRating;
     private int defaultRating;

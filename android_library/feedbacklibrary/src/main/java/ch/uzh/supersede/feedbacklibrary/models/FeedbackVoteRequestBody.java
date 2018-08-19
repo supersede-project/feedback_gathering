@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackVoteRequestBody {
-    private long id;
+public final class FeedbackVoteRequestBody {
     private int vote;
     private String voterUsername;
 

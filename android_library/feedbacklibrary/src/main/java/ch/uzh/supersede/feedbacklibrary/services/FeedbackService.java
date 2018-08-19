@@ -244,7 +244,7 @@ public abstract class FeedbackService {
 
         @Override
         public void editFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String status) {
-            Feedback feedback = new Feedback.Builder().withFeedbackStatus(Enums.FEEDBACK_STATUS.valueOf(status)).build();
+            Feedback feedback = new Feedback.Builder().withFeedbackStatus(Enums.FEEDBACK_STATUS.valueOf(status.toUpperCase().replace(" ","_"))).build();
             editFeedback(callback, feedbackDetailsBean.getFeedbackId(), EDIT_FEEDBACK_STATUS, feedback);
         }
 
@@ -331,7 +331,7 @@ public abstract class FeedbackService {
 
         @Override
         public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio) {
-            FeedbackDatabase.getInstance(context).writeFeedback(FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback).getFeedbackBean(), Enums.SAVE_MODE.CREATED);
+            FeedbackDatabase.getInstance(context).writeFeedback(FeedbackUtility.feedbackToFeedbackDetailsBean(feedback).getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK, feedback);
         }
 
