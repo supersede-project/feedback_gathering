@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,6 +12,7 @@
         android:weightSum="60">
 
         <LinearLayout
+            android:id="@+id/details_layout_up"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
@@ -40,7 +41,6 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="3"
-                    android:enabled="false"
                     android:onClick="onButtonClicked"
                     android:text="@string/details_audio" />
 
@@ -130,9 +130,11 @@
                     android:id="@+id/details_text_status"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="0dp"
-                    android:layout_weight="0"
-                    android:padding="0dp" />
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:padding="0dp"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp"/>
 
                 <TextView
                     android:id="@+id/details_text_title"
@@ -143,21 +145,11 @@
                     android:padding="0dp"
                     android:gravity="start|center_horizontal"
                     android:paddingStart="5dp"/>
-
-                <Spinner
-                    android:id="@+id/details_spinner_status"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="2"
-                    android:padding="0dp"
-                    android:gravity="start|center_horizontal"
-                    android:paddingStart="5dp"/>
-
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_mid"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
@@ -170,11 +162,11 @@
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="9"
-                android:background="@color/cyanDark"
                 android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_low"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="25"
@@ -209,6 +201,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_button"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
@@ -246,4 +239,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.ContentFrameLayout>
+</RelativeLayout>

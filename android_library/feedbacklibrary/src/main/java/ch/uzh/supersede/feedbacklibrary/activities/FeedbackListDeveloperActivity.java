@@ -111,7 +111,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass());
+            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(1), getClass());
             listItem.addAllLabels(labels);
             feedbackListItems.add(listItem);
         }
@@ -138,7 +138,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
     @Override
     protected List<FeedbackListItem> getActiveList() {
-        return getActiveListByState(currentViewState);
+        return activeFeedbackList;
     }
 
     private List<FeedbackListItem> getActiveListByState(Enums.FEEDBACK_SORTING state) {
@@ -154,7 +154,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
 
     @Override
     protected void doSearch(String s) {
-        List<FeedbackListItem> sortedFeedbackList = new ArrayList<>(getActiveList());
+        List<FeedbackListItem> sortedFeedbackList = new ArrayList<>(getActiveListByState(currentViewState));
         activeFeedbackList.clear();
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
             for (FeedbackListItem item : sortedFeedbackList) {
@@ -164,7 +164,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
             }
             searchTerm = s;
         } else {
-            activeFeedbackList = new ArrayList<>(getActiveList());
+            activeFeedbackList = new ArrayList<>(getActiveListByState(currentViewState));
             searchTerm = null;
         }
         sort();

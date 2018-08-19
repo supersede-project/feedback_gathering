@@ -74,4 +74,13 @@ public class StringUtility {
         }
         return sb.toString();
     }
+
+
+    public static String generateSpace(int i) {
+        String s = "";
+        for (int e = 0; e < i; e++){
+            s += " ";
+        }
+        return s;
+    }
 }

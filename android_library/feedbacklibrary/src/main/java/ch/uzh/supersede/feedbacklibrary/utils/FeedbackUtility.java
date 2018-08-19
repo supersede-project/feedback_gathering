@@ -149,6 +149,7 @@ public class FeedbackUtility {
         Enums.FEEDBACK_STATUS status = (feedback.getFeedbackStatus() != null) ? feedback.getFeedbackStatus() : OPEN;
         int upVotes = feedback.getVotes();
         int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
+        boolean isPublic = feedback.isPublic();
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -165,6 +166,11 @@ public class FeedbackUtility {
         String bitmapName = null;
         if (feedback.getScreenshotFeedbackList() != null && !feedback.getScreenshotFeedbackList().isEmpty()) {
             bitmapName = feedback.getScreenshotFeedbackList().get(0).getPath();
+        }
+
+        String audioFileName = null;
+        if (feedback.getAudioFeedbackList() != null && !feedback.getAudioFeedbackList().isEmpty()) {
+            audioFileName = feedback.getAudioFeedbackList().get(0).getPath();
         }
 
         String title = feedback.getTitle();
@@ -186,8 +192,9 @@ public class FeedbackUtility {
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
                 .withStatus(status)
+                .isPublic(isPublic)
                 .build();
-        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedback.getId(), feedback.getFeedbackResponses(), context);
+        List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses(), context);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedback.getId())
                 .withFeedbackBean(feedbackBean)
@@ -197,16 +204,15 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmapName(bitmapName)
+                .withAudioFileName(audioFileName)
                 .withResponses(feedbackResponses)
+                .isPublic(isPublic)
                 .build();
     }
 
-    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
+    private static List<FeedbackResponseBean> feedbackResponseListToFeedbackResponseBeans(FeedbackBean feedbackBean, long feedbackId, List<FeedbackResponse> feedbackResponses, Context context) {
         List<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
-        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
-        if (userName == null){
-            return Collections.emptyList();
-        }
+
         if (feedbackResponses != null) {
             for (FeedbackResponse feedbackResponse : feedbackResponses) {
                 String responseUserName = feedbackResponse.getUser().getName();
@@ -217,7 +223,7 @@ public class FeedbackUtility {
                         .withUserName(responseUserName)
                         .withTimestamp((feedbackResponse.getUpdatedAt() != null ? feedbackResponse.getUpdatedAt() : feedbackResponse.getCreatedAt()).getTime())
                         .isDeveloper(feedbackResponse.getUser().isDeveloper())
-                        .isFeedbackOwner(userName.equals(responseUserName))
+                        .isFeedbackOwner(feedbackBean.getUserName().equals(responseUserName))
                         .build()
                 );
             }

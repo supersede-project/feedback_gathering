@@ -1,14 +1,16 @@
 package ch.uzh.supersede.host;
 
 import android.graphics.Color;
+import android.graphics.drawable.*;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
-import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AppCompatActivity implements
@@ -38,6 +40,19 @@ public class HostActivity extends AppCompatActivity implements
         feedbackButton.setBackgroundColor(secondaryColor);
         dummyButton1.setBackgroundColor(secondaryColor);
         dummyButton2.setBackgroundColor(secondaryColor);
+
+
+        //DEBUG
+        int color1 = Color.TRANSPARENT;
+        int color2 = Color.TRANSPARENT;
+        Drawable background = linearLayout.getBackground();
+        if (background instanceof ColorDrawable)
+            color2 = ((ColorDrawable) background).getColor();
+        background = feedbackButton.getBackground();
+        if (background instanceof ColorDrawable)
+            color1 = ((ColorDrawable) background).getColor();
+        Log.d("ColorCombination:","Layout/Button: "+color2+", "+color1);
+        //!DEBUG
 
         Integer currentUserKarma = FeedbackConnector.getInstance().getCurrentUserKarma(this);
         if (currentUserKarma != null) {
@@ -88,7 +103,7 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public int getConfiguredMaxResponseLength() {
-        return 30;
+        return 300;
     }
 
     @Override
@@ -136,7 +151,10 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public int[] getConfiguredCustomStyle() {
-        return new int[]{-179768107,-12768107};
+//        return new int[]{-9869962,-12394740}; //Viper
+//        return new int[]{-12394740,-9869962}; // Razor
+//        return new int[]{-1528179, -13089991}; //Creme
+        return new int[]{-16047514,-9992786,-5126707}; //Blue
     }
 
     @Override

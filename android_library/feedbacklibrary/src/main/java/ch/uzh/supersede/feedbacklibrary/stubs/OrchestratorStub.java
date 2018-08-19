@@ -84,6 +84,7 @@ public class OrchestratorStub {
             if (ADVANCED.check(context) && configuration.getAudioOrder() != -1) {
                 AudioFeedback audioFeedback = new AudioFeedback(configuration);
                 AudioFeedbackView audioMechanismView = new AudioFeedbackView(layoutInflater, audioFeedback, resources, activity, context);
+                audioMechanismView.colorView(configuration.getTopColors());
                 feedbackParts.add(audioFeedback);
                 feedbackPartViews.add(audioMechanismView);
                 id++;
@@ -95,6 +96,7 @@ public class OrchestratorStub {
             if (configuration.getRatingOrder() != -1) {
                 RatingFeedback ratingFeedback = new RatingFeedback(configuration);
                 RatingFeedbackView ratingFeedbackView = new RatingFeedbackView(layoutInflater, ratingFeedback);
+                ratingFeedbackView.colorView(configuration.getTopColors());
                 feedbackParts.add(ratingFeedback);
                 feedbackPartViews.add(ratingFeedbackView);
                 id++;
@@ -106,6 +108,7 @@ public class OrchestratorStub {
             if (configuration.getScreenshotOrder() != -1) {
                 ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback(configuration);
                 ScreenshotFeedbackView screenshotFeedbackView = new ScreenshotFeedbackView(layoutInflater, activity, screenshotFeedback);
+                screenshotFeedbackView.colorView(configuration.getTopColors());
                 feedbackParts.add(screenshotFeedback);
                 feedbackPartViews.add(screenshotFeedbackView);
                 id++;
@@ -117,6 +120,7 @@ public class OrchestratorStub {
             if (configuration.getTextOrder() != -1) {
                 TextFeedback textFeedback = new TextFeedback(configuration);
                 TextFeedbackView textFeedbackView = new TextFeedbackView(layoutInflater, textFeedback);
+                textFeedbackView.colorView(configuration.getTopColors());
                 feedbackParts.add(textFeedback);
                 feedbackPartViews.add(textFeedbackView);
                 id++;

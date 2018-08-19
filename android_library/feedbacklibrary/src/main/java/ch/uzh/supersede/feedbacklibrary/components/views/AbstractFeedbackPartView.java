@@ -26,6 +26,24 @@ public abstract class AbstractFeedbackPartView implements Comparable{
 
     public abstract void updateModel();
 
+    protected abstract void colorPrimary(int color);
+
+    protected abstract void colorSecondary(int color);
+
+    protected abstract void colorTertiary(int color);
+
+    public void colorView(Integer... colors){
+        if (colors != null && colors.length >= 1){
+            colorPrimary(colors[0]);
+        }
+        if (colors != null && colors.length >= 2){
+            colorSecondary(colors[1]);
+        }
+        if (colors != null && colors.length >= 3){
+            colorTertiary(colors[2]);
+        }
+    }
+
     public int getViewOrder() {
         return viewOrder;
     }

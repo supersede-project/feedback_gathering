@@ -2,11 +2,13 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ContentFrameLayout;
 import android.text.InputFilter;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -16,9 +18,11 @@ import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_FROM_CREATION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.UP_VOTED;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -27,20 +31,20 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
     private Button downButton;
     private Button reportButton;
     private Button makePublicButton;
-    private boolean creationMode = false;
     private TextView statusText;
+    private boolean creationMode = false;
+    private boolean tutorialFinished = false;
+    private boolean tutorialInitialized = false;
 
     @Override
     protected void initViews() {
         setContentView(R.layout.activity_feedback_details);
-
         setMode(READING);
         setCallback(this);
         setResponseLayout(getView(R.id.details_layout_scroll_layout, LinearLayout.class));
         setScrollContainer(getView(R.id.details_layout_scroll_container, ScrollView.class));
         setVotesText(getView(R.id.details_text_votes, TextView.class));
         setUserText(getView(R.id.details_text_user, TextView.class));
-        setStatus(getView(R.id.details_spinner_status, Spinner.class));
         setTitleText(getView(R.id.details_text_title, TextView.class));
         setDescriptionText(getView(R.id.details_text_description, TextView.class));
         setImageButton(getView(R.id.details_button_images, Button.class));
@@ -56,9 +60,10 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
 
-        colorViews(2, statusText);
-        colorViews(0, upButton, downButton);
-        colorViews(1, getView(R.id.details_root, ContentFrameLayout.class));
+        colorViews(0, upButton, downButton,makePublicButton);
+        colorViews(1, getView(R.id.details_root, RelativeLayout.class));
+        colorViews(0, getView(R.id.details_layout_scroll_layout, LinearLayout.class));
+        colorViews(configuration.getLastColorIndex(), statusText);
     }
 
     @Override
@@ -68,9 +73,16 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
 
         updateReportStatus(null);
         updateOwnFeedbackCase();
-        invokeVersionControl(5, getAudioButton().getId(), getTagButton().getId());
-
+        invokeVersionControl(4, getAudioButton().getId(), getTagButton().getId());
+        initStatusText();
+        drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
+        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
         onPostCreate();
+    }
+
+    private void initStatusText() {
+        statusText.setText(getString(R.string.details_status,getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
     }
 
     @Override
@@ -100,25 +112,6 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         }
     }
 
-    protected void updateFeedbackState() {
-        super.updateFeedbackState();
-        if (ACTIVE.check(this, true)) {
-            if (getFeedbackState().isUpVoted()) {
-                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.green_4));
-                upButton.setEnabled(false);
-            }
-            if (getFeedbackState().isDownVoted()) {
-                getVotesText().setTextColor(ContextCompat.getColor(this, R.color.red_5));
-                downButton.setEnabled(false);
-            }
-            if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
-                colorViews(1, getVotesText());
-                upButton.setEnabled(true);
-                downButton.setEnabled(true);
-            }
-        }
-    }
-
     @Override
     public void onButtonClicked(View view) {
         super.onButtonClicked(view);
@@ -134,13 +127,34 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         updateFeedbackState();
     }
 
+    protected void updateFeedbackState() {
+        super.updateFeedbackState();
+        if (ACTIVE.check(this, true)) {
+            if (getFeedbackState().isUpVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.green_4),0.4));
+                upButton.setEnabled(false);
+                downButton.setEnabled(true);
+            }
+            if (getFeedbackState().isDownVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.red_5),0.4));
+                downButton.setEnabled(false);
+                upButton.setEnabled(true);
+            }
+            if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.black),0.4));
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+            }
+        }
+    }
+
     protected void handleUpVoteButtonClicked() {
-        RepositoryStub.sendUpVote(this, getFeedbackDetailsBean().getFeedbackBean());
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), UP_VOTED);
         getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().upVote());
     }
 
     protected void handleDownVoteButtonClicked() {
-        RepositoryStub.sendDownVote(this, getFeedbackDetailsBean().getFeedbackBean());
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), DOWN_VOTED);
         getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().downVote());
     }
 
@@ -211,7 +225,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
      */
     public void updateOwnFeedbackCase() {
         if (ACTIVE.check(getApplicationContext()) && getFeedbackDetailsBean().getUserName().equals(getUserName())) {
-            disableViews(reportButton, getSubscribeButton());
+            disableViews(reportButton, getSubscribeButton(),upButton,downButton);
         }
     }
 
@@ -231,6 +245,58 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
                 Toast.makeText(FeedbackDetailsActivity.this, R.string.details_published, Toast.LENGTH_SHORT).show();
                 break;
             default:
+        }
+    }
+
+    @Override
+    protected void createInfoBubbles() {
+        if (!tutorialFinished && !tutorialInitialized) {
+            imageButton.setEnabled(false);
+            audioButton.setEnabled(false);
+            tagButton.setEnabled(false);
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
+            makePublicButton.setEnabled(false);
+            reportButton.setEnabled(false);
+            responseButton.setEnabled(false);
+            subscribeButton.setEnabled(false);
+
+            RelativeLayout root = getView(R.id.details_root, RelativeLayout.class);
+
+            String votesLabel = getString(R.string.detail_tutorial_title_votes);
+            String publicLabel = getString(R.string.detail_tutorial_title_public);
+            String multimediaLabel = getString(R.string.detail_tutorial_title_multimedia);
+            String subscribeLabel = getString(R.string.detail_tutorial_title_subs);
+            String replyLabel = getString(R.string.detail_tutorial_title_reply);
+            float textSize = ScalingUtility
+                    .getInstance()
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, votesLabel,publicLabel,multimediaLabel, replyLabel, subscribeLabel);
+            RelativeLayout repLayout = infoUtility.addInfoBox(root, replyLabel, getString(R.string.detail_tutorial_content_reply), textSize, this, responseButton);
+            RelativeLayout subLayout = infoUtility.addInfoBox(root, subscribeLabel, getString(R.string.detail_tutorial_content_subs), textSize, this, subscribeButton, repLayout);
+            RelativeLayout mulLayout = infoUtility.addInfoBox(root, multimediaLabel, getString(R.string.detail_tutorial_content_multimedia), textSize, this, audioButton, subLayout);
+            RelativeLayout pubtLayout = infoUtility.addInfoBox(root, publicLabel, getString(R.string.detail_tutorial_content_public), textSize, this, downButton, mulLayout);
+            RelativeLayout votLayout = infoUtility.addInfoBox(root, votesLabel, getString(R.string.detail_tutorial_content_votes), textSize, this, votesText, pubtLayout);
+            repLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, true).apply();
+                    imageButton.setEnabled(true);
+                    audioButton.setEnabled(true);
+                    tagButton.setEnabled(true);
+                    upButton.setEnabled(true);
+                    downButton.setEnabled(true);
+                    makePublicButton.setEnabled(true);
+                    reportButton.setEnabled(true);
+                    responseButton.setEnabled(true);
+                    subscribeButton.setEnabled(true);
+                    tutorialFinished = true;
+                    updateFeedbackState();
+                    return false;
+                }
+            });
+            colorShape(1, mulLayout, subLayout, repLayout, pubtLayout, votLayout);
+            tutorialInitialized = true;
         }
     }
 }

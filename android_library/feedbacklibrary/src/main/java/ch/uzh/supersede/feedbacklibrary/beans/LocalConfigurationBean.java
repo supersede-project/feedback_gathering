@@ -213,7 +213,7 @@ public class LocalConfigurationBean implements Serializable {
             };
         } else if (style == SWITZERLAND) {
             topColors = new Integer[]{
-                    WHITE, SWISS_RED, WHITE
+                    SWISS_RED, WHITE, SWISS_RED
             };
         } else if (style == GERMANY) {
             topColors = new Integer[]{
@@ -438,5 +438,9 @@ public class LocalConfigurationBean implements Serializable {
 
     public String getEndpointUrl() {
         return endpointUrl;
+    }
+
+    public int getLastColorIndex() {
+        return topColors.length-1;
     }
 }

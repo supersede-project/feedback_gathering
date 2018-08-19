@@ -12,6 +12,7 @@
         android:weightSum="60">
 
         <LinearLayout
+            android:id="@+id/details_developer_layout_up"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
@@ -79,7 +80,8 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:text="@string/details_developer_votes_title"/>
+                        android:text="@string/details_developer_votes_title" />
+
                     <TextView
                         android:id="@+id/details_developer_text_votes"
                         android:layout_width="0dp"
@@ -92,9 +94,10 @@
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="3"
+                        android:layout_margin="5dp"
                         android:gravity="center"
                         android:onClick="onButtonClicked"
-                        android:text="@string/details_developer_delete"/>
+                        android:text="@string/details_developer_delete" />
                 </LinearLayout>
 
                 <Space
@@ -102,14 +105,32 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <Button
-                    android:id="@+id/details_developer_button_award_karma"
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
-                    android:onClick="onButtonClicked"
-                    android:padding="0dp"
-                    android:text="@string/details_developer_award_karma" />
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <Button
+                        android:id="@+id/details_developer_button_award_karma"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2"
+                        android:layout_margin="5dp"
+                        android:onClick="onButtonClicked"
+                        android:padding="0dp"
+                        android:text="@string/details_developer_award_karma" />
+                    <Button
+                        android:id="@+id/details_developer_button_revoke_karma"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2"
+                        android:layout_margin="5dp"
+                        android:onClick="onButtonClicked"
+                        android:padding="0dp"
+                        android:text="@string/details_developer_revoke_karma" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/details_developer_text_user"
@@ -118,7 +139,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="2"
                     android:gravity="start|center_horizontal"
-                    android:paddingStart="5dp"/>
+                    android:paddingStart="5dp" />
 
                 <Spinner
                     android:id="@+id/details_developer_spinner_status"
@@ -142,6 +163,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_developer_layout_mid"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
@@ -158,6 +180,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_developer_layout_low"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="25"
@@ -192,6 +215,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_developer_layout_button"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="5"

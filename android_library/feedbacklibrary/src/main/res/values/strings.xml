@@ -121,11 +121,20 @@
     <string name="list_alert_event">Could not process the Event from to the Server.</string>
     <string name="list_alert_server">Could not establish a Connection to the Server.</string>
     <string name="list_alert_user_level">Increase your User-Level to participate!</string>
+    <string name="list_tutorial_title_category">Category Tabs</string>
+    <string name="list_tutorial_title_search">Search Field</string>
+    <string name="list_tutorial_title_filter">Filter Options</string>
+    <string name="list_tutorial_title_list">Feedback List</string>
+    <string name="list_tutorial_content_list">Here you will see a list of already created Feedback. In this case, the list is empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
+    <string name="list_tutorial_content_filter">This option lets you filter out statuses.</string>
+    <string name="list_tutorial_content_search">You can search within the provided feedback list by entering a search term here.</string>
+    <string name="list_tutorial_content_category">There are four available categories: Mine, Top, Hot and New. The first one shows only feedback that you provided while the other ones sort all the existing feedback according to number of comments, number of votes or date.</string>
+
     <!--Developer List-->
     <string name="developer_list_button_private">Private</string>
     <string name="developer_list_button_reported">Reported</string>
-    <string name="developer_list_button_feature_1">#Feature 1</string>
-    <string name="developer_list_button_feature_2">#Feature 2</string>
+    <string name="developer_list_button_feature_1"></string>
+    <string name="developer_list_button_feature_2"></string>
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>
@@ -137,6 +146,7 @@
     <string name="details_unsubscribe">Unsubscribe</string>
     <string name="details_images">Image</string>
     <string name="details_audio">Audio</string>
+    <string name="details_audio_stop">Stop</string>
     <string name="details_tags">Tags</string>
     <string name="details_user">User: %1$s</string>
     <string name="details_status">Status: %1$s</string>
@@ -157,8 +167,11 @@
     <!--DetailsDeveloper-->
     <string name="details_developer_award_karma">Award Karma</string>
     <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>
+    <string name="details_developer_revoke_karma_title">Confirm Karma Revoking</string>
     <string name="details_developer_award_karma_content">How much Karma do you want to award the User %1$s?</string>
-    <string name="details_developer_karma_awarded">%1$s Karma to %2$s awarded!</string>
+    <string name="details_developer_revoke_karma_content">How much Karma do you want to revoke from the User %1$s?</string>
+    <string name="details_developer_karma_awarded">%1$s Karma awarded to %2$s!</string>
+    <string name="details_developer_karma_revoked">%1$s Karma from %2$s revoked!</string>
     <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
     <string name="details_developer_delete_confirm_title">Feedback Deletion</string>
     <string name="details_developer_delete_confirm">Do you want to delete this Feedback? This action is irreversible!</string>
@@ -168,6 +181,17 @@
     <string name="details_developer_status_updated">Status updated!</string>
     <string name="details_developer_votes_title">Votes: </string>
     <string name="details_developer_delete">Delete</string>
+    <string name="details_developer_revoke_karma">Revoke Karma</string>
+    <string name="detail_tutorial_title_votes">Voting and Karma-System</string>
+    <string name="detail_tutorial_title_multimedia">Multimedia Files</string>
+    <string name="detail_tutorial_title_subs">Subscription Feature</string>
+    <string name="detail_tutorial_title_reply">Responding to Feedback</string>
+    <string name="detail_tutorial_title_public">Private / Public Feedback</string>
+    <string name="detail_tutorial_content_reply">It is possible send a response to a feedback. Responses made by the creator are colored red while developer-responses have a golden color.</string>
+    <string name="detail_tutorial_content_subs">Subscribing to a feedback grants you the option to receive notifications when the linked feedback is being updated.</string>
+    <string name="detail_tutorial_content_multimedia">Based on the available multimedia files, these buttons will be toggled on and off individually.</string>
+    <string name="detail_tutorial_content_votes">Every feedback, except your own, can be voted by you. Feedback that receives votes grants its creator karma. Said karma can then be used to unlock certain features.</string>
+    <string name="detail_tutorial_content_public">After you create your own feedback, you can choose to make it public. If you don\'t, other users wont see it. Developers always see any feedback.</string>
     <!--Feedback-->
 
     <!--Settings-->
@@ -235,8 +259,9 @@
     <string name="notification_feedback_title">&#8226; Your subscribed feedback have received updates.</string>
     <string name="notification_feedback_responses">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new responses.</string>
     <string name="notification_feedback_votes">&#8226; Your subscribed feedback got &lt;b&gt;%1$d&lt;/b&gt; new votes.</string>
-    <string name="notification_feedback_status">&#8226; The status of &lt;b&gt;%1$d&lt;/b&gt; subscribed feedback have changed.</string>
+    <string name="notification_feedback_status">&#8226; The statusSpinner of &lt;b&gt;%1$d&lt;/b&gt; subscribed feedback have changed.</string>
     <string name="notification_feedback_visibility">&#8226; The visibility of &lt;b&gt;%1$d&lt;/b&gt; of your own feedback have changed.</string>
     <string name="notification_feedback_own">&lt;b&gt;%1$d&lt;/b&gt; of your own. </string>
+
 
 </resources>

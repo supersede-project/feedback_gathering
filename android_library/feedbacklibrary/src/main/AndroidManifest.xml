@@ -14,53 +14,52 @@
         android:allowBackup="false"
         android:label="@string/feedback_library"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.FeedbackLibrary">
+        android:theme="@style/AppTheme.FeedbackLibraryLight">
         <!-- android:theme will be overriden from app:theme -->
 
         <activity
             android:name=".activities.AnnotateImageActivity"
             android:label="@string/annotate_image_activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary" />
+            android:theme="@style/AppTheme.FeedbackLibraryLight" />
         <activity
             android:name=".activities.FeedbackHubActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary" />
+            android:theme="@style/AppTheme.FeedbackLibraryLight" />
         <activity
             android:name=".activities.FeedbackActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackListDeveloperActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackIdentityActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackDetailsDeveloperActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:theme="@style/AppTheme.FeedbackLibraryLight"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.FeedbackSettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary" />
+            android:theme="@style/AppTheme.FeedbackLibraryLight" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

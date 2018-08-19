@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
+import android.graphics.*;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
@@ -34,6 +34,24 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     private Bitmap pictureBitmapAnnotated;
     private Activity activity;
     private ScreenshotFeedback screenshotFeedback;
+    private int buttonColor;
+
+    @Override
+    protected void colorPrimary(int color) {
+        buttonColor = color;
+        deleteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        getEnclosingLayout().setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorSecondary(int color) {
+        ((CardView)((LinearLayout)getEnclosingLayout()).getChildAt(0)).setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorTertiary(int color) {
+
+    }
 
     public ScreenshotFeedbackView(LayoutInflater layoutInflater, Activity activity, ScreenshotFeedback screenshotFeedback) {
         super(layoutInflater);
@@ -52,6 +70,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         selectButton.setEnabled(enabled);
         if (enabled) {
             selectButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button));
+            selectButton.getBackground().setColorFilter(buttonColor, PorterDuff.Mode.SRC_IN);
         } else {
             selectButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
@@ -70,6 +89,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         deleteButton.setEnabled(enabled);
         if (enabled) {
             deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button));
+            deleteButton.getBackground().setColorFilter(buttonColor, PorterDuff.Mode.SRC_IN);
         } else {
             deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
@@ -135,6 +155,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     public void updateModel() {
         pictureBitmapAnnotated = pictureBitmap;
     }
+
 
     private void onImageAnnotate(ScreenshotFeedbackView screenshotFeedbackView) {
         Intent intent = new Intent(activity, AnnotateImageActivity.class);

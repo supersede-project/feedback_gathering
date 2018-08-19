@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,9 +99,9 @@ public abstract class FeedbackService {
 
     public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
 
-    public abstract void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot);
+    public abstract void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio);
 
-    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser);
+    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor);
 
     public abstract void getFeedbackListPrivate(IFeedbackServiceEventListener callback);
 
@@ -173,10 +174,12 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot) {
+        public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio) {
             List<MultipartBody.Part> multipartFiles = new ArrayList<>();
             multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), screenshot)));
-            multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/mp3"), new byte[0]))); //FIXME [jfo] load audio
+            if (audio != null){
+                multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/m4a"), audio)));
+            }
 
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             String jsonString = gson.toJson(feedback);
@@ -200,7 +203,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor) {
             getFeedbackList(callback, EventType.GET_FEEDBACK_LIST, VIEW_ALL, null, relevantForUser, false);
         }
 
@@ -304,7 +307,9 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackAudio(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            //TODO implementation
+            feedbackAPI.getFeedbackAudio(getToken(), language, applicationId, feedbackDetailsBean.getAudioFileName()).enqueue(
+                    new RepositoryCallback<ResponseBody>(callback, GET_FEEDBACK_AUDIO) {
+                    });
         }
     }
 
@@ -325,19 +330,19 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot) {
+        public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio) {
             FeedbackDatabase.getInstance(context).writeFeedback(FeedbackUtility.feedbackToFeedbackDetailsBean(context, feedback).getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK, feedback);
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser) {
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context, String relevantForUser, int backgroundColor) {
             LocalConfigurationBean configuration = ConfigurationUtility.getConfigurationFromDatabase(context);
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
             ArrayList<String> labels = new ArrayList<>();
             for (FeedbackDetailsBean bean : RepositoryStub.getFeedback(context, 50, -30, 50, 0.1f)) {
                 if (bean != null) {
-                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, 0, FeedbackListActivity.class);
+                    FeedbackListItem listItem = new FeedbackListItem(context, 8, bean, configuration, backgroundColor, FeedbackListActivity.class);
                     listItem.addAllLabels(labels);
                     allFeedbackList.add(listItem);
                 }
@@ -428,7 +433,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackAudio(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-
+            callback.onEventCompleted(GET_FEEDBACK_AUDIO_MOCK, false);
         }
 
     }

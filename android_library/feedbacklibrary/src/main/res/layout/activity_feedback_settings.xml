@@ -42,6 +42,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
+                    android:visibility="gone"
                     android:text="@string/settings_use_stubs" />
 
                 <ToggleButton
@@ -49,6 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
+                    android:visibility="gone"
                     android:layout_weight="5" />
             </LinearLayout>
 
@@ -64,15 +66,9 @@
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
-                    android:gravity="center_vertical|end"
+                    android:gravity="center"
                     android:text="@string/settings_enable_notifications"/>
 
-                <ToggleButton
-                    android:id="@+id/settings_toggle_enable_notifications"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
-                    android:layout_weight="5" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,6 +77,13 @@
                 android:layout_weight="3"
                 android:orientation="horizontal">
 
+                <ToggleButton
+                    android:id="@+id/settings_toggle_enable_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="5" />
+
                 <TextView
                     android:id="@+id/settings_text_feature_3"
                     android:layout_width="0dp"
@@ -88,6 +91,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
+                    android:visibility="gone"
                     android:text="#feature 3#"/>
 
                 <ToggleButton
@@ -96,6 +100,7 @@
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="5"
+                    android:visibility="gone"
                     android:enabled="false" />
             </LinearLayout>
         </LinearLayout>
@@ -115,6 +120,7 @@
             android:text="@string/settings_feedback_title" />
 
         <LinearLayout
+            android:id="@+id/settings_layout_button"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="5"

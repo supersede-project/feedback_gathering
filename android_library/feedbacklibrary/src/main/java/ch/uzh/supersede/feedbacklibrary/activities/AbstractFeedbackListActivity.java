@@ -29,9 +29,9 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBAC
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
 
-    private LinearLayout scrollListLayout;
+    protected EditText searchText;
+    protected LinearLayout scrollListLayout;
     private LinearLayout focusSink;
-    private EditText searchText;
     private ScrollView scrollView;
     private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];
     private List<Enums.FEEDBACK_STATUS> allowedStatuses = new ArrayList<>();
@@ -107,12 +107,11 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
         scrollView.scrollTo(0, 0);
         for (LinearLayout item : getActiveList()) {
             scrollListLayout.addView(item);
-//            scrollListLayout.addView(new SpacerListItem(this,5,getTopColor(1)));
         }
     }
 
     protected void sort() {
-        for (FeedbackListItem item : getActiveList()) {
+         for (FeedbackListItem item : getActiveList()) {
             item.setSorting(sorting, getAllowedStatuses());
         }
         Collections.sort(getActiveList());

@@ -10,8 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.*;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import java.util.List;
@@ -65,9 +64,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
         spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
         spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95)) {
-            colorViews(0, backgroundLayout);
-            colorViews(1, listButton, levelButton, feedbackButton, settingsButton);
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95, CUSTOM)) {
+            colorViews(0, listButton, levelButton, feedbackButton, settingsButton);
+            colorViews(1, backgroundLayout);
         } else if (getColorCount() == 3) {
             if (getConfiguration().isColoringVertical()) {
                 colorViews(0, listButton, levelButton, spaceTop);
@@ -98,14 +97,14 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
-            String statusLabel = getString(R.string.hub_feedback_status_label);
+            String statusLabel = getString(R.string.hub_feedback_status_label)+StringUtility.generateSpace(10);
             String createLabel = getString(R.string.hub_feedback_create_label);
             String settingsLabel = getString(R.string.hub_feedback_settings_label);
             String listLabel = getString(R.string.hub_feedback_list_label);
-            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label);
+            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label)+StringUtility.generateSpace(10);
             String infoLabel = getString(R.string.hub_feedback_info_label);
-            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20,75,0.45,statusLabel,createLabel,settingsLabel,listLabel,lvlLabel,infoLabel);
-            RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize,this, statusText);
+            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20, 75, 0.45, statusLabel, createLabel, settingsLabel, listLabel, lvlLabel, infoLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize, this, statusText);
             RelativeLayout llLayout = infoUtility.addInfoBox(root, createLabel, getString(R.string.hub_feedback_create_info), textSize, this, feedbackButton, mLayout);
             RelativeLayout lrLayout = infoUtility.addInfoBox(root, settingsLabel, getString(R.string.hub_feedback_settings_info), textSize, this, settingsButton, llLayout);
             RelativeLayout ulLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.hub_feedback_list_info), textSize, this, listButton, lrLayout);
@@ -253,32 +252,15 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
                             //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
-                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
-                            )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
-                            nameInputText.setText(inputDefaultText);
-                            nameInputText.addTextChangedListener(new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-                                    if (s.toString().contains(inputDefaultText)){
-                                        nameInputText.setText(s.toString().replace(inputDefaultText,""));
-                                        nameInputText.setSelection(1);
-                                    }
-                                }
-                            });
+                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            )});
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
-                                    .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M?getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()):getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
+                                    .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(),
+                                            configuration
+                                            .getMaxUserNameLength()) : getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {
@@ -300,7 +282,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 }
             } else {
                 //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
-                tapCounter++;
+//                tapCounter++;
                 if (tapCounter >= 5 && ACTIVE.check(this)) {
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, null);
@@ -353,7 +335,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText)){
+                    String[] textParts = inputDefaultText.split("-");
+                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText) || inputString.contains(textParts[0])|| inputString.contains(textParts[1])) {
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -408,7 +391,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     private void handleAllPermissionsGranted(boolean reload) {
         updateUserLevel(true);
-        if (ACTIVE.check(this, true)  && preAllocatedStringStorage[0] != null) {
+        if (ACTIVE.check(this, true) && preAllocatedStringStorage[0] != null) {
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
             if (name == null) {
                 Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_registered, preAllocatedStringStorage[0]), Toast.LENGTH_SHORT)

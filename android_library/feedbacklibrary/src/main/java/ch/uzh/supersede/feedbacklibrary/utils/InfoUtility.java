@@ -2,22 +2,12 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-
-import java.util.*;
+import android.util.*;
+import android.view.*;
+import android.view.animation.*;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
@@ -70,7 +60,12 @@ public class InfoUtility {
         //Layouting
         int anchorWidth = anchorView.getWidth();
         int anchorHeight = anchorView.getHeight();
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int specWidth = View.MeasureSpec.makeMeasureSpec(screenWidth, View.MeasureSpec.AT_MOST);
+        int specHeight = View.MeasureSpec.makeMeasureSpec(screenHeight, View.MeasureSpec.AT_MOST);
+        view.measure(specWidth,specHeight);
+        int y1 = y - view.getMeasuredHeight();
+        Log.d("MEASURE",view.getMeasuredHeight()+"<- "+title+", "+y1);
+        y1 = NumberUtility.multiply(screenHeight,0.75)<y1?NumberUtility.multiply(screenHeight,0.75):y1;
         if (x < screenWidth / 2) {
             infoBox.setX(x+anchorWidth/2);
             if (y < screenHeight/2){ //upper-left
@@ -78,7 +73,7 @@ public class InfoUtility {
                 infoBox.setY(y+anchorHeight/2);
             }else{ //lower-left
                 infoBox.setBackground(ResourcesCompat.getDrawable(view.getResources(), R.drawable.info_box_left_lower_neutral, null));
-                infoBox.setY(y-view.getMeasuredHeight());
+                infoBox.setY(y1);
             }
         } else {//right info-box
             infoBox.setX(x+anchorWidth/2-titleWidth);
@@ -87,7 +82,7 @@ public class InfoUtility {
                 infoBox.setY(y+anchorHeight/2);
             }else{ //lower-right
                 infoBox.setBackground(ResourcesCompat.getDrawable(view.getResources(), R.drawable.info_box_right_lower_neutral, null));
-                infoBox.setY(y-view.getMeasuredHeight());
+                infoBox.setY(y1);
             }
         }
 
