@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
 
-public class Enums {
+public final class Enums {
 
     private static final String LABEL_OPEN = "Open";
     private static final String LABEL_IN_PROGRESS = "In Progress";

@@ -9,7 +9,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
-public class FeedbackDetailsBean implements Serializable {
+public final class FeedbackDetailsBean implements Serializable {
 
     private long feedbackId;
     private String description;
@@ -22,6 +22,7 @@ public class FeedbackDetailsBean implements Serializable {
     private byte[] bitmapBytes;
     private String bitmapName;
     private String audioFileName;
+    private String contextData;
     private boolean isSubscribed;
     private boolean isPublic;
 
@@ -39,6 +40,7 @@ public class FeedbackDetailsBean implements Serializable {
         private byte[] bitmap;
         private String bitmapName;
         private String audioFileName;
+        private String contextData;
         private FeedbackBean feedbackBean;
         private boolean isSubscribed;
         private boolean isPublic;
@@ -107,8 +109,13 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder isPublic (boolean isPublic){
+        public Builder isPublic(boolean isPublic){
             this.isPublic = isPublic;
+            return this;
+        }
+
+        public Builder withContext(String contextData){
+            this.contextData = contextData;
             return this;
         }
 
@@ -128,6 +135,7 @@ public class FeedbackDetailsBean implements Serializable {
                 bean.audioFileName = this.audioFileName;
                 bean.isSubscribed = this.isSubscribed;
                 bean.isPublic = this.isPublic;
+                bean.contextData = this.contextData;
                 return bean;
             }
             return null;
@@ -196,5 +204,9 @@ public class FeedbackDetailsBean implements Serializable {
 
     public boolean isPublic() {
         return isPublic;
+    }
+
+    public String getContextData() {
+        return contextData;
     }
 }

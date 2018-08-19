@@ -15,7 +15,7 @@ import android.widget.TextView;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.views.ColorPickerView;
 
-public class ColorPickerDialog extends DialogFragment {
+public final class ColorPickerDialog extends DialogFragment {
     OnColorChangeDialogListener mListener;
     private int changedColor;
 

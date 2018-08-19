@@ -1,32 +1,27 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ContentFrameLayout;
 import android.text.InputFilter;
 import android.view.*;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.UP_VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity implements IFeedbackServiceEventListener {
+public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity implements IFeedbackServiceEventListener {
     private Button upButton;
     private Button downButton;
     private Button reportButton;
@@ -73,7 +68,6 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
 
         updateReportStatus(null);
         updateOwnFeedbackCase();
-        invokeVersionControl(4, getAudioButton().getId(), getTagButton().getId());
         initStatusText();
         drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
@@ -127,6 +121,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         updateFeedbackState();
     }
 
+    @Override
     protected void updateFeedbackState() {
         super.updateFeedbackState();
         if (ACTIVE.check(this, true)) {
@@ -248,6 +243,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
         if (!tutorialFinished && !tutorialInitialized) {
@@ -274,8 +270,8 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
             RelativeLayout repLayout = infoUtility.addInfoBox(root, replyLabel, getString(R.string.detail_tutorial_content_reply), textSize, this, responseButton);
             RelativeLayout subLayout = infoUtility.addInfoBox(root, subscribeLabel, getString(R.string.detail_tutorial_content_subs), textSize, this, subscribeButton, repLayout);
             RelativeLayout mulLayout = infoUtility.addInfoBox(root, multimediaLabel, getString(R.string.detail_tutorial_content_multimedia), textSize, this, audioButton, subLayout);
-            RelativeLayout pubtLayout = infoUtility.addInfoBox(root, publicLabel, getString(R.string.detail_tutorial_content_public), textSize, this, downButton, mulLayout);
-            RelativeLayout votLayout = infoUtility.addInfoBox(root, votesLabel, getString(R.string.detail_tutorial_content_votes), textSize, this, votesText, pubtLayout);
+            RelativeLayout pubLayout = infoUtility.addInfoBox(root, publicLabel, getString(R.string.detail_tutorial_content_public), textSize, this, downButton, mulLayout);
+            RelativeLayout votLayout = infoUtility.addInfoBox(root, votesLabel, getString(R.string.detail_tutorial_content_votes), textSize, this, votesText, pubLayout);
             repLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -295,7 +291,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
                     return false;
                 }
             });
-            colorShape(1, mulLayout, subLayout, repLayout, pubtLayout, votLayout);
+            colorShape(1, mulLayout, subLayout, repLayout, pubLayout, votLayout);
             tutorialInitialized = true;
         }
     }

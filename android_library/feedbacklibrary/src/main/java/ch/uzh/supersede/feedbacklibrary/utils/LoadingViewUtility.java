@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
-public class LoadingViewUtility {
+public final class LoadingViewUtility {
     private LoadingViewUtility() {
     }
 

@@ -13,12 +13,8 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import java.util.List;
-
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.database.DatabaseMigration;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.database.*;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -32,20 +28,16 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
-public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
+public final class FeedbackHubActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     private Button listButton;
     private Button levelButton;
     private Button feedbackButton;
     private Button settingsButton;
     private LinearLayout backgroundLayout;
     private TextView spaceTop;
-    private TextView spaceLeft;
-    private TextView spaceRight;
-    private TextView spaceBottom;
     private TextView statusText;
     private String userName;
     private boolean tutorialInitialized = false;
-    private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
     private final String inputDefaultText = "... Insert User-Name here ...";
@@ -61,9 +53,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         settingsButton = getView(R.id.hub_button_settings, Button.class);
         backgroundLayout = getView(R.id.hub_layout_background, LinearLayout.class);
         spaceTop = getView(R.id.hub_space_color_top, TextView.class);
-        spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
-        spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
-        spaceRight = getView(R.id.hub_space_color_right, TextView.class);
+        TextView spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
+        TextView spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
+        TextView spaceRight = getView(R.id.hub_space_color_right, TextView.class);
         if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95, CUSTOM)) {
             colorViews(0, listButton, levelButton, feedbackButton, settingsButton);
             colorViews(1, backgroundLayout);
@@ -88,7 +80,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         updateUserLevel(false);
-        invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -166,7 +157,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
+            enableView(listButton, viewToColorMap.get(listButton), true);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
             ConfigurationUtility.execStoreStateToDatabase(this, configuration);
@@ -177,7 +168,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
             int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
             if (configuration.hasAtLeastNTopColors(2)) {
-                Spanned statusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
                         userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
@@ -188,21 +179,21 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                 ColorUtility.getBackgroundColorOfView(backgroundLayout),
                                 configuration.getTopColors()[1],
                                 0.3))));
-                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText.toString(), 20, 0, 0.4);
+                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
                 this.statusText.setTextSize(textSize);
-                this.statusText.setText(statusText);
+                this.statusText.setText(hubStatusText);
             } else {
-                String statusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
                         userKarma,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
                         upVotedFeedbackBeans,
                         downVotedFeedbackBeans)
                         .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING, DARK_BLUE)).toString();
-                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText, 20, 0, 0.4);
+                        .replace(SECONDARY_COLOR_STRING, DARK_BLUE));
+                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
                 this.statusText.setTextSize(textSize);
-                this.statusText.setText(statusText);
+                this.statusText.setText(hubStatusText);
             }
 
             boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
@@ -279,33 +270,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         break;
                     default:
                         break;
-                }
-            } else {
-                //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
-//                tapCounter++;
-                if (tapCounter >= 5 && ACTIVE.check(this)) {
-                    tapCounter = 0;
-                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, null);
-                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, false);
-                    List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN);
-                    List<LocalFeedbackBean> subscribedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(SUBSCRIBED);
-                    List<LocalFeedbackBean> votedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(VOTED);
-                    List<LocalFeedbackBean> respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED);
-                    List<LocalFeedbackBean> allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL);
-                    FeedbackDatabase.getInstance(this).wipeAllStoredFeedback();
-                    Toast.makeText(this, "DEVELOPER: Username resetted!\n" +
-                                    allFeedbackBeans.size() + " Local Feedback-Entries deleted, containing\n" +
-                                    ownFeedbackBeans.size() + " own Feedback-Entries\n" +
-                                    subscribedFeedbackBeans.size() + " subscribed Feedback-Entries\n" +
-                                    votedFeedbackBeans.size() + " voted Feedback-Entries\n" +
-                                    respondedFeedbackBeans.size() + " responded Feedback-Entries.",
-                            Toast.LENGTH_SHORT).show();
-                    userName = null;
-                    String statusText = Html.fromHtml(getString(R.string.hub_status, userName, 0, 0, 0, 0, 0).replace(PRIMARY_COLOR_STRING, DARK_BLUE)).toString();
-                    float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(statusText, 20, 0, 0.4);
-                    this.statusText.setTextSize(textSize);
-                    this.statusText.setText(statusText);
-                    updateUserLevel(false);
                 }
             }
         }
@@ -446,8 +410,4 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }

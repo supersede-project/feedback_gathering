@@ -8,16 +8,14 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.Locale;
 
-import ch.uzh.supersede.feedbacklibrary.components.exceptions.InvalidConfigurationException;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE;
-import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
-public class LocalConfigurationBean implements Serializable {
+public final class LocalConfigurationBean implements Serializable {
     // Application
     private String hostApplicationName;
     private String hostApplicationId;

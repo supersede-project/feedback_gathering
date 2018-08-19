@@ -23,7 +23,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
-public class AnnotateImageView extends AppCompatImageView {
+public final class AnnotateImageView extends AppCompatImageView {
 
     public enum Mode {
         DRAW, ERASER

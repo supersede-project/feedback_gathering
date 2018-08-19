@@ -1,16 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import java.util.*;
@@ -23,13 +20,12 @@ import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
+public final class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
     private TextView titleView;
     private TextView dateView;
     private TextView statusView;
@@ -83,9 +79,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (VersionUtility.getDateVersion() > 2) {
-                    startFeedbackDetailsActivity();
-                }
+                startFeedbackDetailsActivity();
             }
         });
         GradientDrawable gradientDrawable = new GradientDrawable();
@@ -94,9 +88,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     }
 
     private void startFeedbackDetailsActivity() {
-        Intent intent = null;
+        Intent intent;
         if (ACTIVE.check(getContext())){
-            if (VersionUtility.getDateVersion()>=4 && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
             } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
@@ -184,7 +178,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         this.sorting = sorting;
     }
 
-    public void addAllLabels(ArrayList<String> labels) {
+    public void addAllLabels(List<String> labels) {
         labels.addAll(this.labels);
     }
 

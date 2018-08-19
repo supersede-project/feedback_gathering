@@ -24,7 +24,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
+public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private Button editButton;
@@ -45,7 +45,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
 
     @Override
     protected void colorSecondary(int color) {
-        ((CardView)((LinearLayout)getEnclosingLayout()).getChildAt(0)).setBackgroundColor(color);
+        ((LinearLayout)getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
     }
 
     @Override

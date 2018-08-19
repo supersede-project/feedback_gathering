@@ -7,14 +7,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
-import ch.uzh.supersede.feedbacklibrary.models.FeedbackReport;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -24,7 +22,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity {
+public final class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity {
     private Enums.FEEDBACK_SORTING currentViewState = PRIVATE;
 
     private String searchTerm;
@@ -110,7 +108,7 @@ public class FeedbackListDeveloperActivity extends AbstractFeedbackListActivity 
         ArrayList<String> labels = new ArrayList<>();
 
         for (Feedback feedback : feedbackList) {
-            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
             FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(1), getClass());
             listItem.addAllLabels(labels);
             feedbackListItems.add(listItem);

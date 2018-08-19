@@ -8,7 +8,7 @@ import android.view.View;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
-public class ColorUtility {
+public final class ColorUtility {
 
     private ColorUtility() {
     }
@@ -33,9 +33,6 @@ public class ColorUtility {
      * Calculates the differences between Color a and b
      * Returns a value between 0 (identical) and 1 (complete different colors)
      *
-     * @param a
-     * @param b
-     * @return
      */
     public static float getColorDifferences(int a, int b) {
         return 1f / 765f * (

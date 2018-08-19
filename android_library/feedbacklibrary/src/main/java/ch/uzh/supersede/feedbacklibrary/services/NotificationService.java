@@ -22,7 +22,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
-public class NotificationService extends Service implements IFeedbackServiceEventListener {
+public final class NotificationService extends Service implements IFeedbackServiceEventListener {
     private static final int MAX_FAIL_COUNT = 10;
 
     private LocalConfigurationBean configuration;
@@ -213,7 +213,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             while (pollThread == thisThread) {
                 execPoll(config);
                 try {
-                    thisThread.sleep(DateUtility.minutesToMillis(config.getPullIntervalMinutes()));
+                    Thread.sleep(DateUtility.minutesToMillis(config.getPullIntervalMinutes()));
                     synchronized (this) {
                         while (isShutdown && pollThread == thisThread) {
                             wait();

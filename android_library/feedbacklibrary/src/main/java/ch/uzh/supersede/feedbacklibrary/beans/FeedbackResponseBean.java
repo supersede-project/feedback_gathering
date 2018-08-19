@@ -1,11 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
 import java.io.Serializable;
-import java.util.UUID;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
-public class FeedbackResponseBean implements Serializable{
+public final class FeedbackResponseBean implements Serializable{
 
     private long responseId;
     private long feedbackId;

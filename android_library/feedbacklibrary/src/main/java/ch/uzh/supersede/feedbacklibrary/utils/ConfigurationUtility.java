@@ -10,7 +10,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class ConfigurationUtility {
+public final class ConfigurationUtility {
     private ConfigurationUtility() {
     }
 

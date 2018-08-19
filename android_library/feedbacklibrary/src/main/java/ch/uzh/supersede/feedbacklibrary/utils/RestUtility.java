@@ -2,7 +2,11 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import okhttp3.ResponseBody;
 
-public class RestUtility {
+public final class RestUtility {
+
+    private RestUtility(){
+
+    }
 
     public static boolean responseEquals(Object response, Object equalsObject){
         if (response==null ||equalsObject == null){

@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.database.Cursor;
 
-public class LocalFeedbackState{
+public final class LocalFeedbackState{
     private int owner;
     private int voted;
     private int subscribed;

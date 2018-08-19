@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import java.util.List;
 
-public class StringUtility {
+public final class StringUtility {
 
     private StringUtility() {
     }
@@ -12,10 +12,7 @@ public class StringUtility {
     }
 
     public static boolean equals(String a, String b) {
-        if (hasText(a) && hasText(b)) {
-            return a.equals(b);
-        }
-        return false;
+        return hasText(a) && hasText(b) && a.equals(b);
     }
 
     public static String concatWithDelimiter(String delimiter, List<String> tokens) {
@@ -77,10 +74,26 @@ public class StringUtility {
 
 
     public static String generateSpace(int i) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int e = 0; e < i; e++){
-            s += " ";
+            s.append(" ");
         }
-        return s;
+        return s.toString();
+    }
+
+    public static String nulLSafe(String str) {
+        return str==null?"":str;
+    }
+
+    public static boolean contains(String text, String... tokens) {
+        if (text == null || tokens == null){
+            return false;
+        }
+        for (String token : tokens){
+            if (!text.contains(token)){
+                return false;
+            }
+        }
+        return true;
     }
 }

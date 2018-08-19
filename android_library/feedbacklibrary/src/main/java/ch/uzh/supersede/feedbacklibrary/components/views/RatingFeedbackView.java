@@ -1,13 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
-import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.*;
 import android.graphics.drawable.*;
 import android.os.Build;
-import android.support.annotation.*;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.widget.RatingBar;
@@ -16,7 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 
-public class RatingFeedbackView extends AbstractFeedbackPartView {
+public final class RatingFeedbackView extends AbstractFeedbackPartView {
     private RatingFeedback ratingFeedback;
     private RatingBar ratingBar;
 

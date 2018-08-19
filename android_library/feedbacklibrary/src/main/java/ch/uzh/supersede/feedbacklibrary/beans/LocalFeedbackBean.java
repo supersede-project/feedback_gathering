@@ -2,11 +2,9 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.database.Cursor;
 
-import java.util.UUID;
-
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
-public class LocalFeedbackBean {
+public final class LocalFeedbackBean {
     private long creationDate;
     private long votedDate;
     private long subscribedDate;

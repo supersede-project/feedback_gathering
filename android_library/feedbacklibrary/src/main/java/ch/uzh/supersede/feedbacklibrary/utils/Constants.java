@@ -1,7 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 
-public class Constants {
+public final class Constants {
     private Constants() {
     }
 

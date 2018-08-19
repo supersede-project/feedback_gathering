@@ -7,7 +7,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
-public class TextFeedback extends AbstractFeedbackPart {
+public final class TextFeedback extends AbstractFeedbackPart {
     private String hint;
     private String label;
     private Integer maxLength;

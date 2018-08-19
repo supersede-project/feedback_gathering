@@ -20,8 +20,9 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
+public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
     private Button deleteButton;
+    private Button contextButton;
     private Button awardKarmaButton;
     private Button revokeKarmaButton;
     private Spinner statusSpinner;
@@ -42,6 +43,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
         setSubscribeButton(getView(R.id.details_developer_button_subscribe, Button.class));
         setResponseButton(getView(R.id.details_developer_button_response, Button.class));
 
+        contextButton = getView(R.id.details_developer_button_context, Button.class);
         deleteButton = getView(R.id.details_developer_button_delete, Button.class);
         awardKarmaButton = getView(R.id.details_developer_button_award_karma, Button.class);
         revokeKarmaButton = getView(R.id.details_developer_button_revoke_karma, Button.class);
@@ -49,7 +51,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
 
         colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
         colorViews(configuration.getLastColorIndex(), statusSpinner);
-        colorViews(0,awardKarmaButton,revokeKarmaButton,deleteButton);
+        colorViews(0,awardKarmaButton,revokeKarmaButton,deleteButton,contextButton);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
     }
 
 
-    public static final int[] karmaModifier = new int[]{1};
+    private static final int[] karmaModifier = new int[]{1};
     @Override
     public void onButtonClicked(View view) {
         super.onButtonClicked(view);
@@ -133,6 +135,11 @@ public class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsAct
                     .withTitle(getString(R.string.details_developer_delete_confirm_title))
                     .withCustomOk("Confirm", okClickListener)
                     .withMessage(getString(R.string.details_developer_delete_confirm)).buildAndShow();
+        }else if (view.getId() == contextButton.getId()){
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_developer_context))
+                    .withoutCancel()
+                    .withMessage(getFeedbackDetailsBean().getContextData()).buildAndShow();
         }
         updateFeedbackState();
     }

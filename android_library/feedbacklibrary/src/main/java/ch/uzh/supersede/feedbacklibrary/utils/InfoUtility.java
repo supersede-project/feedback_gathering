@@ -11,7 +11,7 @@ import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
-public class InfoUtility {
+public final class InfoUtility {
     private int screenWidth;
     private int screenHeight;
 

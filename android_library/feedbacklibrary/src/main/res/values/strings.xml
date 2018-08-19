@@ -182,6 +182,7 @@
     <string name="details_developer_votes_title">Votes: </string>
     <string name="details_developer_delete">Delete</string>
     <string name="details_developer_revoke_karma">Revoke Karma</string>
+    <string name="details_developer_context">Context</string>
     <string name="detail_tutorial_title_votes">Voting and Karma-System</string>
     <string name="detail_tutorial_title_multimedia">Multimedia Files</string>
     <string name="detail_tutorial_title_subs">Subscription Feature</string>

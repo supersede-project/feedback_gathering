@@ -27,7 +27,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackSettingsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
+public final class FeedbackSettingsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
 
     private LinearLayout scrollListLayout;
     private SETTINGS_VIEW currentViewState = MINE;
@@ -95,7 +95,6 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 getView(R.id.settings_layout_color_2, LinearLayout.class),
                 getView(R.id.settings_layout_color_3, LinearLayout.class),
                 getView(R.id.settings_layout_color_4, LinearLayout.class));
-        invokeVersionControl(5, R.id.settings_toggle_feature_3);
         if (!ADVANCED.check(this)) {
             disableViews(enableNotificationsToggle);
         }

@@ -1,14 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.CardView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.design.widget.*;
+import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -16,25 +11,24 @@ import java.lang.reflect.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 
-public class TextFeedbackView extends AbstractFeedbackPartView {
-    private TextFeedback textFeedback ;
+public final class TextFeedbackView extends AbstractFeedbackPartView {
+    private TextFeedback textFeedback;
 
     @Override
     protected void colorPrimary(int color) {
         getEnclosingLayout().setBackgroundColor(color);
         int childCount = ((LinearLayout) getEnclosingLayout()).getChildCount();
-        for (int p = 0; p < childCount; p++){
-            handleChildLayoutsForegrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p),color);
+        for (int p = 0; p < childCount; p++) {
+            handleChildLayoutsForegrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p), color);
         }
     }
 
     @Override
     protected void colorSecondary(int color) {
         int childCount = ((LinearLayout) getEnclosingLayout()).getChildCount();
-        for (int p = 0; p < childCount; p++){
-            handleChildLayoutsBackgrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p),color);
+        for (int p = 0; p < childCount; p++) {
+            handleChildLayoutsBackgrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p), color);
         }
     }
 
@@ -43,37 +37,38 @@ public class TextFeedbackView extends AbstractFeedbackPartView {
 
     }
 
-    private void handleChildLayoutsBackgrounds(View v, int color){
-        if (v instanceof ViewGroup){
+    private void handleChildLayoutsBackgrounds(View v, int color) {
+        if (v instanceof ViewGroup) {
             v.setBackgroundColor(color);
             int childCount = ((ViewGroup) v).getChildCount();
             for (int p = 0; p < childCount; p++) {
-                handleChildLayoutsBackgrounds(((ViewGroup) v).getChildAt(p),color);
+                handleChildLayoutsBackgrounds(((ViewGroup) v).getChildAt(p), color);
             }
         }
     }
-    private void handleChildLayoutsForegrounds(View v, int color){
-        if (v instanceof ViewGroup){
+
+    private void handleChildLayoutsForegrounds(View v, int color) {
+        if (v instanceof ViewGroup) {
             int childCount = ((ViewGroup) v).getChildCount();
             for (int p = 0; p < childCount; p++) {
-                handleChildLayoutsForegrounds(((ViewGroup) v).getChildAt(p),color);
+                handleChildLayoutsForegrounds(((ViewGroup) v).getChildAt(p), color);
             }
         }
-        if (v instanceof TextView){
-            ((TextView)v).setTextColor(color);
-            if (v instanceof TextInputEditText){
+        if (v instanceof TextView) {
+            ((TextView) v).setTextColor(color);
+            if (v instanceof TextInputEditText) {
                 ColorStateList colorStateList = ColorStateList.valueOf(color);
-                ((TextInputEditText)v).setSupportBackgroundTintList(colorStateList);
+                ((TextInputEditText) v).setSupportBackgroundTintList(colorStateList);
             }
         }
-        if (v instanceof TextInputLayout){
-            setUpperHintColor(color,(TextInputLayout)v);
+        if (v instanceof TextInputLayout) {
+            setUpperHintColor(color, (TextInputLayout) v);
         }
     }
 
     private void setUpperHintColor(int color, TextInputLayout textInputLayout) {
         try {
-            for (Field field : new Field[]{textInputLayout.getClass().getDeclaredField("mFocusedTextColor"),textInputLayout.getClass().getDeclaredField("mDefaultTextColor")}) {
+            for (Field field : new Field[]{textInputLayout.getClass().getDeclaredField("mFocusedTextColor"), textInputLayout.getClass().getDeclaredField("mDefaultTextColor")}) {
                 field.setAccessible(true);
                 int[][] states = new int[][]{{0}};
                 int[] colors = new int[]{
@@ -99,7 +94,6 @@ public class TextFeedbackView extends AbstractFeedbackPartView {
     }
 
 
-
     private void initView() {
         final TextInputLayout textInputLayout = (TextInputLayout) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_input_layout);
         final TextInputEditText textInputEditText = (TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text);
@@ -107,7 +101,6 @@ public class TextFeedbackView extends AbstractFeedbackPartView {
         // Set the hint and enable it
         textInputLayout.setHintEnabled(true);
         textInputLayout.setHint(textFeedback.getHint());
-        textInputLayout.setHintTextAppearance(R.color.white);
 
         textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override

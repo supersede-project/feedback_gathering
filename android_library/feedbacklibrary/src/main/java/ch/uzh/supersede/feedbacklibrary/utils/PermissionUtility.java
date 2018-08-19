@@ -15,7 +15,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
-public class PermissionUtility {
+public final class PermissionUtility {
 
     public enum USER_LEVEL {
         LOCKED(0),

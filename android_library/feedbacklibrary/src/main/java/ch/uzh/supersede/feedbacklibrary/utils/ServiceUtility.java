@@ -11,7 +11,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ENABLE_NOTIFICATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
-public class ServiceUtility {
+public final class ServiceUtility {
     private ServiceUtility() {
     }
 

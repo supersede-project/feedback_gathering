@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class EditImageItem {
+public final class EditImageItem {
     private String title;
     private int elementResource;
     private OnClickListener listener;

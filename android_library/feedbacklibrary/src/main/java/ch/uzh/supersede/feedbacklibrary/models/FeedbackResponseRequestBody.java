@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class FeedbackResponseRequestBody {
+public final class FeedbackResponseRequestBody {
     private String username;
     private String content;
 

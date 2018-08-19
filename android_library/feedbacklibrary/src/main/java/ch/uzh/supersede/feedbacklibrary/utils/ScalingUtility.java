@@ -2,12 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.app.Activity;
 import android.graphics.*;
-import android.util.*;
+import android.util.DisplayMetrics;
 import android.widget.*;
 
-import ch.uzh.supersede.feedbacklibrary.R;
-
-public class ScalingUtility {
+public final class ScalingUtility {
     private static ScalingUtility instance = null;
     private static float density = 0.0f;
     private static int screenHeight = 0;
@@ -100,14 +98,12 @@ public class ScalingUtility {
 
     public void updateEditText(EditText editText) {
         editText.measure(0,0);
-        float textSizePrior = editText.getTextSize();
         float textSize = (1f/density)*getTextSizeScaledForHeight(editText.getText().toString(),editText.getTextSize(),0,1f/screenHeight*editText.getMeasuredHeight());
         editText.setTextSize(textSize);
     }
 
     public void updateButtonText(Button button) {
         button.measure(0,0);
-        float textSizePrior = button.getTextSize();
         float textSize = (1f/density)*getTextSizeScaledForHeight(button.getText().toString(),button.getTextSize(),0,1f/screenHeight*button.getMeasuredHeight());
         button.setTextSize(textSize);
     }

@@ -1,46 +1,32 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
+import android.graphics.*;
+import android.net.*;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
-import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
-import ch.uzh.supersede.feedbacklibrary.models.Feedback;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.VersionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.FEEDBACK_ACTIVITY_TAG;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
-public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedbackView.MultipleAudioMechanismsListener, IFeedbackServiceEventListener {
+public final class FeedbackActivity extends AbstractBaseActivity implements AudioFeedbackView.MultipleAudioMechanismsListener, IFeedbackServiceEventListener {
     private List<AbstractFeedbackPart> feedbackParts;
     private List<AbstractFeedbackPartView> feedbackPartViews;
     private FeedbackDetailsBean feedbackDetailsBean;
@@ -119,6 +105,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
     }
 
+    @SuppressWarnings("unchecked")
     private void initView() {
         feedbackPartViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -145,7 +132,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
 
-        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
         FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot), audioFile);
         ImageUtility.wipeImages(this);
     }
@@ -153,32 +140,22 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     @Override
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case CREATE_FEEDBACK:
-                if (VersionUtility.getDateVersion() > 2 ) {
-                    if (response instanceof Feedback) {
-                        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this,(Feedback) response);
-                    }
-                    Intent intent = new Intent(this, FeedbackDetailsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
-                    intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-                    intent.putExtra(EXTRA_FROM_CREATION, true);
-                    intent.putExtra(EXTRA_KEY_CALLER_CLASS, this.getClass().getName());
-                    startActivity(this,FeedbackDetailsActivity.class, true,intent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                } else {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), FeedbackHubActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(this,FeedbackHubActivity.class, true,intent);
-                }
-                break;
-            default:
-                break;
+        if (eventType == EventType.CREATE_FEEDBACK) {
+            if (response instanceof Feedback) {
+                feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean((Feedback) response);
+            }
+            Intent intent = new Intent(this, FeedbackDetailsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
+            intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+            intent.putExtra(EXTRA_FROM_CREATION, true);
+            intent.putExtra(EXTRA_KEY_CALLER_CLASS, this.getClass().getName());
+            startActivity(this, FeedbackDetailsActivity.class, true, intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void annotateMechanismView(Intent data) {
         ScreenshotFeedbackView screenshotFeedbackView = null;
         for (AbstractFeedbackPartView feedbackPartView : feedbackPartViews) {

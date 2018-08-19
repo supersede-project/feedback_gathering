@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-public class BorderView extends View {
+public final class BorderView extends View {
     private Rect rect;
     private Paint paint;
 
