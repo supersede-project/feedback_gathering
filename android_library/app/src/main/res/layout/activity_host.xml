@@ -54,7 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:onClick="onButtonClicked"
                 android:text="@string/button_host_trigger_1" />
 
             <Button
@@ -62,7 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:onClick="onButtonClicked"
                 android:text="@string/button_host_trigger_2" />
         </LinearLayout>
     </LinearLayout>
