@@ -168,6 +168,11 @@ public class FeedbackUtility {
             bitmapName = feedback.getScreenshotFeedbackList().get(0).getPath();
         }
 
+        String audioFileName = null;
+        if (feedback.getAudioFeedbackList() != null && !feedback.getAudioFeedbackList().isEmpty()) {
+            audioFileName = feedback.getAudioFeedbackList().get(0).getPath();
+        }
+
         String title = feedback.getTitle();
         if (title == null || title.length() == 0) {
             title = "#Dummy-Title#" + (imageName != null ? "* " : " ") + GeneratorStub.BagOfFeedbackTitles.pickRandom();
@@ -199,7 +204,9 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .withUpVotes(upVotes)
                 .withBitmapName(bitmapName)
+                .withAudioFileName(audioFileName)
                 .withResponses(feedbackResponses)
+                .isPublic(isPublic)
                 .build();
     }
 

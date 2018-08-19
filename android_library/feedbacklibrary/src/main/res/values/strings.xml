@@ -146,6 +146,7 @@
     <string name="details_unsubscribe">Unsubscribe</string>
     <string name="details_images">Image</string>
     <string name="details_audio">Audio</string>
+    <string name="details_audio_stop">Stop</string>
     <string name="details_tags">Tags</string>
     <string name="details_user">User: %1$s</string>
     <string name="details_status">Status: %1$s</string>

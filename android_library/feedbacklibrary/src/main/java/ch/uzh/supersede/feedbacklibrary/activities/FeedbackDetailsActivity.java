@@ -71,7 +71,7 @@ public class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity imp
 
         updateReportStatus(null);
         updateOwnFeedbackCase();
-        invokeVersionControl(5, getAudioButton().getId(), getTagButton().getId());
+        invokeVersionControl(4, getAudioButton().getId(), getTagButton().getId());
         initStatusText();
         drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
 

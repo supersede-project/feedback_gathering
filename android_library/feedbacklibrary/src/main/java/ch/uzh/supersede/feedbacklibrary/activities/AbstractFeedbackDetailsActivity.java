@@ -1,9 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.*;
 import android.graphics.drawable.*;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +15,9 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -28,6 +35,9 @@ import okhttp3.ResponseBody;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_DIR;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_EXTENSION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_FILENAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -52,6 +62,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private IFeedbackServiceEventListener callback;
     private String userName;
     private Class<?> callerClass;
+    private String audioFilePath;
+    private boolean isAudioPlaying;
+    private boolean isAudioStopped;
+    private MediaPlayer mediaPlayer;
     private boolean initiallyVoted = false;
 
     public static Enums.RESPONSE_MODE getMode() {
@@ -207,6 +221,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         setFeedbackDetailsBean(getCachedFeedbackDetailsBean());
         initFeedbackDetailView();
         initPermissionCheck();
+        setVisibilityAttachmentButtons();
     }
 
     protected void drawLayoutOutlines(int... layouts) {
@@ -270,6 +285,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             handleTagButtonClicked();
         } else if (view.getId() == imageButton.getId()) {
             handleImageButtonClicked();
+        } else if (view.getId() == audioButton.getId()) {
+            handleAudioButtonClicked();
         } else if (view.getId() == subscribeButton.getId()) {
             handleSubscribeButtonClicked();
         } else if (view.getId() == responseButton.getId() && mode == READING) {
@@ -289,6 +306,21 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             FeedbackService.getInstance(getApplicationContext()).getFeedbackImage(this, feedbackDetailsBean);
         } else {
             showImageDialog(feedbackDetailsBean.getBitmap());
+        }
+    }
+
+    protected void handleAudioButtonClicked() {
+        if (feedbackDetailsBean.getAudioFileName() != null) {
+            if(isAudioPlaying) {
+               stopAudio();
+            } else {
+                FeedbackService.getInstance(getApplicationContext()).getFeedbackAudio(this, feedbackDetailsBean);
+            }
+        } else {
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_audio))
+                    .withoutCancel()
+                    .withMessage("No Audio").buildAndShow();
         }
     }
 
@@ -326,6 +358,16 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                         showImageDialog(((ResponseBody) response).bytes());
                     } catch (IOException e) {
                         showImageDialog(new byte[0]);
+                    }
+                }
+                break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
+                if (response instanceof ResponseBody) {
+                    try {
+                        playAudio(((ResponseBody) response).bytes());
+                    } catch (IOException e) {
+                        Log.e("PlayAudio", "playing audio failed");
                     }
                 }
                 break;
@@ -371,6 +413,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             case GET_FEEDBACK_IMAGE_MOCK:
                 showImageDialog(new byte[0]);
                 break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
+                showImageDialog(new byte[0]);
+                break;
             default:
         }
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
@@ -381,6 +427,10 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         switch (eventType) {
             case GET_FEEDBACK_IMAGE:
             case GET_FEEDBACK_IMAGE_MOCK:
+                showImageDialog(new byte[0]);
+                break;
+            case GET_FEEDBACK_AUDIO:
+            case GET_FEEDBACK_AUDIO_MOCK:
                 showImageDialog(new byte[0]);
                 break;
             default:
@@ -421,6 +471,19 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         scrollContainer.fullScroll(View.FOCUS_DOWN);
     }
 
+    protected void setVisibilityAttachmentButtons(){
+        if (getFeedbackDetailsBean().getBitmapName() == null) {
+            disableViews(imageButton);
+        }
+        if (getFeedbackDetailsBean().getTags() == null || getFeedbackDetailsBean().getTags().length == 0) {
+            disableViews(tagButton);
+        }
+        if (getFeedbackDetailsBean().getAudioFileName() == null) {
+            disableViews(audioButton);
+        }
+
+    }
+
     protected void showImageDialog(byte[] bitmap) {
         Bitmap bitmapImage = ImageUtility.bytesToImage(bitmap);
         if (bitmapImage != null) {
@@ -449,6 +512,36 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         builder.show();
     }
 
+    protected void playAudio(byte[] audio) {
+        try {
+            audioFilePath = getApplicationContext().getDir(AUDIO_DIR, Context.MODE_PRIVATE).getAbsolutePath() + PATH_DELIMITER + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
+            FileOutputStream stream = new FileOutputStream(audioFilePath);
+            stream.write(audio);
+            stream.close();
+            File audioFile = new File(audioFilePath);
+            if(audioFile.length() != 0) {
+                if (mediaPlayer == null) {
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setDataSource(audioFilePath);
+                    mediaPlayer.prepare();
+                }
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        stopAudio();
+                    }
+                });
+                mediaPlayer.start();
+                audioButton.setText(R.string.details_audio_stop);
+                isAudioPlaying = true;
+            }
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onPause() {
         execFinalize();
@@ -458,6 +551,9 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     @Override
     protected void onDestroy() {
         execFinalize();
+        if(isAudioPlaying) {
+            stopAudio();
+        }
         super.onDestroy();
     }
 
@@ -468,5 +564,14 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, 0, userName);
         }
         FeedbackService.getInstance(getApplicationContext()).createSubscription(this, feedbackDetailsBean.getFeedbackBean());
+    }
+
+    private void stopAudio() {
+        mediaPlayer.stop();
+        isAudioStopped = true;
+        isAudioPlaying = false;
+        audioButton.setText(R.string.details_audio);
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 }

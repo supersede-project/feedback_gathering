@@ -19,6 +19,8 @@ public interface IFeedbackServiceEventListener {
         GET_FEEDBACK_LIST_SUBSCRIBED_MOCK,
         GET_FEEDBACK_IMAGE,
         GET_FEEDBACK_IMAGE_MOCK,
+        GET_FEEDBACK_AUDIO,
+        GET_FEEDBACK_AUDIO_MOCK,
         GET_TAG_LIST,
         GET_TAG_LIST_MOCK,
         PING_REPOSITORY,
