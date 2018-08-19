@@ -56,7 +56,7 @@ public final class ContextInformationFeedback extends AbstractFeedbackPart {
                 Point screen = new Point();
                 windowManager.getDefaultDisplay().getRealSize(screen);
                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                this.resolution = screen.x + " x " + screen.y + ", density: "+metrics.density+ ", densityDpi: "+metrics.densityDpi;
+                this.resolution = screen.x + " x " + screen.y + ", Density: "+metrics.density+ ", DPI: "+metrics.densityDpi;
             }
             return this;
         }
