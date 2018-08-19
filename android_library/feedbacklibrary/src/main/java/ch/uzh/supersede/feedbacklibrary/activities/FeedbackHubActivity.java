@@ -40,7 +40,6 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     private boolean tutorialInitialized = false;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
-    private final String inputDefaultText = "... Insert User-Name here ...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,11 +295,6 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                         return;
                     }
                     if (inputString.length() > configuration.getMaxUserNameLength()) {
-                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String[] textParts = inputDefaultText.split("-");
-                    if (inputDefaultText.equals(inputString) || inputString.contains(inputDefaultText) || inputString.contains(textParts[0])|| inputString.contains(textParts[1])) {
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
