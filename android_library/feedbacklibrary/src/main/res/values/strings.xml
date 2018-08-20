@@ -171,7 +171,7 @@
     <string name="details_developer_award_karma_content">How much Karma do you want to award the User %1$s?</string>
     <string name="details_developer_revoke_karma_content">How much Karma do you want to revoke from the User %1$s?</string>
     <string name="details_developer_karma_awarded">%1$s Karma awarded to %2$s!</string>
-    <string name="details_developer_karma_revoked">%1$s Karma from %2$s revoked!</string>
+    <string name="details_developer_karma_revoked">%1$s Karma revoked from %2$s!</string>
     <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
     <string name="details_developer_delete_confirm_title">Feedback Deletion</string>
     <string name="details_developer_delete_confirm">Do you want to delete this Feedback? This action is irreversible!</string>

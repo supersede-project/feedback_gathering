@@ -216,10 +216,10 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     private void addTag(String s) {
         createdTags.add(s.toLowerCase());
         Button b = new Button(this);
-        ScalingUtility.getInstance().updateButtonText(b);
         b.setText(s);
         b.setPadding(5,0,5,0);
         b.setBackground(null);
+        ScalingUtility.getInstance().updateButtonText(b);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,10 +284,6 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     boolean cancellation = false;
     @Override
     public void onBackPressed() {
-        if (!tutorialFinished){
-            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!cancellation) {
             new PopUp(this)
                     .withTitle(getString(R.string.identity_cancel))

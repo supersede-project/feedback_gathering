@@ -67,7 +67,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                 getView(R.id.list_layout_color_3, LinearLayout.class),
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
-        colorViews(2, getView(R.id.list_root, RelativeLayout.class));
+        colorViews(configuration.getLastColorIndex(), getView(R.id.list_root, RelativeLayout.class));
         colorViews(0, getView(R.id.list_layout_scroll, LinearLayout.class));
 
         if (ACTIVE.check(this)){
@@ -105,6 +105,12 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     doSearch(getSearchText().getText().toString());
                     loadingTextView.setVisibility(View.INVISIBLE);
                     sort();
+
+                    if (!tutorialFinished) {
+                        for (int c = 0; c < scrollListLayout.getChildCount();c++){
+                            scrollListLayout.getChildAt(c).setEnabled(false);
+                        }
+                    }
                 }
                 break;
             case GET_FEEDBACK_LIST_MOCK:
@@ -241,6 +247,9 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     getButtons().get(NEW).setEnabled(true);
                     filterButton.setEnabled(true);
                     searchText.setEnabled(true);
+                    for (int c = 0; c < scrollListLayout.getChildCount();c++){
+                        scrollListLayout.getChildAt(c).setEnabled(true);
+                    }
                     tutorialFinished = true;
                     return false;
                 }

@@ -421,4 +421,12 @@ public final class FeedbackDatabase extends AbstractFeedbackDatabase {
         db.close();
         return newRowId;
     }
+
+    private static final String KARMA_IDENTIFIER = "Karma#";
+    public Integer storeKarma(long feedbackId, Integer karma){
+        Integer karmaStored = readInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)), 0);
+        karmaStored += karma;
+        writeInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)),karmaStored);
+        return karmaStored;
+    }
 }
