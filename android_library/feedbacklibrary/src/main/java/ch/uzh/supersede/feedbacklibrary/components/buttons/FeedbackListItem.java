@@ -69,7 +69,6 @@ public final class FeedbackListItem extends LinearLayout implements Comparable, 
         statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel().concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
         pointView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackBean().getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor(backgroundColor,true);
-        setBackgroundColor(backgroundColor);
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);

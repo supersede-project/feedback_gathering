@@ -64,6 +64,7 @@ public final class FeedbackListDeveloperActivity extends AbstractFeedbackListAct
                 getView(R.id.dev_list_layout_color_4, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_5, LinearLayout.class));
         colorViews(configuration.getLastColorIndex(), getView(R.id.dev_list_root, ContentFrameLayout.class));
+        colorViews(0, getView(R.id.dev_list_layout_scroll, LinearLayout.class));
         onPostCreate();
     }
 

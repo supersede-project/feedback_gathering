@@ -74,7 +74,6 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
             }
         });
 
-        colorLayouts(0, getView(R.id.settings_root, ContentFrameLayout.class));
         colorTextOnly(0,
                 getView(R.id.settings_text_use_stubs, TextView.class),
                 getView(R.id.settings_text_enable_notifications, TextView.class),
@@ -95,6 +94,9 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 getView(R.id.settings_layout_color_2, LinearLayout.class),
                 getView(R.id.settings_layout_color_3, LinearLayout.class),
                 getView(R.id.settings_layout_color_4, LinearLayout.class));
+        colorViews(0, getView(R.id.settings_root, RelativeLayout.class));
+        colorViews(0, getView(R.id.settings_layout_scroll, LinearLayout.class));
+
         if (!ADVANCED.check(this)) {
             disableViews(enableNotificationsToggle);
         }

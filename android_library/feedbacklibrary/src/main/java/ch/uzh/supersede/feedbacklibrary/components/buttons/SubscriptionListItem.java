@@ -26,7 +26,7 @@ public final class SubscriptionListItem extends AbstractSettingsListItem impleme
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        Switch subscribeToggle = createSwitch(getShortParams(), context, Gravity.START, feedbackDetailsBean, PADDING);
+        Switch subscribeToggle = createSwitch(getShortParams(), context, Gravity.START, feedbackDetailsBean, 0);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());

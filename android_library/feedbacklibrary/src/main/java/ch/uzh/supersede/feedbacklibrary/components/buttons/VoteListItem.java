@@ -24,7 +24,7 @@ public final class VoteListItem extends AbstractSettingsListItem {
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, PADDING);
+        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, 0);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());
