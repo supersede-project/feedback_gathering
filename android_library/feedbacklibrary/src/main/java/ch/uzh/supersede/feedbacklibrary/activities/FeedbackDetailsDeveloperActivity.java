@@ -107,9 +107,11 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                         Integer karma = Integer.parseInt(karmaInputText.getText().toString());
                         karma = karma*karmaModifier[0];
                         String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, null);
+                        String karmaString = String.valueOf(karma*karmaModifier[0]);
+                        karma = FeedbackDatabase.getInstance(getApplicationContext()).storeKarma(getFeedbackDetailsBean().getFeedbackId(),karma);
                         FeedbackService.getInstance(getApplicationContext()).createVote(getCallback(), getFeedbackDetailsBean(), karma, userName);
                         RepositoryStub.sendKarma(getFeedbackDetailsBean(), karma);
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0]>0?R.string.details_developer_karma_awarded:R.string.details_developer_karma_revoked, String.valueOf(karma*karmaModifier[0]), getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0]>0?R.string.details_developer_karma_awarded:R.string.details_developer_karma_revoked, karmaString, getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     } else {
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_error), Toast.LENGTH_SHORT).show();

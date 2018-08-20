@@ -56,14 +56,14 @@ public final class FeedbackListDeveloperActivity extends AbstractFeedbackListAct
         colorShape(0, getButtons().get(REPORTED));
         colorShape(0, true, feature1Button, feature2Button);
         colorShape(1, getButtons().get(PRIVATE));
-        colorViews(0, filterButton);
+        colorViews(0, filterButton,getView(R.id.dev_list_layout_scroll, LinearLayout.class));
         colorViews(1,
                 getView(R.id.dev_list_layout_color_1, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_2, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_3, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_4, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_5, LinearLayout.class));
-        colorViews(2, getView(R.id.dev_list_root, ContentFrameLayout.class));
+        colorViews(configuration.getLastColorIndex(), getView(R.id.dev_list_root, ContentFrameLayout.class));
         onPostCreate();
     }
 
@@ -109,7 +109,7 @@ public final class FeedbackListDeveloperActivity extends AbstractFeedbackListAct
 
         for (Feedback feedback : feedbackList) {
             FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
-            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(1), getClass());
+            FeedbackListItem listItem = new FeedbackListItem(this, 8, feedbackDetailsBean, configuration, getTopColor(0), getClass());
             listItem.addAllLabels(labels);
             feedbackListItems.add(listItem);
         }
