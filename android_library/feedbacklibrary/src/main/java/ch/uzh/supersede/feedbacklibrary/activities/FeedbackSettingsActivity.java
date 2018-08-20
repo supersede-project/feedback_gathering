@@ -2,7 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.ContentFrameLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,7 +12,8 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.*;
@@ -42,6 +42,8 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
     private ArrayList<AbstractSettingsListItem> feedbackListVoted = new ArrayList<>();
     private ArrayList<AbstractSettingsListItem> feedbackListSubscribed = new ArrayList<>();
 
+    boolean isDeveloper = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +52,18 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
         scrollListLayout = getView(R.id.settings_layout_scroll, LinearLayout.class);
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
 
-        ownButton = setOnClickListener(getView(R.id.settings_button_own, Button.class));
-        votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
+        ownButton = getView(R.id.settings_button_own, Button.class);
+        votedButton = getView(R.id.settings_button_voted, Button.class);
         subscribedButton = setOnClickListener(getView(R.id.settings_button_subscribed, Button.class));
+
+        isDeveloper = getConfiguration().isDeveloper();
+
+        if (isDeveloper) {
+            currentViewState = SUBSCRIBED;
+        } else {
+            ownButton = setOnClickListener(getView(R.id.settings_button_own, Button.class));
+            votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
+        }
 
         ToggleButton useStubsToggle = getView(R.id.settings_toggle_use_stubs, ToggleButton.class);
         useStubsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(USE_STUBS, false));
@@ -80,14 +91,19 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 getView(R.id.settings_text_feature_3, TextView.class),
                 getView(R.id.settings_text_title_general, TextView.class),
                 getView(R.id.settings_text_title_feedback, TextView.class));
+
+
         colorViews(1,
                 getView(R.id.settings_toggle_use_stubs, ToggleButton.class),
                 getView(R.id.settings_toggle_enable_notifications, ToggleButton.class),
                 getView(R.id.settings_toggle_feature_3, ToggleButton.class));
         colorShape(0, ownButton, votedButton, subscribedButton);
-        colorShape(1, ownButton);
-        if (getColorCount() == 3){
-            colorShape(configuration.getLastColorIndex(), getView(R.id.settings_layout_button,LinearLayout.class));
+        if (isDeveloper){
+            colorShape(0, true, ownButton, votedButton);
+        }
+
+        if (getColorCount() == 3) {
+            colorShape(configuration.getLastColorIndex(), getView(R.id.settings_layout_button, LinearLayout.class));
         }
         colorViews(1,
                 getView(R.id.settings_layout_color_1, LinearLayout.class),
@@ -149,6 +165,7 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 break;
             default:
         }
+        toggleButtons(getViewByState(currentViewState));
     }
 
     @Override
@@ -186,7 +203,9 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
     }
 
     private void toggleButtons(View v) {
-        setInactive(ownButton, votedButton, subscribedButton);
+        if (!isDeveloper) {
+            setInactive(ownButton, votedButton, subscribedButton);
+        }
         colorShape(1, v);
 
         if (v.getId() == ownButton.getId()) {
