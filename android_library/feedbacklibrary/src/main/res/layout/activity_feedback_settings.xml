@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settings_root">
@@ -177,17 +177,9 @@
             android:id="@+id/settings_layout_color_2"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="horizontal"
-            android:weightSum="1" />
-
-        <LinearLayout
-            android:id="@+id/settings_layout_color_3"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="40"
-            android:orientation="horizontal"
-            android:weightSum="22">
+            android:weightSum="2" >
 
             <LinearLayout
                 android:id="@+id/list_edit_focus_sink"
@@ -196,6 +188,15 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settings_layout_color_3"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:orientation="horizontal"
+            android:weightSum="22">
 
             <Space
                 android:layout_width="0dp"
@@ -230,5 +231,4 @@
             android:orientation="horizontal"
             android:weightSum="1" />
     </LinearLayout>
-
-</android.support.v7.widget.ContentFrameLayout>
+</RelativeLayout>

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -13,7 +13,8 @@ import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.*;
-import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -66,7 +67,6 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         this.feedbackDetailsBean = feedbackDetailsBean;
         this.colors = configuration.getTopColors();
         this.configuration = configuration;
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                                  .getDefaultDisplay()
@@ -75,20 +75,13 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         int screenWidth = displayMetrics.widthPixels;
         int partHeight = NumberUtility.divide(screenHeight, visibleTiles + 3);
         int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
-        LayoutParams masterParams = new LayoutParams(screenWidth, partHeight);
+        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight);
         masterParams.setMargins(5, 5, 5, 5);
         setLayoutParams(masterParams);
         setOrientation(VERTICAL);
-        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
+        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight / 2);
         shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-
-        int textColor;
-        if (ColorUtility.isDark(backgroundColor)) {
-            textColor = ContextCompat.getColor(context, R.color.white);
-        } else {
-            textColor = ContextCompat.getColor(context, R.color.black);
-        }
-
+        int textColor = ColorUtility.getTextColor(context, backgroundColor);
         upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, PADDING, textColor);
@@ -96,16 +89,17 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
         TextView statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel(),
                 Gravity.START, PADDING, statusColor);
-
-        setBackgroundColor(backgroundColor);
         lowerWrapperLayout.addView(statusView);
-
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startFeedbackDetailsActivity();
             }
         });
+
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+        setBackground(gradientDrawable);
     }
 
     private void startFeedbackDetailsActivity() {
