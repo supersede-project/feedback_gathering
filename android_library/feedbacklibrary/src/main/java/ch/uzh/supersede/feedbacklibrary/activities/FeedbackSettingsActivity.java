@@ -111,6 +111,8 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
     @Override
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
+        List<FeedbackDetailsBean> feedbackDetailsBeans;
+        List<LocalFeedbackBean> localFeedbackBeans;
         switch (eventType) {
             case GET_FEEDBACK_LIST_VOTED:
                 feedbackListVoted.clear();
@@ -118,8 +120,10 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 break;
             case GET_FEEDBACK_LIST_VOTED_MOCK:
                 feedbackListVoted.clear();
-                for (FeedbackDetailsBean bean : FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean((List<LocalFeedbackBean>) response, this)) {
-                    feedbackListVoted.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                localFeedbackBeans = (List<LocalFeedbackBean>) response;
+                feedbackDetailsBeans = FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean(localFeedbackBeans, this);
+                for (int i = 0; i < feedbackDetailsBeans.size(); i++) {
+                    feedbackListVoted.add(new VoteListItem(this, 8, feedbackDetailsBeans.get(i), localFeedbackBeans.get(i), configuration, getTopColor(0)));
                 }
                 Collections.sort(feedbackListVoted);
                 break;
@@ -129,8 +133,10 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 break;
             case GET_FEEDBACK_LIST_OWN_MOCK:
                 feedbackListOwn.clear();
-                for (FeedbackDetailsBean bean : FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean((List<LocalFeedbackBean>) response, this)) {
-                    feedbackListOwn.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                localFeedbackBeans = (List<LocalFeedbackBean>) response;
+                feedbackDetailsBeans = FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean(localFeedbackBeans, this);
+                for (int i = 0; i < feedbackDetailsBeans.size(); i++) {
+                    feedbackListOwn.add(new VoteListItem(this, 8, feedbackDetailsBeans.get(i), localFeedbackBeans.get(i), configuration, getTopColor(0)));
                 }
                 Collections.sort(feedbackListOwn);
                 break;

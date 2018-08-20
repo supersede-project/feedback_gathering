@@ -39,9 +39,14 @@ public final class FeedbackUtility {
 
     public static List<VoteListItem> createFeedbackVotesListItems(List<Feedback> feedbackList, Context context, LocalConfigurationBean configuration, int topColor) {
         List<VoteListItem> voteListItems = new ArrayList<>();
+        List<LocalFeedbackBean> feedbackBeansVoted = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.VOTED);
         for (Feedback feedback : feedbackList) {
-            FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
-            voteListItems.add(new VoteListItem(context, 8, feedbackDetailsBean, configuration, topColor));
+            for (LocalFeedbackBean localFeedbackBean: feedbackBeansVoted){
+                if (feedback.getId() == localFeedbackBean.getFeedbackId()){
+                    FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
+                    voteListItems.add(new VoteListItem(context, 8, feedbackDetailsBean, localFeedbackBean, configuration, topColor));
+                }
+            }
         }
         return voteListItems;
     }

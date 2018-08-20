@@ -10,19 +10,21 @@ import android.widget.LinearLayout;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 
+import static android.widget.ImageView.ScaleType.*;
+
 public final class VoteListItem extends AbstractSettingsListItem {
 
     public VoteListItem(Context context) {
         super(context);
     }
 
-    public VoteListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
+    public VoteListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalFeedbackBean localFeedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context, visibleTiles, feedbackDetailsBean, configuration, backgroundColor);
 
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        ImageView voteView = createVoteView(getShortParams(), context, feedbackDetailsBean, PADDING);
+        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, PADDING);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());
@@ -32,14 +34,15 @@ public final class VoteListItem extends AbstractSettingsListItem {
         addView(lowerWrapperLayout);
     }
 
-    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, FeedbackDetailsBean feedbackDetailsBean, int padding) {
+    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, LocalFeedbackBean localFeedbackBean, int padding) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(layoutParams);
+        imageView.setScaleType(CENTER);
 
-        if (feedbackDetailsBean.getUpVotes() > 0) {
+        if (localFeedbackBean.getVoted() > 0) {
             imageView.setImageResource(R.drawable.ic_vote_up);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
-        } else if (feedbackDetailsBean.getUpVotes() < 0) {
+        } else if (localFeedbackBean.getVoted() < 0) {
             imageView.setImageResource(R.drawable.ic_vote_down);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         }
