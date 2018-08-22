@@ -83,6 +83,10 @@ public abstract class FeedbackService {
         return apiInstance;
     }
 
+    public boolean isAuthenticated(){
+        return token != null;
+    }
+
     String getToken() {
         return token;
     }

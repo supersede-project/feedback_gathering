@@ -14,8 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -128,8 +127,13 @@ public final class NotificationService extends Service implements IFeedbackServi
             stopSelf();
             return;
         }
-        FeedbackService.getInstance(this).getFeedbackListSubscribed(this,this);
-        FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
+
+        if (FeedbackService.getInstance(this).isAuthenticated()) {
+            FeedbackService.getInstance(this).getFeedbackListSubscribed(this, this);
+            FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
+        } else {
+            FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(config.getEndpointLogin(), config.getEndpointPass()));
+        }
     }
 
     @Override
