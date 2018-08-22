@@ -220,7 +220,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
      */
     public void updateOwnFeedbackCase() {
         if (ACTIVE.check(getApplicationContext()) && getFeedbackDetailsBean().getUserName().equals(getUserName())) {
-            disableViews(reportButton, getSubscribeButton(),upButton,downButton);
+            disableViews(reportButton,upButton,downButton);
         }
     }
 
