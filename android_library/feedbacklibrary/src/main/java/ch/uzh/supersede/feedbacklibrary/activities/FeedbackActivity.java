@@ -17,6 +17,7 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
@@ -168,6 +169,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         if (eventType == EventType.CREATE_FEEDBACK) {
             if (response instanceof Feedback) {
                 feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean((Feedback) response);
+                FeedbackDatabase.getInstance(this).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             }
             Intent intent = new Intent(this, FeedbackDetailsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
