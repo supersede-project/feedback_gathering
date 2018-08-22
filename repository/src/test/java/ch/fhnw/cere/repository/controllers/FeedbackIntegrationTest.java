@@ -21,9 +21,7 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,6 +53,15 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private SettingRepository settingRepository;
 
+    @Autowired
+    private AndroidUserRepository androidUserRepository;
+
+    @Autowired
+    private FeedbackResponseRepository feedbackResponseRepository;
+
+    @Autowired
+    private FeedbackVoteRepository feedbackVoteRepository;
+
     private String basePathEn = "/feedback_repository/en/";
     private String basePathDe = "/feedback_repository/de/";
 
@@ -84,6 +91,9 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
+        androidUserRepository.deleteAllInBatch();
+        feedbackResponseRepository.deleteAllInBatch();
+        feedbackVoteRepository.deleteAllInBatch();
 
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", "userId1", 1, 11, "en"));
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it"));
@@ -113,6 +123,9 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
+        androidUserRepository.deleteAllInBatch();
+        feedbackResponseRepository.deleteAllInBatch();
+        feedbackVoteRepository.deleteAllInBatch();
     }
 
     @Test(expected = ServletException.class)
@@ -243,6 +256,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Test
     public void postFeedback() throws Exception {
         Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        feedback.setFeedbackStatus(null);
         String feedbackJson = toJson(feedback);
 
         MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
@@ -255,7 +269,8 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Test
     public void postFeedbackTree() throws Exception {
         Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
-        feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
+        feedback.setFeedbackStatus(null);
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>() {{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
@@ -292,16 +307,17 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Test
     public void postFeedbackTree2() throws Exception {
         Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
-        feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
+        feedback.setFeedbackStatus(null);
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>() {{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
-        feedback.setCategoryFeedbacks(new ArrayList<CategoryFeedback>(){{
+        feedback.setCategoryFeedbacks(new ArrayList<CategoryFeedback>() {{
             add(new CategoryFeedback(feedback, 1, 99L, null));
             add(new CategoryFeedback(feedback, 1, 98L));
             add(new CategoryFeedback(feedback, 1, "custom category"));
         }});
-        feedback.setRatingFeedbacks(new ArrayList<RatingFeedback>(){{
+        feedback.setRatingFeedbacks(new ArrayList<RatingFeedback>() {{
             add(new RatingFeedback(feedback, "Please rate X", 5, 1));
             add(new RatingFeedback(feedback, "Please rate Y", 0, 2));
         }});
@@ -365,6 +381,10 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
+                .andExpect(jsonPath("$.public", is(false)))
+                .andExpect(jsonPath("$.tags", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackReports", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackResponses", hasSize(0)))
 
                 .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
                 .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
@@ -400,19 +420,20 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
-    public void postFeedbackTreeWithFile() throws Exception {
+    public void postFeedbackTreeWithFileAndResponse() throws Exception {
         Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
-        feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
+        feedback.setFeedbackStatus(null);
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>() {{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
         feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null,
                 new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1", "{\"diagram\": \"diagramX2\"}"));
-        feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{
+        feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>() {{
             add(new AttachmentFeedback("attachment1", feedback, 3));
             add(new AttachmentFeedback("attachment2", feedback, 3));
         }});
-        feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{
+        feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>() {{
             add(new ScreenshotFeedback("screenshot1", feedback, 4, null));
         }});
         String feedbackJson = toJson(feedback);
@@ -477,6 +498,10 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
+                .andExpect(jsonPath("$.public", is(false)))
+                .andExpect(jsonPath("$.tags", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackReports", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackResponses", hasSize(0)))
 
                 .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
                 .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
@@ -498,7 +523,166 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
                 //.andExpect(jsonPath("$.attachmentFeedbacks[0].path", is("1_userId1_test_Kopie.pdf")))
                 .andExpect(jsonPath("$.attachmentFeedbacks[1].mechanismId", is(3)));
-                //.andExpect(jsonPath("$.attachmentFeedbacks[1].path", is("1_userId1_test_Kopie")));
+        //.andExpect(jsonPath("$.attachmentFeedbacks[1].path", is("1_userId1_test_Kopie")));
+    }
+
+    @Test
+    public void feedbackOperationsTest() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+        String androidUserJson = "{\"name\":\"androiduser\",\n\"is_developer\":false}";
+
+        mockMvc.perform(post("/feedback_repository/en/applications/1/android_users")
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(androidUserJson))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/feedback_repository/en/applications/1/android_users")
+                .header("Authorization", adminJWTToken)
+                .param("name", "androiduser#0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("androiduser#0")))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.developer", is(false)))
+                .andExpect(jsonPath("$.blocked", is(false)));
+
+        String androidUsername = "androiduser#0";
+
+        Feedback feedback = new Feedback("New Feedback", androidUsername, 1, 11, "en");
+        feedback.setFeedbackStatus(null);
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>() {{
+            add(new TextFeedback(feedback, "Text Feedback 1", 1));
+            add(new TextFeedback(feedback, "info@example.com", 2));
+        }});
+        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null,
+                new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1", "{\"diagram\": \"diagramX2\"}"));
+        feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>() {{
+            add(new AttachmentFeedback("attachment1", feedback, 3));
+            add(new AttachmentFeedback("attachment2", feedback, 3));
+        }});
+        feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>() {{
+            add(new ScreenshotFeedback("screenshot1", feedback, 4, null));
+        }});
+        String feedbackJson = toJson(feedback);
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
+
+        File resourcesDirectory = new File("src/test/resources");
+
+        FileInputStream fileInputStream1 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/test_file.pdf"));
+        FileInputStream fileInputStream2 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/test_file"));
+        FileInputStream fineInputStream3 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/screenshot_1_example.png"));
+        MockMultipartFile pdfFile = new MockMultipartFile("attachment1", "test_Kopie.pdf", "application/pdf", fileInputStream1);
+        MockMultipartFile pdfFile2 = new MockMultipartFile("attachment2", "test_Kopie", "application/pdf", fileInputStream2);
+        MockMultipartFile screenshotFile = new MockMultipartFile("screenshot1", "screenshot_1_example.png", "image/png", fineInputStream3);
+
+        MvcResult result = this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+                .file(jsonFile)
+                .file(pdfFile)
+                .file(pdfFile2)
+                .file(screenshotFile))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", is("New Feedback")))
+                .andExpect(jsonPath("$.userIdentification", is(androidUsername)))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.configurationId", is(11)))
+                .andExpect(jsonPath("$.language", is("en")))
+
+                .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
+                .andExpect(jsonPath("$.textFeedbacks[1].text", is("info@example.com")))
+
+                .andExpect(jsonPath("$.contextInformation.resolution", is("1920x1080")))
+                .andExpect(jsonPath("$.contextInformation.userAgent", is("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")))
+                .andExpect(jsonPath("$.contextInformation.androidVersion", is(nullValue())))
+                .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
+                .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
+                .andExpect(jsonPath("$.contextInformation.country", is("CH")))
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+
+                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].part", is("attachment1")))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
+
+                .andExpect(jsonPath("$.screenshotFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].part", is("screenshot1")))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].mechanismId", is(4)))
+                .andReturn();
+
+        String createdFeedbackString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Feedback createdFeedback = mapper.readValue(createdFeedbackString, Feedback.class);
+
+        String feedbackUrl = basePathEn + "applications/" + createdFeedback.getApplicationId() + "/feedbacks/" + createdFeedback.getId();
+
+        mockMvc.perform(get(feedbackUrl)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
+
+                .andExpect(jsonPath("$.title", is("New Feedback")))
+                .andExpect(jsonPath("$.userIdentification", is(androidUsername)))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.configurationId", is(11)))
+                .andExpect(jsonPath("$.language", is("en")))
+                .andExpect(jsonPath("$.public", is(false)))
+                .andExpect(jsonPath("$.tags", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackReports", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackResponses", hasSize(0)))
+
+                .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
+                .andExpect(jsonPath("$.textFeedbacks[1].text", is("info@example.com")))
+
+                .andExpect(jsonPath("$.contextInformation.resolution", is("1920x1080")))
+                .andExpect(jsonPath("$.contextInformation.userAgent", is("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")))
+                .andExpect(jsonPath("$.contextInformation.androidVersion", is(nullValue())))
+                .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
+                .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
+                .andExpect(jsonPath("$.contextInformation.country", is("CH")))
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+
+                .andExpect(jsonPath("$.screenshotFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].mechanismId", is(4)))
+
+                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[1].mechanismId", is(3)));
+
+        String feedbackResponseJson = "{\"username\":\"" + androidUsername + "\",\"content\": \"this is a comment\"}";
+
+        this.mockMvc.perform(post(feedbackUrl + "/responses")
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(feedbackResponseJson))
+                .andExpect(status().isCreated());
+
+        String feedbackVoteJson = "{\"voterUsername\":\"" + androidUsername + "\",\"vote\": 1}";
+
+        this.mockMvc.perform(put(feedbackUrl + "/votes")
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(feedbackVoteJson))
+                .andExpect(status().isCreated());
+
+        String editFeedbackJson = "{\"public\": true,\"feedbackStatus\": \"CLOSED\"}";
+        this.mockMvc.perform(put(feedbackUrl)
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(editFeedbackJson))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(feedbackUrl)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.public", is(true)))
+                .andExpect(jsonPath("$.feedbackStatus", is("CLOSED")))
+                .andExpect(jsonPath("$.tags", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackReports", hasSize(0)))
+                .andExpect(jsonPath("$.feedbackResponses", hasSize(1)))
+                .andExpect(jsonPath("$.votes", is(1)))
+                .andExpect(jsonPath("$.feedbackResponses[0].content", is("this is a comment")));
+
+
     }
 }
 

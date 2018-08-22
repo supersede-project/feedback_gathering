@@ -80,7 +80,7 @@ public class FeedbackController extends BaseController {
         if(onlyReported) {
             return FeedbackUtil.setMinMaxVotes(feedbackService.findByIsReported(applicationId), applicationId, feedbackService);
         }
-        if (view != null && idList == null) {
+        if (view != null && idList == null && username == null) {
             if (view.equals("public")) {
                 return FeedbackUtil.setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, true), applicationId, feedbackService);
             } else if (view.equals("private")) {

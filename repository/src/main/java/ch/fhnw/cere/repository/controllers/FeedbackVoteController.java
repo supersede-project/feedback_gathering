@@ -12,6 +12,7 @@ import ch.fhnw.cere.repository.services.FeedbackVoteService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class FeedbackVoteController extends BaseController {
            return feedbackVoteService.find(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public FeedbackVote createFeedbackVote(@PathVariable long applicationId, @PathVariable long feedbackId, HttpEntity<String> createdVote) {
