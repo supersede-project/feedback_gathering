@@ -111,7 +111,7 @@ public final class PopUp {
     }
 
     public PopUp buildAndShow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.DarkDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_DARK);
 
         TextView titleView = new TextView(context);
         // You Can Customise your Title here

@@ -76,12 +76,12 @@
     <string name="hub_feedback_settings_label">Feedback Settings</string>
     <string name="hub_feedback_create_label">Create Feedback</string>
     <string name="hub_feedback_info_label">Tutorial Info-Bubble</string>
-    <string name="hub_feedback_status_info">This Field will summarize your Statistics.\nUser-Level 2 required.</string>
-    <string name="hub_feedback_list_info">This Button lets you access the Feedback for this App.\nUser-Level 1 required.</string>
-    <string name="hub_feedback_user_lvl_info">This Button lets you register an Account and thereby increase your User-Level which you need to access certain Functionalities.</string>
-    <string name="hub_feedback_settings_info">Use this Button to undertake the App some Adaptions regarding Notifications and other cool Stuff!\nUser-Level 2 required.</string>
-    <string name="hub_feedback_create_info">Create your own Feedback by using this Button.\nUser-Level 2 required.</string>
-    <string name="hub_feedback_info_info">This Bubble will guide you through this Application\'s Feedback Functionality.\nTap on it to continue!</string>
+    <string name="hub_feedback_status_info">This field will summarize your statistics.\nUser-level 2 required.</string>
+    <string name="hub_feedback_list_info">This button lets you access the feedback for this app.\nUser-level 1 required.</string>
+    <string name="hub_feedback_user_lvl_info">This button lets you register an account and thereby increase your user-level which you need to access certain functions.</string>
+    <string name="hub_feedback_settings_info">Use this button to undertake the app some adaptions regarding notifications and other cool stuff!\nUser-level 2 required.</string>
+    <string name="hub_feedback_create_info">Create your own feedback by using this button.\nUser-level 2 required.</string>
+    <string name="hub_feedback_info_info">This bubble will guide you through this application\'s feedback functionality.\nTap on it to continue!</string>
     <string name="hub_status">&lt;b>&lt;font color="#secondaryColorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>
         &lt;font color="#primaryColorString">User-Name&lt;/font>
         &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %1$s&lt;/font>&lt;br/>&lt;b>
@@ -96,19 +96,19 @@
         &lt;font color="#primaryColorString">Down-Votes&lt;/font>
         &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %6$d&lt;/font></string>
     <string name="hub_access_1">Accessing Level 1</string>
-    <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!</string>
+    <string name="hub_access_1_description">Level 1 grants you access to others feedback and requires permissions for internet-access!</string>
     <string name="hub_confirm">Confirm</string>
     <string name="hub_access_2">Accessing Level 2</string>
-    <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least %1$d and at most %2$d Characters!</string>
-    <string name="hub_access_2_and_3_description">Level 2 and 3 grant you the ability to create Feedback yourself and allows you access to more advanced Feedback Mechanisms such as Notifications. These features require a User-Name with at least %1$d and at most %2$d Characters!</string>
-    <string name="hub_access_2_fail">The connection to the Server could not be established. Try again later.</string>
-    <string name="hub_warning_username_too_short">User-Name too short!</string>
+    <string name="hub_access_2_description">Level 2 grants you the ability to create feedback and requires storage read/write-permissions and a username with at least %1$d and at most %2$d characters!</string>
+    <string name="hub_access_2_and_3_description">Level 2 and 3 grant you the ability to create feedback yourself and allows you access to more advanced feedback mechanisms such as notifications. These features require a username with at least %1$d and at most %2$d characters!</string>
+    <string name="hub_access_2_fail">The connection to the server could not be established. Please try again later.</string>
+    <string name="hub_warning_username_too_short">Username too short!</string>
     <string name="hub_access_3">Accessing Level 3</string>
-    <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms such as Notifications and needs Audio-Recording-Permissions!</string>
+    <string name="hub_access_3_description">Level 3 grants you access to more advanced feedback mechanisms such as notifications and needs audio recording permissions!</string>
     <string name="hub_username_restored">User restored: "%1$s".</string>
     <string name="hub_username_registered">User "%1$s" registered.</string>
     <string name="hub_developer_registered">Developer "%1$s" registered.</string>
-    <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
+    <string name="hub_warning_permission_not_granted">Permissions for next level not granted!</string>
     <!--List-->
     <string name="list_button_mine">Mine</string>
     <string name="list_button_top">Top</string>
@@ -118,23 +118,22 @@
     <string name="list_edit_search">Search</string>
     <string name="list_date">Date: %1$s</string>
     <string name="list_responses">(%1$d Responses)</string>
-    <string name="list_alert_event">Could not process the Event from to the Server.</string>
-    <string name="list_alert_server">Could not establish a Connection to the Server.</string>
-    <string name="list_alert_user_level">Increase your User-Level to participate!</string>
+    <string name="list_alert_event">Could not process the event from to the server.</string>
+    <string name="list_alert_server">Could not establish a connection to the server.</string>
+    <string name="list_alert_user_level">Increase your user-level to participate!</string>
     <string name="list_tutorial_title_category">Category Tabs</string>
     <string name="list_tutorial_title_search">Search Field</string>
     <string name="list_tutorial_title_filter">Filter Options</string>
     <string name="list_tutorial_title_list">Feedback List</string>
-    <string name="list_tutorial_content_list">Here you will see a list of already created Feedback. In this case, the list is empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
+    <string name="list_tutorial_content_list">Here you will see a list of already created feedback. In this case, the list is empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
     <string name="list_tutorial_content_filter">This option lets you filter out statuses.</string>
     <string name="list_tutorial_content_search">You can search within the provided feedback list by entering a search term here.</string>
-    <string name="list_tutorial_content_category">There are four available categories: Mine, Top, Hot and New. The first one shows only feedback that you provided while the other ones sort all the existing feedback according to number of comments, number of votes or date.</string>
+    <string name="list_tutorial_content_category">There are four available categories: MINE, TOP, HOT and NEW. The first one shows only feedback that you provided while the other ones sort all the existing feedback according to number of comments, number of votes or date.</string>
 
     <!--Developer List-->
     <string name="developer_list_button_private">Private</string>
     <string name="developer_list_button_reported">Reported</string>
-    <string name="developer_list_button_feature_1"></string>
-    <string name="developer_list_button_feature_2"></string>
+
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>
@@ -154,27 +153,27 @@
     <string name="details_response_too_short">Response too short.</string>
     <string name="details_make_public">Make Feedback Public</string>
     <string name="details_make_public_title">Confirm Feedback Publishing</string>
-    <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
+    <string name="details_make_public_content">Do you want to publish this feedback?\nA published feedback can be seen, rated and responded upon by other users and developers.\nThis decision cannot be reverted.</string>
 
     <string name="details_report_title">Report Feedback</string>
-    <string name="details_report_content">Enter a short Summary with a length between %1$d and %2$d Character to describe your Report:</string>
-    <string name="details_report_sent">Report sent, Thank you!</string>
+    <string name="details_report_content">Enter a short summary with a length between %1$d and %2$d character to describe your report:</string>
+    <string name="details_report_sent">Report sent, thank you!</string>
     <string name="details_report_error_empty">Description empty!</string>
     <string name="details_report_error_short">Description too short!</string>
     <string name="details_report_error_long">Description too long!</string>
-    <string name="details_response_sent">Response sent, Thank you!</string>
-    <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
+    <string name="details_response_sent">Response sent, thank you!</string>
+    <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
     <!--DetailsDeveloper-->
     <string name="details_developer_award_karma">Award Karma</string>
     <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>
     <string name="details_developer_revoke_karma_title">Confirm Karma Revoking</string>
-    <string name="details_developer_award_karma_content">How much Karma do you want to award the User %1$s?</string>
-    <string name="details_developer_revoke_karma_content">How much Karma do you want to revoke from the User %1$s?</string>
-    <string name="details_developer_karma_awarded">%1$s Karma awarded to %2$s!</string>
-    <string name="details_developer_karma_revoked">%1$s Karma revoked from %2$s!</string>
-    <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
+    <string name="details_developer_award_karma_content">How much karma do you want to award %1$s?</string>
+    <string name="details_developer_revoke_karma_content">How much karma do you want to revoke from %1$s?</string>
+    <string name="details_developer_karma_awarded">%1$s karma awarded to %2$s!</string>
+    <string name="details_developer_karma_revoked">%1$s karma revoked from %2$s!</string>
+    <string name="details_developer_karma_error">Enter a valid amount of karma!</string>
     <string name="details_developer_delete_confirm_title">Feedback Deletion</string>
-    <string name="details_developer_delete_confirm">Do you want to delete this Feedback? This action is irreversible!</string>
+    <string name="details_developer_delete_confirm">Do you want to delete this feedback? This action is irreversible!</string>
     <string name="details_developer_delete_response_confirm_title">Response Deletion</string>
     <string name="details_developer_delete_response_confirm">Do you want to delete this response? This action is irreversible!</string>
     <string name="details_developer_deleted">Feedback deleted!</string>
@@ -224,21 +223,21 @@
     <string name="identity_warn_too_few_tags">Not enough Tags! Minimum: </string>
     <string name="identity_next">Next</string>
     <string name="identity_recommendations">Recommendations:</string>
-    <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Recommended Tags can be added by tapping on them. Tap on an already added Tag to modify it.</string>
+    <string name="identity_tag_handling">Pressing SPACE or ENTER will add your tag. Recommended tags can be added by tapping on them. Tap on an already added tag to modify it.</string>
     <string name="identity_back">Back</string>
-    <string name="identity_introduction">Begin your Feedback-Creation with choosing a  Title and adding some Tags!</string>
+    <string name="identity_introduction">Begin your feedback-creation with choosing a title and adding some tags!</string>
     <string name="identity_tutorial_title_cancel">Cancel Creation</string>
     <string name="identity_tutorial_title_continue">Continue</string>
     <string name="identity_tutorial_title_selected_tags">Selected Tags</string>
     <string name="identity_tutorial_title_recommendations">Recommendations</string>
     <string name="identity_tutorial_title_tag_input">Feedback Tagging</string>
     <string name="identity_tutorial_title_title_input">Feedback Title</string>
-    <string name="identity_tutorial_content_title_input">To create your Feedback, start off with a Title! Length must be between %1$d and %2$d Characters.</string>
-    <string name="identity_tutorial_content_tag_input">Add a few short Tags to classify your Feedback! Pressing Space or Enter will add your Tags. You can add up to %1$d Tags, minimum %2$d. A Tag must be between %3$d and %4$d Characters long.</string>
-    <string name="identity_tutorial_content_recommendations">You can also select one of the already existing Tags by tapping on a similar one that appears while writing.</string>
-    <string name="identity_tutorial_content_selected_tags">All included Tags appear here. Don\'t like one? Tap on it for Removal or Adjustment.</string>
-    <string name="identity_tutorial_content_continue">Finished with the initial Setup? Click here to continue.</string>
-    <string name="identity_tutorial_content_cancel">Decided otherwise? Press the Back-Button or this one to cancel the Feedback Creation!</string>
+    <string name="identity_tutorial_content_title_input">To create your feedback, start off with a title! It\'s length must be between %1$d and %2$d characters.</string>
+    <string name="identity_tutorial_content_tag_input">Add a few short tags to classify your feedback! Pressing space or enter will add a tag. You can add up to %1$d tags, minimum %2$d. A tag must be between %3$d and %4$d characters long.</string>
+    <string name="identity_tutorial_content_recommendations">You can also select one of the already existing tags by tapping on a similar one that appears while writing.</string>
+    <string name="identity_tutorial_content_selected_tags">All included tags appear here. Don\'t like one? Tap on it for removal or adjustment.</string>
+    <string name="identity_tutorial_content_continue">Finished with the initial setup? Click here to continue.</string>
+    <string name="identity_tutorial_content_cancel">Decided otherwise? Press the back-button or this one to cancel the feedback creation!</string>
     <!--Tutorial-->
     <string name="tutorial_finished">Tutorial finished!</string>
     <string name="tutorial_alert">Finish the Tutorial first!</string>

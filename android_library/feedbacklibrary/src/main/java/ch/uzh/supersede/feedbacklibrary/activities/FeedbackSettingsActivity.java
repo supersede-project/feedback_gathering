@@ -30,19 +30,15 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 public final class FeedbackSettingsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
 
     private LinearLayout scrollListLayout;
-    private SETTINGS_VIEW currentViewState = MINE;
+    private SETTINGS_VIEW currentViewState = SUBSCRIBED;
 
-    private Button ownButton;
     private Button votedButton;
     private Button subscribedButton;
 
     private LinearLayout focusSink;
 
-    private ArrayList<AbstractSettingsListItem> feedbackListOwn = new ArrayList<>();
     private ArrayList<AbstractSettingsListItem> feedbackListVoted = new ArrayList<>();
     private ArrayList<AbstractSettingsListItem> feedbackListSubscribed = new ArrayList<>();
-
-    boolean isDeveloper = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +48,8 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
         scrollListLayout = getView(R.id.settings_layout_scroll, LinearLayout.class);
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
 
-        ownButton = getView(R.id.settings_button_own, Button.class);
-        votedButton = getView(R.id.settings_button_voted, Button.class);
+        votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
         subscribedButton = setOnClickListener(getView(R.id.settings_button_subscribed, Button.class));
-
-        isDeveloper = getConfiguration().isDeveloper();
-
-        if (isDeveloper) {
-            currentViewState = SUBSCRIBED;
-        } else {
-            ownButton = setOnClickListener(getView(R.id.settings_button_own, Button.class));
-            votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
-        }
 
         ToggleButton useStubsToggle = getView(R.id.settings_toggle_use_stubs, ToggleButton.class);
         useStubsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(USE_STUBS, false));
@@ -97,10 +83,7 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 getView(R.id.settings_toggle_use_stubs, ToggleButton.class),
                 getView(R.id.settings_toggle_enable_notifications, ToggleButton.class),
                 getView(R.id.settings_toggle_feature_3, ToggleButton.class));
-        colorShape(0, ownButton, votedButton, subscribedButton);
-        if (isDeveloper){
-            colorShape(0, true, ownButton, votedButton);
-        }
+        colorShape(0, votedButton, subscribedButton);
 
         if (getColorCount() == 3) {
             colorShape(configuration.getLastColorIndex(), getView(R.id.settings_layout_button, LinearLayout.class));
@@ -145,19 +128,6 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 }
                 Collections.sort(feedbackListVoted);
                 break;
-            case GET_FEEDBACK_LIST_OWN:
-                feedbackListOwn.clear();
-                feedbackListOwn.addAll(FeedbackUtility.createFeedbackVotesListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
-                break;
-            case GET_FEEDBACK_LIST_OWN_MOCK:
-                feedbackListOwn.clear();
-                localFeedbackBeans = (List<LocalFeedbackBean>) response;
-                feedbackDetailsBeans = FeedbackUtility.localFeedbackBeanToFeedbackDetailsBean(localFeedbackBeans, this);
-                for (int i = 0; i < feedbackDetailsBeans.size(); i++) {
-                    feedbackListOwn.add(new VoteListItem(this, 8, feedbackDetailsBeans.get(i), localFeedbackBeans.get(i), configuration, getTopColor(0)));
-                }
-                Collections.sort(feedbackListOwn);
-                break;
             case GET_FEEDBACK_LIST_SUBSCRIBED:
                 feedbackListSubscribed.clear();
                 feedbackListSubscribed.addAll(FeedbackUtility.createFeedbackSubscriptionListItems((List<Feedback>) response, this, configuration, getTopColor(0)));
@@ -180,7 +150,6 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
 
     private void execFillFeedbackList() {
         FeedbackService.getInstance(this).getFeedbackListVoted(this, this);
-        FeedbackService.getInstance(this).getFeedbackListOwn(this, this);
         FeedbackService.getInstance(this).getFeedbackListSubscribed(this, this);
     }
 
@@ -203,15 +172,10 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
     }
 
     private void toggleButtons(View v) {
-        if (!isDeveloper) {
-            setInactive(ownButton, votedButton, subscribedButton);
-        }
+        setInactive(votedButton, subscribedButton);
         colorShape(1, v);
 
-        if (v.getId() == ownButton.getId()) {
-            load(feedbackListOwn);
-            currentViewState = MINE;
-        } else if (v.getId() == votedButton.getId()) {
+        if (v.getId() == votedButton.getId()) {
             load(feedbackListVoted);
             currentViewState = VOTED;
         } else if (v.getId() == subscribedButton.getId()) {
@@ -233,9 +197,8 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 return votedButton;
             case SUBSCRIBED:
                 return subscribedButton;
-            case MINE:
             default:
-                return ownButton;
+                return subscribedButton;
         }
     }
 

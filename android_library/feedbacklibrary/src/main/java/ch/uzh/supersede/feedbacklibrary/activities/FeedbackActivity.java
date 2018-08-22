@@ -17,6 +17,7 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
@@ -42,6 +43,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         feedbackTags = getIntent().getStringArrayExtra(EXTRA_KEY_FEEDBACK_TAGS);
         initView();
         colorViews(1,getView(R.id.feedback_root, ScrollView.class));
+        toggleSendButton(true);
         onPostCreate();
     }
 
@@ -93,6 +95,14 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
+        switch (eventType){
+            case CREATE_FEEDBACK:
+                toggleSendButton(true);
+                break;
+            default:
+                break;
+        }
+
         String msg = "Failed to consume the Event.";
         Log.e(FEEDBACK_ACTIVITY_TAG, msg);
         DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
@@ -100,9 +110,24 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
 
     @Override
     public void onConnectionFailed(EventType eventType) {
+        switch (eventType){
+            case CREATE_FEEDBACK:
+                toggleSendButton(true);
+                break;
+            default:
+                break;
+        }
+
         String msg = "Failed to connect to the Server.";
         Log.e(FEEDBACK_ACTIVITY_TAG, msg);
         DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
+    }
+
+    private void toggleSendButton(boolean isEnabled){
+        Button sendButton = getView(R.id.supersede_feedbacklibrary_send_feedback_button, Button.class);
+        sendButton.setEnabled(isEnabled);
+        sendButton.setClickable(isEnabled);
+        sendButton.setBackground(isEnabled ? getResources().getDrawable(R.drawable.pink_button) : getResources().getDrawable(R.drawable.gray_button));
     }
 
     @SuppressWarnings("unchecked")
@@ -131,8 +156,9 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         }
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
-
+        toggleSendButton(false);
         feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
+
         FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot), audioFile);
         ImageUtility.wipeImages(this);
     }
@@ -143,6 +169,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         if (eventType == EventType.CREATE_FEEDBACK) {
             if (response instanceof Feedback) {
                 feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean((Feedback) response);
+                FeedbackDatabase.getInstance(this).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             }
             Intent intent = new Intent(this, FeedbackDetailsActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

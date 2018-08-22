@@ -51,7 +51,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="3"
                 android:background="@drawable/white_tab"
-                android:text="@string/developer_list_button_feature_1"
                 android:textColor="@color/indigo"
                 android:enabled="false"/>
 
@@ -64,7 +63,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="3"
                 android:background="@drawable/white_tab"
-                android:text="@string/developer_list_button_feature_2"
                 android:textColor="@color/indigo"
                 android:enabled="false"/>
         </LinearLayout>

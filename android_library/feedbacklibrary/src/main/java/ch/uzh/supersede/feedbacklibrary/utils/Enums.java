@@ -80,7 +80,6 @@ public final class Enums {
     }
 
     public enum SETTINGS_VIEW {
-        MINE,
         VOTED,
         SUBSCRIBED
     }
