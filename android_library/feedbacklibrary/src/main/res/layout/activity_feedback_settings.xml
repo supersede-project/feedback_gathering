@@ -126,19 +126,7 @@
             android:layout_weight="5"
             android:orientation="horizontal"
             android:background="@color/white"
-            android:weightSum="12">
-
-            <Button
-                android:id="@+id/settings_button_own"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="4"
-                android:background="@drawable/white_tab"
-                android:text="@string/settings_button_own"
-                android:textColor="@color/white" />
+            android:weightSum="8">
 
             <Button
                 android:id="@+id/settings_button_voted"

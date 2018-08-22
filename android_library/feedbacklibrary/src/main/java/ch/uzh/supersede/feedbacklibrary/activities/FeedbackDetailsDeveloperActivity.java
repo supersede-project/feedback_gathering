@@ -18,6 +18,8 @@ import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.UP_VOTED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
@@ -90,7 +92,7 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
 
     private static final int[] karmaModifier = new int[]{1};
     @Override
-    public void onButtonClicked(View view) {
+    public void onButtonClicked(final View view) {
         super.onButtonClicked(view);
 
         if (view.getId() == awardKarmaButton.getId() || view.getId() == revokeKarmaButton.getId()) {
@@ -113,6 +115,7 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                         RepositoryStub.sendKarma(getFeedbackDetailsBean(), karma);
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0]>0?R.string.details_developer_karma_awarded:R.string.details_developer_karma_revoked, karmaString, getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
                         dialog.cancel();
+                        FeedbackDatabase.getInstance(getApplicationContext()).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), view.getId() == awardKarmaButton.getId() ? UP_VOTED : DOWN_VOTED);
                     } else {
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_error), Toast.LENGTH_SHORT).show();
                     }
