@@ -72,7 +72,7 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         selectButton.setEnabled(enabled);
         if (enabled) {
             selectButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button));
-            selectButton.getBackground().setColorFilter(buttonColor, PorterDuff.Mode.SRC_IN);
+            selectButton.getBackground().setColorFilter(activity.getResources().getColor(R.color.accent), PorterDuff.Mode.SRC_IN);
         } else {
             selectButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
