@@ -41,19 +41,6 @@ public class HostActivity extends AppCompatActivity implements
         dummyButton1.setBackgroundColor(secondaryColor);
         dummyButton2.setBackgroundColor(secondaryColor);
 
-
-        //DEBUG
-        int color1 = Color.TRANSPARENT;
-        int color2 = Color.TRANSPARENT;
-        Drawable background = linearLayout.getBackground();
-        if (background instanceof ColorDrawable)
-            color2 = ((ColorDrawable) background).getColor();
-        background = feedbackButton.getBackground();
-        if (background instanceof ColorDrawable)
-            color1 = ((ColorDrawable) background).getColor();
-        Log.d("ColorCombination:","Layout/Button: "+color2+", "+color1);
-        //!DEBUG
-
         Integer currentUserKarma = FeedbackConnector.getInstance().getCurrentUserKarma(this);
         if (currentUserKarma != null) {
             Toast.makeText(getApplicationContext(), "Karma of current user = " + currentUserKarma, Toast.LENGTH_LONG).show();

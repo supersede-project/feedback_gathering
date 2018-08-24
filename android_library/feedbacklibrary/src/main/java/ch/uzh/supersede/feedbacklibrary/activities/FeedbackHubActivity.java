@@ -390,6 +390,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                     FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
                     FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, androidUser.isDeveloper());
                     FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_BLOCKED, androidUser.isBlocked());
+                    FeedbackDatabase.newInstance(this).writeDouble(DATABASE_VERSION, DATABASE_VERSION_NUMBER);
                     userName = androidUser.getName();
                 }
                 preAllocatedStringStorage[0] = null;
