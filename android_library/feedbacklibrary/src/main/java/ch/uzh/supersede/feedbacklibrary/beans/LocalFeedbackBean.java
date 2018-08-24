@@ -83,7 +83,7 @@ public final class LocalFeedbackBean {
         return responded;
     }
 
-    public Enums.FEEDBACK_STATUS getFeedbackStatus(){
+    public Enums.FEEDBACK_STATUS getFeedbackStatus() {
         return Enums.resolveFeedbackStatus(feedbackStatusLabel);
     }
 }

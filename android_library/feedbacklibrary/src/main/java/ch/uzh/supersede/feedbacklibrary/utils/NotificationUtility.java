@@ -226,7 +226,7 @@ public final class NotificationUtility {
         }
     }
 
-    private void appendLineBeak(StringBuilder message, int value){
+    private void appendLineBeak(StringBuilder message, int value) {
         if (value != 0) {
             message.append(HTML_LINEBREAK);
         }

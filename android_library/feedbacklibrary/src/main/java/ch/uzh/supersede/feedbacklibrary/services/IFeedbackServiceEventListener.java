@@ -1,6 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
 public interface IFeedbackServiceEventListener {
+    void onEventCompleted(EventType eventType, Object response);
+
+    void onEventFailed(EventType eventType, Object response);
+
+    void onConnectionFailed(EventType eventType);
+
     enum EventType {
         AUTHENTICATE,
         CREATE_USER,
@@ -43,10 +49,4 @@ public interface IFeedbackServiceEventListener {
         EDIT_FEEDBACK_STATUS,
         EDIT_FEEDBACK_STATUS_MOCK
     }
-
-    void onEventCompleted(EventType eventType, Object response);
-
-    void onEventFailed(EventType eventType, Object response);
-
-    void onConnectionFailed(EventType eventType);
 }

@@ -5,16 +5,19 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.*;
 import android.util.Log;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.database.*;
+import ch.uzh.supersede.feedbacklibrary.database.DatabaseMigration;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -87,11 +90,11 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
-            String statusLabel = getString(R.string.hub_feedback_status_label)+StringUtility.generateSpace(10);
+            String statusLabel = getString(R.string.hub_feedback_status_label) + StringUtility.generateSpace(10);
             String createLabel = getString(R.string.hub_feedback_create_label);
             String settingsLabel = getString(R.string.hub_feedback_settings_label);
             String listLabel = getString(R.string.hub_feedback_list_label);
-            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label)+StringUtility.generateSpace(10);
+            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label) + StringUtility.generateSpace(10);
             String infoLabel = getString(R.string.hub_feedback_info_label);
             float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20, 75, 0.45, statusLabel, createLabel, settingsLabel, listLabel, lvlLabel, infoLabel);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize, this, statusText);
@@ -210,7 +213,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                                     .withTitle(getString(R.string.hub_access_2))
                                     .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(),
                                             configuration
-                                            .getMaxUserNameLength()) : getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
+                                                    .getMaxUserNameLength()) : getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {

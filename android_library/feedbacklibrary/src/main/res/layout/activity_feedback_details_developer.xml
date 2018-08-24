@@ -93,8 +93,8 @@
                         android:id="@+id/details_developer_button_delete"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
-                        android:layout_weight="3"
                         android:layout_margin="5dp"
+                        android:layout_weight="3"
                         android:gravity="center"
                         android:onClick="onButtonClicked"
                         android:text="@string/details_developer_delete" />
@@ -116,17 +116,18 @@
                         android:id="@+id/details_developer_button_award_karma"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
-                        android:layout_weight="2"
                         android:layout_margin="5dp"
+                        android:layout_weight="2"
                         android:onClick="onButtonClicked"
                         android:padding="0dp"
                         android:text="@string/details_developer_award_karma" />
+
                     <Button
                         android:id="@+id/details_developer_button_revoke_karma"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
-                        android:layout_weight="2"
                         android:layout_margin="5dp"
+                        android:layout_weight="2"
                         android:onClick="onButtonClicked"
                         android:padding="0dp"
                         android:text="@string/details_developer_revoke_karma" />

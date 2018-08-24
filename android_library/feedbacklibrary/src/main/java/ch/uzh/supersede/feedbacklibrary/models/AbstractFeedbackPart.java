@@ -19,7 +19,7 @@ public abstract class AbstractFeedbackPart implements Serializable {
         this.order = order;
     }
 
-    public boolean isValid(List<String> errorMessages){
+    public boolean isValid(List<String> errorMessages) {
         return true;
     }
 

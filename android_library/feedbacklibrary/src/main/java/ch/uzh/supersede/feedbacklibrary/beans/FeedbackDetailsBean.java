@@ -29,6 +29,74 @@ public final class FeedbackDetailsBean implements Serializable {
     private FeedbackDetailsBean() {
     }
 
+    public String getTitle() {
+        return feedbackBean.getTitle();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public String getUpVotesAsText() {
+        return FeedbackUtility.getUpvotesAsText(upVotes);
+    }
+
+    public List<FeedbackResponseBean> getResponses() {
+        return feedbackResponses;
+    }
+
+    public FEEDBACK_STATUS getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public FeedbackBean getFeedbackBean() {
+        return feedbackBean;
+    }
+
+    public String[] getTags() {
+        return feedbackBean.getTags();
+    }
+
+    public long getFeedbackId() {
+        return feedbackId;
+    }
+
+    public Bitmap getBitmap() {
+        return ImageUtility.bytesToImage(bitmapBytes);
+    }
+
+    public String getBitmapName() {
+        return bitmapName;
+    }
+
+    public String getAudioFileName() {
+        return audioFileName;
+    }
+
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public String getContextData() {
+        return contextData;
+    }
+
     public static class Builder {
         private long feedbackId;
         private String description;
@@ -104,17 +172,17 @@ public final class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withSubscription(boolean isSubscribed){
+        public Builder withSubscription(boolean isSubscribed) {
             this.isSubscribed = isSubscribed;
             return this;
         }
 
-        public Builder isPublic(boolean isPublic){
+        public Builder isPublic(boolean isPublic) {
             this.isPublic = isPublic;
             return this;
         }
 
-        public Builder withContext(String contextData){
+        public Builder withContext(String contextData) {
             this.contextData = contextData;
             return this;
         }
@@ -140,73 +208,5 @@ public final class FeedbackDetailsBean implements Serializable {
             }
             return null;
         }
-    }
-
-    public String getTitle() {
-        return feedbackBean.getTitle();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public int getUpVotes() {
-        return upVotes;
-    }
-
-    public String getUpVotesAsText() {
-        return FeedbackUtility.getUpvotesAsText(upVotes);
-    }
-
-    public List<FeedbackResponseBean> getResponses() {
-        return feedbackResponses;
-    }
-
-    public FEEDBACK_STATUS getFeedbackStatus() {
-        return feedbackStatus;
-    }
-
-    public FeedbackBean getFeedbackBean() {
-        return feedbackBean;
-    }
-
-    public String[] getTags() {
-        return feedbackBean.getTags();
-    }
-
-    public long getFeedbackId() {
-        return feedbackId;
-    }
-
-    public Bitmap getBitmap() {
-        return ImageUtility.bytesToImage(bitmapBytes);
-    }
-
-    public String getBitmapName() {
-        return bitmapName;
-    }
-
-    public String getAudioFileName() {
-        return audioFileName;
-    }
-
-    public boolean isSubscribed() {
-        return isSubscribed;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public String getContextData() {
-        return contextData;
     }
 }

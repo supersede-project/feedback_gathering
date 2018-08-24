@@ -11,7 +11,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 
 public final class DialogUtils {
 
-    private DialogUtils(){
+    private DialogUtils() {
     }
 
     /**

@@ -48,40 +48,8 @@ public final class ImageUtility {
         return CollectionUtility.subArray(Integer.class, finalColorList, 0, nColors);
     }
 
-    public static class ColorMapEntry implements Comparable {
-        private int color;
-        private int count;
-
-        public ColorMapEntry(int color) {
-            this.color = color;
-            this.count = 1;
-        }
-
-        public void increment() {
-            this.count++;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
-        public int getCount() {
-            return count;
-        }
-
-        @Override
-        public int compareTo(@NonNull Object o) {
-            if (o instanceof ColorMapEntry) {
-                int comparedCount = ((ColorMapEntry) o).getCount();
-                return comparedCount > getCount() ? 1 : comparedCount == getCount() ? 0 : -1;
-            }
-            return 0;
-        }
-    }
-
     /**
      * Returns an average color-intensity, stepDensity defines the coverage of pixels
-     *
      */
     public static double calculateAverageColorIntensity(Bitmap bitmap, double stepDensity) {
         double density = (stepDensity <= 0 || stepDensity > 0.5) ? 0.5 : stepDensity;
@@ -91,7 +59,6 @@ public final class ImageUtility {
 
     /**
      * Returns an average color-intensity, stepSize defines the probing distance
-     *
      */
     private static double calculateAverageColorIntensity(Bitmap bitmap, int stepSize) {
         long redBucket = 0;
@@ -266,5 +233,36 @@ public final class ImageUtility {
         }
 
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    public static class ColorMapEntry implements Comparable {
+        private int color;
+        private int count;
+
+        public ColorMapEntry(int color) {
+            this.color = color;
+            this.count = 1;
+        }
+
+        public void increment() {
+            this.count++;
+        }
+
+        public int getColor() {
+            return color;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        @Override
+        public int compareTo(@NonNull Object o) {
+            if (o instanceof ColorMapEntry) {
+                int comparedCount = ((ColorMapEntry) o).getCount();
+                return comparedCount > getCount() ? 1 : comparedCount == getCount() ? 0 : -1;
+            }
+            return 0;
+        }
     }
 }

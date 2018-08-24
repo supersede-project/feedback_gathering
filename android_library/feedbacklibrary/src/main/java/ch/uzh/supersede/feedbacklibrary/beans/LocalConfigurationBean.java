@@ -10,7 +10,8 @@ import java.util.Locale;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
+import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
@@ -105,6 +106,16 @@ public final class LocalConfigurationBean implements Serializable {
         hostApplicationId = getApplicationId(activity);
         hostApplicationLongId = NumberUtility.createApplicationIdFromString(hostApplicationId);
         hostApplicationLanguage = Locale.getDefault().getLanguage();
+    }
+
+    private static String getApplicationName(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
+    }
+
+    private static String getApplicationId(Context context) {
+        return context.getPackageName().concat("." + getApplicationName(context)).toLowerCase();
     }
 
     private void readDefaultConfiguration() {
@@ -239,29 +250,19 @@ public final class LocalConfigurationBean implements Serializable {
             topColors = new Integer[]{
                     WIN95_GRAY, WIN95_BLUE, WHITE
             };
-        } else if (style == CUSTOM){
+        } else if (style == CUSTOM) {
             int[] colors = configuration.getConfiguredCustomStyle();
-            if (colors.length == 3 ) {
-                topColors = new Integer[]{colors[0],colors[1],colors[2]};
-            }else if (colors.length == 2 ) {
-                topColors = new Integer[]{colors[0],colors[1]};
-            }else{
-                Log.e("Wrong Configuration","Custom Styles must contain 2 or 3 colors! Fallback to Dark-Theme!");
+            if (colors.length == 3) {
+                topColors = new Integer[]{colors[0], colors[1], colors[2]};
+            } else if (colors.length == 2) {
+                topColors = new Integer[]{colors[0], colors[1]};
+            } else {
+                Log.e("Wrong Configuration", "Custom Styles must contain 2 or 3 colors! Fallback to Dark-Theme!");
                 topColors = new Integer[]{
                         ANTHRACITE_DARK, GRAY_DARK, GRAY
                 };
             }
         }
-    }
-
-    private static String getApplicationName(Context context) {
-        ApplicationInfo applicationInfo = context.getApplicationInfo();
-        int stringId = applicationInfo.labelRes;
-        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
-    }
-
-    private static String getApplicationId(Context context) {
-        return context.getPackageName().concat("." + getApplicationName(context)).toLowerCase();
     }
 
     public boolean hasAtLeastNTopColors(int n) {
@@ -408,7 +409,9 @@ public final class LocalConfigurationBean implements Serializable {
         return topColors;
     }
 
-    public Integer getLastColor() {return topColors[topColors.length-1];}
+    public Integer getLastColor() {
+        return topColors[topColors.length - 1];
+    }
 
     public boolean isColoringVertical() {
         return isColoringVertical;
@@ -439,6 +442,6 @@ public final class LocalConfigurationBean implements Serializable {
     }
 
     public int getLastColorIndex() {
-        return topColors.length-1;
+        return topColors.length - 1;
     }
 }

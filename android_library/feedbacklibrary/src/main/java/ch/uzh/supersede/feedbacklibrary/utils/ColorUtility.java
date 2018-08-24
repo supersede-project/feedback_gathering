@@ -2,7 +2,8 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.*;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -21,18 +22,17 @@ public final class ColorUtility {
         return ((Color.red(color) + Color.green(color) + Color.blue(color)) / 3d) < 122;
     }
 
-    public static int getTextColor(Context context, int backgroundColor){
+    public static int getTextColor(Context context, int backgroundColor) {
         if (ColorUtility.isDark(backgroundColor)) {
             return ContextCompat.getColor(context, R.color.white);
         } else {
-           return ContextCompat.getColor(context, R.color.black);
+            return ContextCompat.getColor(context, R.color.black);
         }
     }
 
     /**
      * Calculates the differences between Color a and b
      * Returns a value between 0 (identical) and 1 (complete different colors)
-     *
      */
     public static float getColorDifferences(int a, int b) {
         return 1f / 765f * (
@@ -44,8 +44,8 @@ public final class ColorUtility {
 
     public static int adjustColorToBackground(int backgroundColor, int color, double differenceThreshold) {
         int newColor = color;
-        while (getColorDifferences(backgroundColor,newColor)<differenceThreshold){
-            newColor = adjustColorToBrightness(backgroundColor,newColor);
+        while (getColorDifferences(backgroundColor, newColor) < differenceThreshold) {
+            newColor = adjustColorToBrightness(backgroundColor, newColor);
         }
         return newColor;
     }
@@ -55,15 +55,15 @@ public final class ColorUtility {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
-        if (isDark(backgroundColor)){
+        if (isDark(backgroundColor)) {
             step = 10;
-        }else{
+        } else {
             step = -10;
         }
-        red=((red+step)>255?255:(red+step)<0?0:red+step);
-        green=((green+step)>255?255:(green+step)<0?0:green+step);
-        blue=((blue+step)>255?255:(blue+step)<0?0:blue+step);
-        return Color.rgb(red,green,blue);
+        red = ((red + step) > 255 ? 255 : (red + step) < 0 ? 0 : red + step);
+        green = ((green + step) > 255 ? 255 : (green + step) < 0 ? 0 : green + step);
+        blue = ((blue + step) > 255 ? 255 : (blue + step) < 0 ? 0 : blue + step);
+        return Color.rgb(red, green, blue);
     }
 
     public static String toHexString(int color) {
@@ -73,16 +73,18 @@ public final class ColorUtility {
         }
         return hexColour;
     }
+
     public static int fromHexString(String color) {
-        color = color.replace("#","");
+        color = color.replace("#", "");
         return Integer.valueOf(color, 16);
     }
 
-    public static int getBackgroundColorOfView(View v){
+    public static int getBackgroundColorOfView(View v) {
         int color = Color.TRANSPARENT;
         Drawable background = v.getBackground();
-        if (background instanceof ColorDrawable)
+        if (background instanceof ColorDrawable) {
             color = ((ColorDrawable) background).getColor();
+        }
         return color;
     }
 }

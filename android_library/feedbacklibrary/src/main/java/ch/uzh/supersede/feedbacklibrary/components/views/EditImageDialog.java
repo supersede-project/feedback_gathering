@@ -13,13 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
 
@@ -35,6 +32,14 @@ public final class EditImageDialog extends DialogFragment {
 
     private OnEditImageListener listener;
 
+    public EditImageDialog() {
+        super();
+        items = new ArrayList<>();
+        allImageEditItems = new HashMap<>();
+        quickEditItems = new HashMap<>();
+        colorEditItems = new HashMap<>();
+    }
+
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
@@ -46,14 +51,6 @@ public final class EditImageDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnColorChangeDialogListener");
         }
-    }
-
-    public EditImageDialog() {
-        super();
-        items = new ArrayList<>();
-        allImageEditItems = new HashMap<>();
-        quickEditItems = new HashMap<>();
-        colorEditItems = new HashMap<>();
     }
 
     @Override
@@ -223,7 +220,7 @@ public final class EditImageDialog extends DialogFragment {
         }
     }
 
-    private AnnotateImageActivity getAnnotateImageActivity(){
+    private AnnotateImageActivity getAnnotateImageActivity() {
         if (getActivity() instanceof AnnotateImageActivity) {
             return (AnnotateImageActivity) getActivity();
         } else {

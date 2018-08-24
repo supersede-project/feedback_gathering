@@ -12,7 +12,8 @@ import com.google.gson.annotations.Expose;
 import java.util.Calendar;
 import java.util.Locale;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.NOT_YET_IMPLEMENTED_EXCEPTION;
 
@@ -32,6 +33,30 @@ public final class ContextInformationFeedback extends AbstractFeedbackPart {
 
     public ContextInformationFeedback() {
         // NOP
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public String getAndroidVersion() {
+        return androidVersion;
+    }
+
+    public String getLocalTime() {
+        return localTime;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getMetaData() {
+        return metaData;
     }
 
     public static class Builder {
@@ -56,7 +81,7 @@ public final class ContextInformationFeedback extends AbstractFeedbackPart {
                 Point screen = new Point();
                 windowManager.getDefaultDisplay().getRealSize(screen);
                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                this.resolution = screen.x + " x " + screen.y + ", Density: "+metrics.density+ ", DPI: "+metrics.densityDpi;
+                this.resolution = screen.x + " x " + screen.y + ", Density: " + metrics.density + ", DPI: " + metrics.densityDpi;
             }
             return this;
         }
@@ -98,12 +123,12 @@ public final class ContextInformationFeedback extends AbstractFeedbackPart {
         }
 
         public Builder withMetaData() {
-            this.metaData = "MANUFACTURER:"+StringUtility.nulLSafe(Build.MANUFACTURER)+
-                    ";HARDWARE:"+ StringUtility.nulLSafe(Build.HARDWARE)+
-                    ";MODEL:"+StringUtility.nulLSafe(Build.MODEL)+
-                    ";DEVICE:"+StringUtility.nulLSafe(Build.DEVICE)+
-                    ";BRAND:"+StringUtility.nulLSafe(Build.BRAND)+
-                    ";TYPE:"+StringUtility.nulLSafe(Build.TYPE);
+            this.metaData = "MANUFACTURER:" + StringUtility.nulLSafe(Build.MANUFACTURER) +
+                    ";HARDWARE:" + StringUtility.nulLSafe(Build.HARDWARE) +
+                    ";MODEL:" + StringUtility.nulLSafe(Build.MODEL) +
+                    ";DEVICE:" + StringUtility.nulLSafe(Build.DEVICE) +
+                    ";BRAND:" + StringUtility.nulLSafe(Build.BRAND) +
+                    ";TYPE:" + StringUtility.nulLSafe(Build.TYPE);
             return this;
         }
 
@@ -120,30 +145,5 @@ public final class ContextInformationFeedback extends AbstractFeedbackPart {
             }
             return null;
         }
-    }
-
-    public String getResolution() {
-        return resolution;
-    }
-
-
-    public String getAndroidVersion() {
-        return androidVersion;
-    }
-
-    public String getLocalTime() {
-        return localTime;
-    }
-
-    public String getTimeZone() {
-        return timeZone;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getMetaData() {
-        return metaData;
     }
 }

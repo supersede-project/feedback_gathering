@@ -1,19 +1,23 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
-import android.view.*;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsDeveloperActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
@@ -66,9 +70,12 @@ public final class FeedbackListItem extends LinearLayout implements Comparable, 
         titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, padding, textColor);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(getFeedbackBean().getTimeStamp())), Gravity.END, padding, textColor);
         int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
-        statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel().concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
+        statusView = createTextView(shortParams, context, feedbackDetailsBean
+                .getFeedbackStatus()
+                .getLabel()
+                .concat(SPACE + context.getString(R.string.list_responses, getFeedbackBean().getResponses())), Gravity.START, padding, statusColor);
         pointView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackBean().getVotesAsText(), Gravity.END, padding, textColor);
-        updatePercentageColor(backgroundColor,true);
+        updatePercentageColor(backgroundColor, true);
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);
@@ -82,14 +89,14 @@ public final class FeedbackListItem extends LinearLayout implements Comparable, 
             }
         });
         GradientDrawable gradientDrawable = new GradientDrawable();
-        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK);
         setBackground(gradientDrawable);
     }
 
     private void startFeedbackDetailsActivity() {
         Intent intent;
-        if (ACTIVE.check(getContext())){
-            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+        if (ACTIVE.check(getContext())) {
+            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
             } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
@@ -157,8 +164,8 @@ public final class FeedbackListItem extends LinearLayout implements Comparable, 
         } else {
             percent = 1f / (2 * getFeedbackBean().getMaxUpVotes()) * (getFeedbackBean().getMaxUpVotes() + getFeedbackBean().getUpVotes());
         }
-        if (fancy){
-            pointView.setTextColor(ColorUtility.adjustColorToBackground(backgroundColor,ColorUtility.percentToColor(percent),0.4d));
+        if (fancy) {
+            pointView.setTextColor(ColorUtility.adjustColorToBackground(backgroundColor, ColorUtility.percentToColor(percent), 0.4d));
         }
     }
 

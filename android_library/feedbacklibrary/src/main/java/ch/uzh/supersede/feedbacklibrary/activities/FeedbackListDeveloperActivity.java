@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
@@ -56,7 +57,7 @@ public final class FeedbackListDeveloperActivity extends AbstractFeedbackListAct
         colorShape(0, getButtons().get(REPORTED));
         colorShape(0, true, feature1Button, feature2Button);
         colorShape(1, getButtons().get(PRIVATE));
-        colorViews(0, filterButton,getView(R.id.dev_list_layout_scroll, LinearLayout.class));
+        colorViews(0, filterButton, getView(R.id.dev_list_layout_scroll, LinearLayout.class));
         colorViews(1,
                 getView(R.id.dev_list_layout_color_1, LinearLayout.class),
                 getView(R.id.dev_list_layout_color_2, LinearLayout.class),
@@ -115,7 +116,7 @@ public final class FeedbackListDeveloperActivity extends AbstractFeedbackListAct
             feedbackListItems.add(listItem);
         }
         float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
-        for (FeedbackListItem listItem : feedbackListItems){
+        for (FeedbackListItem listItem : feedbackListItems) {
             listItem.equalizeTextSize(textSize);
         }
         doSearch(getSearchText().getText().toString());

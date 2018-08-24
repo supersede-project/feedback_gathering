@@ -3,10 +3,10 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.*;
-import android.graphics.drawable.*;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +15,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -35,9 +32,7 @@ import okhttp3.ResponseBody;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_DIR;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_EXTENSION;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.AUDIO_FILENAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -45,10 +40,8 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     public static Enums.RESPONSE_MODE mode = READING;
-    private FeedbackDetailsBean feedbackDetailsBean;
-    private LocalFeedbackState feedbackState;
-    private static LinearLayout responseLayout;
     protected static ScrollView scrollContainer;
+    private static LinearLayout responseLayout;
     protected TextView votesText;
     protected TextView userText;
     protected TextView titleText;
@@ -58,6 +51,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     protected Button tagButton;
     protected Button subscribeButton;
     protected Button responseButton;
+    private FeedbackDetailsBean feedbackDetailsBean;
+    private LocalFeedbackState feedbackState;
     private List<FeedbackResponseListItem> responseList = new ArrayList<>();
     private IFeedbackServiceEventListener callback;
     private String userName;
@@ -76,14 +71,6 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         AbstractFeedbackDetailsActivity.mode = mode;
     }
 
-    public LocalFeedbackState getFeedbackState() {
-        return feedbackState;
-    }
-
-    public void setFeedbackState(LocalFeedbackState feedbackState) {
-        this.feedbackState = feedbackState;
-    }
-
     public static LinearLayout getResponseLayout() {
         return responseLayout;
     }
@@ -98,6 +85,14 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     public static void setScrollContainer(ScrollView scrollContainer) {
         AbstractFeedbackDetailsActivity.scrollContainer = scrollContainer;
+    }
+
+    public LocalFeedbackState getFeedbackState() {
+        return feedbackState;
+    }
+
+    public void setFeedbackState(LocalFeedbackState feedbackState) {
+        this.feedbackState = feedbackState;
     }
 
     public TextView getVotesText() {
@@ -226,9 +221,9 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     protected void drawLayoutOutlines(int... layouts) {
         GradientDrawable gradientDrawable = null;
-        for (int layout : layouts){
+        for (int layout : layouts) {
             gradientDrawable = new GradientDrawable();
-            gradientDrawable.setStroke(1,ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+            gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK);
             findViewById(layout).setBackground(gradientDrawable);
         }
     }
@@ -311,8 +306,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
 
     protected void handleAudioButtonClicked() {
         if (feedbackDetailsBean.getAudioFileName() != null) {
-            if(isAudioPlaying) {
-               stopAudio();
+            if (isAudioPlaying) {
+                stopAudio();
             } else {
                 FeedbackService.getInstance(getApplicationContext()).getFeedbackAudio(this, feedbackDetailsBean);
             }
@@ -471,7 +466,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         scrollContainer.fullScroll(View.FOCUS_DOWN);
     }
 
-    protected void setVisibilityAttachmentButtons(){
+    protected void setVisibilityAttachmentButtons() {
         if (getFeedbackDetailsBean().getBitmapName() == null) {
             disableViews(imageButton);
         }
@@ -519,7 +514,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             stream.write(audio);
             stream.close();
             File audioFile = new File(audioFilePath);
-            if(audioFile.length() != 0) {
+            if (audioFile.length() != 0) {
                 if (mediaPlayer == null) {
                     mediaPlayer = new MediaPlayer();
                     mediaPlayer.setDataSource(audioFilePath);
@@ -532,7 +527,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                     }
                 });
                 mediaPlayer.start();
-                mediaPlayer.setVolume(50,50);
+                mediaPlayer.setVolume(50, 50);
                 audioButton.setText(R.string.details_audio_stop);
                 isAudioPlaying = true;
             }
@@ -552,7 +547,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     @Override
     protected void onDestroy() {
         execFinalize();
-        if(isAudioPlaying) {
+        if (isAudioPlaying) {
             stopAudio();
         }
         super.onDestroy();
@@ -561,7 +556,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     private void execFinalize() {
         if (!getFeedbackState().isEqualVoted()) {
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, getFeedbackState().isUpVoted() ? 1 : -1, userName);
-        }else if (getFeedbackState().isEqualVoted() && initiallyVoted){
+        } else if (getFeedbackState().isEqualVoted() && initiallyVoted) {
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, 0, userName);
         }
         FeedbackService.getInstance(getApplicationContext()).createSubscription(this, feedbackDetailsBean.getFeedbackBean());

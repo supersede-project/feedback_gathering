@@ -1,14 +1,17 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.*;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.*;
 
 import java.io.File;
@@ -18,8 +21,10 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.*;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -42,7 +47,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         feedbackTitle = getIntent().getStringExtra(EXTRA_KEY_FEEDBACK_TITLE);
         feedbackTags = getIntent().getStringArrayExtra(EXTRA_KEY_FEEDBACK_TAGS);
         initView();
-        colorViews(1,getView(R.id.feedback_root, ScrollView.class));
+        colorViews(1, getView(R.id.feedback_root, ScrollView.class));
         toggleSendButton(true);
         onPostCreate();
     }
@@ -95,7 +100,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        switch (eventType){
+        switch (eventType) {
             case CREATE_FEEDBACK:
                 toggleSendButton(true);
                 break;
@@ -105,12 +110,12 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
 
         String msg = "Failed to consume the Event.";
         Log.e(FEEDBACK_ACTIVITY_TAG, msg);
-        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
+        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error), msg}, true);
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        switch (eventType){
+        switch (eventType) {
             case CREATE_FEEDBACK:
                 toggleSendButton(true);
                 break;
@@ -120,10 +125,10 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
 
         String msg = "Failed to connect to the Server.";
         Log.e(FEEDBACK_ACTIVITY_TAG, msg);
-        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
+        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error), msg}, true);
     }
 
-    private void toggleSendButton(boolean isEnabled){
+    private void toggleSendButton(boolean isEnabled) {
         Button sendButton = getView(R.id.supersede_feedbacklibrary_send_feedback_button, Button.class);
         sendButton.setEnabled(isEnabled);
         sendButton.setClickable(isEnabled);
@@ -151,7 +156,7 @@ public final class FeedbackActivity extends AbstractBaseActivity implements Audi
         screenshot = screenshot != null ? screenshot : ImageUtility.loadImageFromDatabase(this);
         File audioFile = null;
 
-        if (audioFilePath != null){
+        if (audioFilePath != null) {
             audioFile = new File(audioFilePath);
         }
 

@@ -18,11 +18,11 @@ import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.DOWN_VOTED;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.UP_VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.*;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDetailsActivity {
+    private static final int[] karmaModifier = new int[]{1};
     private Button deleteButton;
     private Button contextButton;
     private Button awardKarmaButton;
@@ -53,7 +53,7 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
 
         colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
         colorViews(configuration.getLastColorIndex(), statusSpinner);
-        colorViews(0,awardKarmaButton,revokeKarmaButton,deleteButton,contextButton);
+        colorViews(0, awardKarmaButton, revokeKarmaButton, deleteButton, contextButton);
     }
 
     @Override
@@ -62,7 +62,8 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
         setCallerClass(ObjectUtility.getCallerClass(getIntent()));
 
         initStatusSpinner();
-        drawLayoutOutlines(R.id.details_developer_layout_up,R.id.details_developer_layout_mid,R.id.details_developer_layout_low,R.id.details_developer_layout_scroll_container,R.id.details_developer_layout_button);
+        drawLayoutOutlines(R.id.details_developer_layout_up, R.id.details_developer_layout_mid, R.id.details_developer_layout_low, R.id.details_developer_layout_scroll_container, R.id
+                .details_developer_layout_button);
         onPostCreate();
     }
 
@@ -89,15 +90,13 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
         }
     }
 
-
-    private static final int[] karmaModifier = new int[]{1};
     @Override
     public void onButtonClicked(final View view) {
         super.onButtonClicked(view);
 
         if (view.getId() == awardKarmaButton.getId() || view.getId() == revokeKarmaButton.getId()) {
             final EditText karmaInputText = new EditText(this);
-            karmaModifier[0] = (view.getId() == revokeKarmaButton.getId()?-1:1);
+            karmaModifier[0] = (view.getId() == revokeKarmaButton.getId() ? -1 : 1);
             karmaInputText.setSingleLine();
             karmaInputText.setMaxLines(1);
             karmaInputText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
@@ -107,25 +106,33 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                 public void onClick(DialogInterface dialog, int which) {
                     if (karmaInputText.getText().length() > 0) {
                         Integer karma = Integer.parseInt(karmaInputText.getText().toString());
-                        karma = karma*karmaModifier[0];
+                        karma = karma * karmaModifier[0];
                         String userName = FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME, null);
-                        String karmaString = String.valueOf(karma*karmaModifier[0]);
-                        karma = FeedbackDatabase.getInstance(getApplicationContext()).storeKarma(getFeedbackDetailsBean().getFeedbackId(),karma);
+                        String karmaString = String.valueOf(karma * karmaModifier[0]);
+                        karma = FeedbackDatabase.getInstance(getApplicationContext()).storeKarma(getFeedbackDetailsBean().getFeedbackId(), karma);
                         FeedbackService.getInstance(getApplicationContext()).createVote(getCallback(), getFeedbackDetailsBean(), karma, userName);
                         RepositoryStub.sendKarma(getFeedbackDetailsBean(), karma);
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0]>0?R.string.details_developer_karma_awarded:R.string.details_developer_karma_revoked, karmaString, getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
+                        Toast
+                                .makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0] > 0 ? R.string.details_developer_karma_awarded : R.string
+                                        .details_developer_karma_revoked, karmaString, getFeedbackDetailsBean()
+                                        .getUserName()), Toast.LENGTH_SHORT)
+                                .show();
                         dialog.cancel();
-                        FeedbackDatabase.getInstance(getApplicationContext()).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), view.getId() == awardKarmaButton.getId() ? UP_VOTED : DOWN_VOTED);
+                        FeedbackDatabase
+                                .getInstance(getApplicationContext())
+                                .writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), view.getId() == awardKarmaButton.getId() ? UP_VOTED : DOWN_VOTED);
                     } else {
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_error), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
             new PopUp(this)
-                    .withTitle(getString(view.getId()==awardKarmaButton.getId()?R.string.details_developer_award_karma_title:R.string.details_developer_revoke_karma_title))
+                    .withTitle(getString(view.getId() == awardKarmaButton.getId() ? R.string.details_developer_award_karma_title : R.string.details_developer_revoke_karma_title))
                     .withInput(karmaInputText)
                     .withCustomOk("Confirm", okClickListener)
-                    .withMessage(getString(view.getId()==awardKarmaButton.getId()?R.string.details_developer_award_karma_content:R.string.details_developer_revoke_karma_content, getFeedbackDetailsBean().getUserName())).buildAndShow();
+                    .withMessage(getString(view.getId() == awardKarmaButton.getId() ? R.string.details_developer_award_karma_content : R.string.details_developer_revoke_karma_content,
+                            getFeedbackDetailsBean()
+                            .getUserName())).buildAndShow();
         } else if (view.getId() == deleteButton.getId()) {
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
                 @Override
@@ -140,7 +147,7 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                     .withTitle(getString(R.string.details_developer_delete_confirm_title))
                     .withCustomOk("Confirm", okClickListener)
                     .withMessage(getString(R.string.details_developer_delete_confirm)).buildAndShow();
-        }else if (view.getId() == contextButton.getId()){
+        } else if (view.getId() == contextButton.getId()) {
             new PopUp(this)
                     .withTitle(getString(R.string.details_developer_context))
                     .withoutCancel()

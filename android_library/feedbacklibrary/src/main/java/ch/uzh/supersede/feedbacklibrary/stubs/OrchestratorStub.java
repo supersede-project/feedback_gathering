@@ -4,26 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
-import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.components.views.RatingFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.components.views.TextFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
-import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
@@ -37,6 +26,13 @@ public final class OrchestratorStub {
     private OrchestratorStub() {
     }
 
+    public static void receiveFeedback(Activity activity) {
+        Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
+        toast.show();
+        ImageUtility.wipeImages(activity);
+        activity.onBackPressed();
+    }
+
     public List<AbstractFeedbackPartView> getFeedbackPartViews() {
         return this.feedbackPartViews;
     }
@@ -47,13 +43,6 @@ public final class OrchestratorStub {
 
     public int getId() {
         return id;
-    }
-
-    public static void receiveFeedback(Activity activity) {
-        Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
-        toast.show();
-        ImageUtility.wipeImages(activity);
-        activity.onBackPressed();
     }
 
     public static class FeedbackBuilder<T extends Activity> {

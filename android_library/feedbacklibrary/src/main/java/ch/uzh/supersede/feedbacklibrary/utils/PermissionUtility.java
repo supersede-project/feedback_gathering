@@ -17,6 +17,27 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 
 public final class PermissionUtility {
 
+    public static USER_LEVEL getUserLevel(Context context) {
+        return getUserLevel(context, false);
+    }
+
+    public static USER_LEVEL getUserLevel(Context context, boolean ignoreDatabaseCheck) {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !ACTIVE.check(context, false)) {
+            context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
+            return PASSIVE;
+        }
+        if (ADVANCED.check(context, ignoreDatabaseCheck)) {
+            return ADVANCED;
+        }
+        if (ACTIVE.check(context, ignoreDatabaseCheck)) {
+            return ACTIVE;
+        }
+        if (PASSIVE.check(context, ignoreDatabaseCheck)) {
+            return PASSIVE;
+        }
+        return LOCKED;
+    }
+
     public enum USER_LEVEL {
         LOCKED(0),
         PASSIVE(1,
@@ -76,26 +97,5 @@ public final class PermissionUtility {
         public int getLevel() {
             return level;
         }
-    }
-
-    public static USER_LEVEL getUserLevel(Context context) {
-        return getUserLevel(context, false);
-    }
-
-    public static USER_LEVEL getUserLevel(Context context, boolean ignoreDatabaseCheck) {
-        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !ACTIVE.check(context, false)) {
-            context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
-            return PASSIVE;
-        }
-        if (ADVANCED.check(context, ignoreDatabaseCheck)) {
-            return ADVANCED;
-        }
-        if (ACTIVE.check(context, ignoreDatabaseCheck)) {
-            return ACTIVE;
-        }
-        if (PASSIVE.check(context, ignoreDatabaseCheck)) {
-            return PASSIVE;
-        }
-        return LOCKED;
     }
 }

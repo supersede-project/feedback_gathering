@@ -30,6 +30,72 @@ public final class FeedbackBean implements Serializable {
     private FeedbackBean() {
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public String getVotesAsText() {
+        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
+    }
+
+    public int getResponses() {
+        return responses;
+    }
+
+    public FEEDBACK_STATUS getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public int getMaxUpVotes() {
+        return maxUpVotes;
+    }
+
+    public int getMinUpVotes() {
+        return minUpVotes;
+    }
+
+    public long getFeedbackId() {
+        return feedbackId;
+    }
+
+    public String downVote() {
+        upVotes--;
+        return getVotesAsText();
+    }
+
+    public String upVote() {
+        upVotes++;
+        return getVotesAsText();
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public boolean isOwnFeedback(Context context) {
+        return ACTIVE.check(context, false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME, ""));
+    }
+
+    public String getBitmapName() {
+        return bitmapName;
+    }
+
     public static class Builder {
         private long feedbackId;
         private String title;
@@ -138,71 +204,5 @@ public final class FeedbackBean implements Serializable {
             bean.isPublic = false;
             return bean;
         }
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String[] getTags() {
-        return tags;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public int getUpVotes() {
-        return upVotes;
-    }
-
-    public String getVotesAsText() {
-        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
-    }
-
-    public int getResponses() {
-        return responses;
-    }
-
-    public FEEDBACK_STATUS getFeedbackStatus() {
-        return feedbackStatus;
-    }
-
-    public int getMaxUpVotes() {
-        return maxUpVotes;
-    }
-
-    public int getMinUpVotes() {
-        return minUpVotes;
-    }
-
-    public long getFeedbackId() {
-        return feedbackId;
-    }
-
-    public String downVote() {
-        upVotes--;
-        return getVotesAsText();
-    }
-
-    public String upVote() {
-        upVotes++;
-        return getVotesAsText();
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public boolean isOwnFeedback(Context context) {
-        return ACTIVE.check(context, false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME, ""));
-    }
-
-    public String getBitmapName() {
-        return bitmapName;
     }
 }

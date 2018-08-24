@@ -25,8 +25,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackServiceConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -40,9 +40,9 @@ public abstract class FeedbackService {
     private static FeedbackMockService mockInstance;
 
     private static IFeedbackAPI feedbackAPI;
-    private String token;
     private static long applicationId;
     private static String language;
+    private String token;
 
     private FeedbackService() {
     }
@@ -83,7 +83,7 @@ public abstract class FeedbackService {
         return apiInstance;
     }
 
-    public boolean isAuthenticated(){
+    public boolean isAuthenticated() {
         return token != null;
     }
 
@@ -181,7 +181,7 @@ public abstract class FeedbackService {
         public void createFeedback(IFeedbackServiceEventListener callback, Context context, Feedback feedback, byte[] screenshot, File audio) {
             List<MultipartBody.Part> multipartFiles = new ArrayList<>();
             multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), screenshot)));
-            if (audio != null){
+            if (audio != null) {
                 multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/m4a"), audio)));
             }
 
@@ -248,7 +248,7 @@ public abstract class FeedbackService {
 
         @Override
         public void editFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, String status) {
-            Feedback feedback = new Feedback.Builder().withFeedbackStatus(Enums.FEEDBACK_STATUS.valueOf(status.toUpperCase().replace(" ","_"))).build();
+            Feedback feedback = new Feedback.Builder().withFeedbackStatus(Enums.FEEDBACK_STATUS.valueOf(status.toUpperCase().replace(" ", "_"))).build();
             editFeedback(callback, feedbackDetailsBean.getFeedbackId(), EDIT_FEEDBACK_STATUS, feedback);
         }
 
@@ -352,7 +352,7 @@ public abstract class FeedbackService {
                 }
             }
             float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
-            for (FeedbackListItem listItem : allFeedbackList){
+            for (FeedbackListItem listItem : allFeedbackList) {
                 listItem.equalizeTextSize(textSize);
             }
             callback.onEventCompleted(GET_FEEDBACK_LIST_MOCK, allFeedbackList);

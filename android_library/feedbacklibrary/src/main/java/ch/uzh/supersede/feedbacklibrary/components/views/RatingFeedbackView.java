@@ -1,8 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.res.ColorStateList;
-import android.graphics.*;
-import android.graphics.drawable.*;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -16,6 +18,14 @@ import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 public final class RatingFeedbackView extends AbstractFeedbackPartView {
     private RatingFeedback ratingFeedback;
     private RatingBar ratingBar;
+
+    public RatingFeedbackView(LayoutInflater layoutInflater, RatingFeedback ratingFeedback) {
+        super(layoutInflater);
+        this.viewOrder = ratingFeedback.getOrder();
+        this.ratingFeedback = ratingFeedback;
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.rating_feedback, null));
+        initView();
+    }
 
     @Override
     protected void colorPrimary(int color) {
@@ -39,22 +49,14 @@ public final class RatingFeedbackView extends AbstractFeedbackPartView {
             ratingBar.setProgressTintList(ColorStateList.valueOf(color));
             ratingBar.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
         } else {
-            LayerDrawable progressLayerDrawable = (LayerDrawable)ratingBar.getProgressDrawable();
+            LayerDrawable progressLayerDrawable = (LayerDrawable) ratingBar.getProgressDrawable();
             Drawable backgroundDrawable = progressLayerDrawable.getDrawable(0);
             Drawable progressDrawable1 = progressLayerDrawable.getDrawable(1);
             Drawable progressDrawable2 = progressLayerDrawable.getDrawable(2);
-            backgroundDrawable.setColorFilter(ColorUtility.isDark(color)? Color.WHITE:Color.BLACK, PorterDuff.Mode.SRC_IN);
+            backgroundDrawable.setColorFilter(ColorUtility.isDark(color) ? Color.WHITE : Color.BLACK, PorterDuff.Mode.SRC_IN);
             progressDrawable1.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
             progressDrawable2.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         }
-    }
-
-    public RatingFeedbackView(LayoutInflater layoutInflater, RatingFeedback ratingFeedback) {
-        super(layoutInflater);
-        this.viewOrder = ratingFeedback.getOrder();
-        this.ratingFeedback = ratingFeedback;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.rating_feedback, null));
-        initView();
     }
 
     private void initView() {

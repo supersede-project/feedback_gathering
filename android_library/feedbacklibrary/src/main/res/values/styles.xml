@@ -24,6 +24,7 @@
     <style name="DarkTitle" parent="@android:style/TextAppearance.DialogWindowTitle">
         <item name="android:gravity">center_horizontal</item>
     </style>
+
     <style name="DarkDialogTitle">
         <item name="android:maxLines">1</item>
         <item name="android:scrollHorizontally">true</item>

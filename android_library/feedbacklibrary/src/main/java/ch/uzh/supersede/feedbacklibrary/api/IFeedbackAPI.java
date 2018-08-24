@@ -26,7 +26,7 @@ public interface IFeedbackAPI {
             List<MultipartBody.Part> files);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
-    Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId,  @Path("feedbackId") long feedbackId);
+    Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId);
 
     @DELETE("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<ResponseBody> deleteFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId);
@@ -36,7 +36,8 @@ public interface IFeedbackAPI {
             ("ids") String ids, @Query("relevantForUser") String relevantForUser, @Query("onlyReported") boolean onlyReported);
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
-    Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body Feedback body);
+    Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
+            Feedback body);
 
     @POST("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> createUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
@@ -51,7 +52,8 @@ public interface IFeedbackAPI {
     Call<AndroidUser> editUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("user") String user, @Body AndroidUser body);
 
     @POST("feedback_repository/{language}/applications/{applicationId}/reports")
-    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReportRequestBody body);
+    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReportRequestBody
+            body);
 
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
     Call<List<FeedbackResponse>> getFeedbackResponseList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId")
@@ -69,14 +71,17 @@ public interface IFeedbackAPI {
     Call<List<String>> getTagList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
     @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/votes")
-    Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body FeedbackVoteRequestBody body);
+    Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
+            FeedbackVoteRequestBody body);
 
     //Retrieves a specific Screenshot/Image
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/screenshots/{file_name_ext}")
-    Call<ResponseBody> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
+    Call<ResponseBody> getFeedbackImage(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String
+            fileNameWithExtension);
 
     //Retrieves a specific Audiofile
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/audios/{file_name_ext}")
-    Call<ResponseBody> getFeedbackAudio(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String fileNameWithExtension);
+    Call<ResponseBody> getFeedbackAudio(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("file_name_ext") String
+            fileNameWithExtension);
 
 }

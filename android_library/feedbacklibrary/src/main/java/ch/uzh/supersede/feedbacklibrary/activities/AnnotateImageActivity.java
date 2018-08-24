@@ -5,7 +5,8 @@ import android.content.*;
 import android.graphics.*;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.*;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -26,7 +27,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 import static android.graphics.Color.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE.CHANGE_COLOR;
-import static ch.uzh.supersede.feedbacklibrary.utils.ImageUtility.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.ImageUtility.loadImageFromDatabase;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, EditImageDialog.OnEditImageListener {
@@ -489,6 +490,15 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         dialog.dismiss();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!avoidRevert) {
+            //Restore old Image
+            ImageUtility.storeAnnotatedImageToDatabase(this, loadImageFromDatabase(this));
+        }
+        super.onBackPressed();
+    }
+
     private class StickerArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final List<Integer> icons;
@@ -523,14 +533,5 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
             textView.setText(values.get(position));
             return convertView;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!avoidRevert) {
-            //Restore old Image
-            ImageUtility.storeAnnotatedImageToDatabase(this, loadImageFromDatabase(this));
-        }
-        super.onBackPressed();
     }
 }

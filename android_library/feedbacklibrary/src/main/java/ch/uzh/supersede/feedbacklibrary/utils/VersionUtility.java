@@ -17,7 +17,7 @@ public final class VersionUtility {
         //        5	33-35	11.08 - 31.08	12
         int modifier = 0;
         if (BuildConfig.DEBUG) {
-           modifier=1;
+            modifier = 1;
         }
 
         if (DateUtility.getYear() <= 2018) {
@@ -30,8 +30,8 @@ public final class VersionUtility {
             } else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7) {
                 return BASE_VERSION + 1 + modifier;
             }
-            return BASE_VERSION+modifier;
-        }else{
+            return BASE_VERSION + modifier;
+        } else {
             return MAX_VERSION;
         }
     }

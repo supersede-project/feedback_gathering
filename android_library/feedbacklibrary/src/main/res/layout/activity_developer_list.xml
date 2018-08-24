@@ -51,8 +51,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="3"
                 android:background="@drawable/white_tab"
-                android:textColor="@color/indigo"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:textColor="@color/indigo" />
 
             <Button
                 android:id="@+id/dev_list_button_feature_2"
@@ -63,8 +63,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="3"
                 android:background="@drawable/white_tab"
-                android:textColor="@color/indigo"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:textColor="@color/indigo" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,11 +103,11 @@
                 android:layout_weight="12"
                 android:background="@color/white"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:nextFocusLeft="@id/list_edit_search"
                 android:nextFocusUp="@id/list_edit_search"
                 android:padding="1dp"
                 android:selectAllOnFocus="true"
+                android:singleLine="true"
                 android:text="@string/list_edit_search" />
 
             <Space

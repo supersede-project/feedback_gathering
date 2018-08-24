@@ -1,7 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
-import android.app.*;
-import android.content.*;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -9,7 +11,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.InputFilter;
 import android.util.DisplayMetrics;
-import android.view.*;
+import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
@@ -17,7 +20,8 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -38,15 +42,6 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
     private LocalConfigurationBean configuration;
     private IFeedbackServiceEventListener eventListener;
 
-    public enum RESPONSE_MODE {
-        FIXED, EDITABLE
-    }
-
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
     public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, IFeedbackServiceEventListener
             eventListener, RESPONSE_MODE mode) {
         super(context);
@@ -59,6 +54,10 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
         generateListItem(feedbackResponseBean);
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
     private void generateListItem(FeedbackResponseBean feedbackResponseBean) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
@@ -68,7 +67,7 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
         int padding = 10;
 
         int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.91f); //weighted 20/22
-        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         masterParams.setMargins(5, 5, 5, 5);
         setLayoutParams(masterParams);
         setOrientation(VERTICAL);
@@ -184,8 +183,8 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
             return ContextCompat.getColor(getContext(), R.color.gold_2);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
-        }else{
-            return ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK;
+        } else {
+            return ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK;
         }
     }
 
@@ -194,11 +193,10 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
             return ContextCompat.getColor(getContext(), R.color.gold_3);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);
-        }else{
-            return ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK;
+        } else {
+            return ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK;
         }
     }
-
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {
         LinearLayout linearLayout = new LinearLayout(context);
@@ -293,5 +291,9 @@ public final class FeedbackResponseListItem extends LinearLayout implements Comp
         inputMethodManager.toggleSoftInputFromWindow(
                 bottomView.getApplicationWindowToken(),
                 InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public enum RESPONSE_MODE {
+        FIXED, EDITABLE
     }
 }

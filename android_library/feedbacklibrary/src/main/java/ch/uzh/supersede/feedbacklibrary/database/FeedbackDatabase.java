@@ -12,15 +12,20 @@ import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.ALL;
 
 
 public final class FeedbackDatabase extends AbstractFeedbackDatabase {
 
 
+    private static final String KARMA_IDENTIFIER = "Karma#";
     private static FeedbackDatabase instance = null;
     private FeedbackDbHelper databaseHelper;
+
+    private FeedbackDatabase(Context context) {
+        databaseHelper = new FeedbackDbHelper(context);
+    }
 
     public static FeedbackDatabase getInstance(Context context) {
         if (instance == null) {
@@ -29,12 +34,8 @@ public final class FeedbackDatabase extends AbstractFeedbackDatabase {
         return instance;
     }
 
-    public static FeedbackDatabase newInstance(Context context){
+    public static FeedbackDatabase newInstance(Context context) {
         return instance = new FeedbackDatabase(context);
-    }
-
-    private FeedbackDatabase(Context context) {
-        databaseHelper = new FeedbackDbHelper(context);
     }
 
     protected String getDatabaseName() {
@@ -422,11 +423,10 @@ public final class FeedbackDatabase extends AbstractFeedbackDatabase {
         return newRowId;
     }
 
-    private static final String KARMA_IDENTIFIER = "Karma#";
-    public Integer storeKarma(long feedbackId, Integer karma){
+    public Integer storeKarma(long feedbackId, Integer karma) {
         Integer karmaStored = readInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)), 0);
         karmaStored += karma;
-        writeInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)),karmaStored);
+        writeInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)), karmaStored);
         return karmaStored;
     }
 }

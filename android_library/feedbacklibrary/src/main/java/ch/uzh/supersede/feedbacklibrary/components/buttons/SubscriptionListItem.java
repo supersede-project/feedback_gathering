@@ -8,17 +8,14 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.*;
 
-import ch.uzh.supersede.feedbacklibrary.*;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
 public final class SubscriptionListItem extends AbstractSettingsListItem implements IFeedbackServiceEventListener {
-
-    public IFeedbackServiceEventListener getListener() {
-        return this;
-    }
 
     public SubscriptionListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context, visibleTiles, feedbackDetailsBean, configuration, backgroundColor);
@@ -34,6 +31,10 @@ public final class SubscriptionListItem extends AbstractSettingsListItem impleme
         lowerWrapperLayout.addView(subscribeToggle);
         addView(getUpperWrapperLayout());
         addView(lowerWrapperLayout);
+    }
+
+    public IFeedbackServiceEventListener getListener() {
+        return this;
     }
 
     private Switch createSwitch(LinearLayoutCompat.LayoutParams layoutParams, final Context context, int gravity, final FeedbackDetailsBean feedbackBean, int padding) {

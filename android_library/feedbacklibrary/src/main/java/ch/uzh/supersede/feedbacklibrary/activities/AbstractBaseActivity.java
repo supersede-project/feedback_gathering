@@ -25,8 +25,6 @@ import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
@@ -36,8 +34,8 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractBaseActivity extends AppCompatActivity {
-    protected USER_LEVEL userLevel = LOCKED;
     protected final String[] preAllocatedStringStorage = new String[]{null};
+    protected USER_LEVEL userLevel = LOCKED;
     protected int screenWidth;
     protected int screenHeight;
     protected LocalConfigurationBean configuration;
@@ -294,7 +292,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus){
+        if (hasFocus) {
             createInfoBubbles();
         }
     }

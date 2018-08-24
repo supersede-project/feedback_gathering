@@ -2,7 +2,8 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.content.Context;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
@@ -17,7 +18,7 @@ public final class FeedbackUtility {
     private FeedbackUtility() {
     }
 
-    public static String getUpvotesAsText(int votes){
+    public static String getUpvotesAsText(int votes) {
         return votes <= 0 ? String.valueOf(votes) : "+" + votes;
     }
 
@@ -31,7 +32,7 @@ public final class FeedbackUtility {
             feedbackDetailsBeans.add(listItem);
         }
         float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(15, 0, 0.4, labels.toArray(new String[labels.size()]));
-        for (FeedbackListItem listItem : feedbackDetailsBeans){
+        for (FeedbackListItem listItem : feedbackDetailsBeans) {
             listItem.equalizeTextSize(textSize);
         }
         return feedbackDetailsBeans;
@@ -41,8 +42,8 @@ public final class FeedbackUtility {
         List<VoteListItem> voteListItems = new ArrayList<>();
         List<LocalFeedbackBean> feedbackBeansVoted = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.VOTED);
         for (Feedback feedback : feedbackList) {
-            for (LocalFeedbackBean localFeedbackBean: feedbackBeansVoted){
-                if (feedback.getId() == localFeedbackBean.getFeedbackId()){
+            for (LocalFeedbackBean localFeedbackBean : feedbackBeansVoted) {
+                if (feedback.getId() == localFeedbackBean.getFeedbackId()) {
                     FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(feedback);
                     voteListItems.add(new VoteListItem(context, 8, feedbackDetailsBean, localFeedbackBean, configuration, topColor));
                 }
@@ -181,7 +182,7 @@ public final class FeedbackUtility {
 
         String title = feedback.getTitle();
         if (title == null || title.length() == 0) {
-            title = "#Dummy-Title#"+ GeneratorStub.BagOfFeedbackTitles.pickRandom();
+            title = "#Dummy-Title#" + GeneratorStub.BagOfFeedbackTitles.pickRandom();
         }
         String[] tags = feedback.getTags();
 
@@ -218,7 +219,7 @@ public final class FeedbackUtility {
     private static String buildContextData(ContextInformationFeedback contextInformation) {
         StringBuilder sb = new StringBuilder();
         String newLine = "\n";
-        if (contextInformation != null){
+        if (contextInformation != null) {
             sb.append("Android Version: ").append(StringUtility.nulLSafe(contextInformation.getAndroidVersion())).append(newLine);
             sb.append("Resolution: ").append(StringUtility.nulLSafe(contextInformation.getResolution())).append(newLine);
             sb.append(parseMetaData(contextInformation.getMetaData()));
@@ -236,7 +237,7 @@ public final class FeedbackUtility {
         String device = "DEVICE";
         String brand = "BRAND";
         String type = "TYPE";
-        if (StringUtility.contains(metaData,manufacturer,hardware,model,device,brand,type)){
+        if (StringUtility.contains(metaData, manufacturer, hardware, model, device, brand, type)) {
             try {
                 StringBuilder sb = new StringBuilder();
                 for (String data : metaData.split(";")) {
@@ -245,16 +246,16 @@ public final class FeedbackUtility {
                     }
                 }
                 return sb.toString();
-            }catch (Exception e){
+            } catch (Exception e) {
                 //NOP Fall-Through
             }
         }
-        return "Metadata: "+StringUtility.nulLSafe(metaData)+"\n";
+        return "Metadata: " + StringUtility.nulLSafe(metaData) + "\n";
     }
 
     private static String formatData(String data) {
         String[] tokens = data.split(":");
-        String formatted = tokens[0].substring(0,1).concat(tokens[0].substring(1,tokens[0].length()).toLowerCase());
+        String formatted = tokens[0].substring(0, 1).concat(tokens[0].substring(1, tokens[0].length()).toLowerCase());
         return formatted.concat(": ").concat(tokens[1]).concat("\n");
     }
 

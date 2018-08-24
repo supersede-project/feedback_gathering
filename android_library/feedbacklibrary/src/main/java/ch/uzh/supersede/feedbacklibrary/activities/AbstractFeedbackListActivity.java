@@ -20,7 +20,6 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
-import ch.uzh.supersede.feedbacklibrary.components.views.SpacerListItem;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -29,11 +28,11 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBAC
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
 
+    private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];
     protected EditText searchText;
     protected LinearLayout scrollListLayout;
     private LinearLayout focusSink;
     private ScrollView scrollView;
-    private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];
     private List<Enums.FEEDBACK_STATUS> allowedStatuses = new ArrayList<>();
     private Map<Enums.FEEDBACK_SORTING, Button> buttons = new EnumMap<>(Enums.FEEDBACK_SORTING.class);
     private boolean returnedFromDeletion = false;
@@ -77,12 +76,12 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
         this.scrollView = scrollView;
     }
 
-    public void setSorting(Enums.FEEDBACK_SORTING sorting) {
-        this.sorting = sorting;
-    }
-
     public Enums.FEEDBACK_SORTING getSorting() {
         return sorting;
+    }
+
+    public void setSorting(Enums.FEEDBACK_SORTING sorting) {
+        this.sorting = sorting;
     }
 
     @Override
@@ -111,7 +110,7 @@ public abstract class AbstractFeedbackListActivity extends AbstractBaseActivity 
     }
 
     protected void sort() {
-         for (FeedbackListItem item : getActiveList()) {
+        for (FeedbackListItem item : getActiveList()) {
             item.setSorting(sorting, getAllowedStatuses());
         }
         Collections.sort(getActiveList());

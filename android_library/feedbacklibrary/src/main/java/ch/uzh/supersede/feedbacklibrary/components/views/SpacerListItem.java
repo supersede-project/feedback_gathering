@@ -11,8 +11,8 @@ public final class SpacerListItem extends LinearLayout {
     public SpacerListItem(Context context, int height, int color) {
         super(context);
         setLayoutParams(new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, height));
-        GradientDrawable gradientDrawable=new GradientDrawable();
-        gradientDrawable.setStroke(1,getResources().getColor(R.color.white));
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, getResources().getColor(R.color.white));
         setBackground(gradientDrawable);
     }
 }
