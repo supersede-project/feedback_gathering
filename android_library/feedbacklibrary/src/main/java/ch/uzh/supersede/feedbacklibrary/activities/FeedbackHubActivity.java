@@ -245,7 +245,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
-                    fetchAndroidUser();
+                    updateUserLevel(true);
                 }
             };
         } else if (userLevel == ACTIVE) {
