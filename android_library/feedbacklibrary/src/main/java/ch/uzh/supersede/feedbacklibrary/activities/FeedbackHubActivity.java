@@ -161,7 +161,6 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
             fetchAndroidUser();
         }
         if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            fetchAndroidUser();
             disableViews(levelButton);
         }
     }
