@@ -126,9 +126,8 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     @Override
     protected void onStart() {
         super.onStart();
-        updateUserLevel(false);
-        restoreHostApplicationNameToPreferences();
         authenticateAndStartService();
+        restoreHostApplicationNameToPreferences();
     }
 
     @Override
@@ -155,59 +154,20 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
 
         enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
-        if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+        if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck) && !ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
             enableView(listButton, viewToColorMap.get(listButton), true);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            ConfigurationUtility.execStoreStateToDatabase(this, configuration);
-            ImageUtility.persistScreenshot(this, cachedScreenshot);
-            int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
-            int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
-            int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
-            int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
-            int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
-            if (configuration.hasAtLeastNTopColors(2)) {
-                Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
-                        userKarma,
-                        ownFeedbackBeans,
-                        respondedFeedbackBeans,
-                        upVotedFeedbackBeans,
-                        downVotedFeedbackBeans)
-                        .replace(PRIMARY_COLOR_STRING, ColorUtility.isDark(ColorUtility.getBackgroundColorOfView(backgroundLayout)) ? WHITE_HEX : BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
-                                ColorUtility.getBackgroundColorOfView(backgroundLayout),
-                                configuration.getTopColors()[1],
-                                0.3))));
-                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
-                this.statusText.setTextSize(textSize);
-                this.statusText.setText(hubStatusText);
-            } else {
-                Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
-                        userKarma,
-                        ownFeedbackBeans,
-                        respondedFeedbackBeans,
-                        upVotedFeedbackBeans,
-                        downVotedFeedbackBeans)
-                        .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING, DARK_BLUE));
-                float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
-                this.statusText.setTextSize(textSize);
-                this.statusText.setText(hubStatusText);
-            }
-
-            boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
-            if (userIsDeveloper) {
-                feedbackButton.setText(R.string.hub_feedback_developer_list);
-            } else {
-                feedbackButton.setText(R.string.hub_feedback_create);
-            }
-
-            enableView(feedbackButton, viewToColorMap.get(feedbackButton));
-            enableView(settingsButton, viewToColorMap.get(settingsButton));
+            fetchAndroidUser();
         }
         if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
             disableViews(levelButton);
         }
+    }
+
+    private void fetchAndroidUser() {
+        AndroidUser androidUser = new AndroidUser(userName);
+        FeedbackService.getInstance(this).getUser(this, androidUser);
     }
 
     @Override
@@ -368,12 +328,62 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
         }
     }
 
+    private void updateHubViews() {
+        enableView(listButton, viewToColorMap.get(listButton), true);
+        ConfigurationUtility.execStoreStateToDatabase(this, configuration);
+        ImageUtility.persistScreenshot(this, cachedScreenshot);
+        int ownFeedbackCount = FeedbackDatabase.getInstance(this).readInteger(USER_FEEDBACK_COUNT, 0);
+        int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
+        int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
+        int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
+        int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
+        if (configuration.hasAtLeastNTopColors(2)) {
+            Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                    userKarma,
+                    ownFeedbackCount,
+                    respondedFeedbackBeans,
+                    upVotedFeedbackBeans,
+                    downVotedFeedbackBeans)
+                    .replace(PRIMARY_COLOR_STRING, ColorUtility.isDark(ColorUtility.getBackgroundColorOfView(backgroundLayout)) ? WHITE_HEX : BLACK_HEX)
+                    .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
+                            ColorUtility.getBackgroundColorOfView(backgroundLayout),
+                            configuration.getTopColors()[1],
+                            0.3))));
+            float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
+            this.statusText.setTextSize(textSize);
+            this.statusText.setText(hubStatusText);
+        } else {
+            Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                    userKarma,
+                    ownFeedbackCount,
+                    respondedFeedbackBeans,
+                    upVotedFeedbackBeans,
+                    downVotedFeedbackBeans)
+                    .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
+                    .replace(SECONDARY_COLOR_STRING, DARK_BLUE));
+            float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
+            this.statusText.setTextSize(textSize);
+            this.statusText.setText(hubStatusText);
+        }
+
+        boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
+        if (userIsDeveloper) {
+            feedbackButton.setText(R.string.hub_feedback_developer_list);
+        } else {
+            feedbackButton.setText(R.string.hub_feedback_create);
+        }
+
+        enableView(feedbackButton, viewToColorMap.get(feedbackButton));
+        enableView(settingsButton, viewToColorMap.get(settingsButton));
+    }
+
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case AUTHENTICATE:
                 if (response instanceof AuthenticateResponse) {
                     FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
+                    updateUserLevel(false);
                 }
                 break;
             case CREATE_USER:
@@ -390,6 +400,15 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                 updateUserLevel(true);
                 levelButton.setEnabled(true);
                 break;
+            case GET_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_FEEDBACK_COUNT, androidUser.getFeedbackCount());
+                    userName = androidUser.getName();
+                    updateHubViews();
+                }
+                break;
             default:
                 break;
         }
@@ -397,11 +416,13 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
+        updateHubViews();
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
+        updateHubViews();
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
