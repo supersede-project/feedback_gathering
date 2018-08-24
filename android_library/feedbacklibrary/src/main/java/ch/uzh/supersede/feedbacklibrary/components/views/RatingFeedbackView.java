@@ -7,8 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
+import android.widget.FrameLayout;
 import android.widget.RatingBar;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -35,8 +35,7 @@ public final class RatingFeedbackView extends AbstractFeedbackPartView {
 
     @Override
     protected void colorSecondary(int color) {
-        ratingBar.setBackgroundColor(color);
-        ((CardView) ratingBar.getParent()).setBackgroundColor(color);
+        ((FrameLayout) ratingBar.getParent()).setBackgroundColor(color);
     }
 
     @Override
@@ -45,17 +44,17 @@ public final class RatingFeedbackView extends AbstractFeedbackPartView {
     }
 
     private void setRatingStarColor(int color) {
+        LayerDrawable progressLayerDrawable = (LayerDrawable) ratingBar.getProgressDrawable();
+        Drawable progressDrawable1 = progressLayerDrawable.getDrawable(1);
+        progressDrawable1.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ratingBar.setProgressTintList(ColorStateList.valueOf(color));
-            ratingBar.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
         } else {
-            LayerDrawable progressLayerDrawable = (LayerDrawable) ratingBar.getProgressDrawable();
             Drawable backgroundDrawable = progressLayerDrawable.getDrawable(0);
-            Drawable progressDrawable1 = progressLayerDrawable.getDrawable(1);
             Drawable progressDrawable2 = progressLayerDrawable.getDrawable(2);
-            backgroundDrawable.setColorFilter(ColorUtility.isDark(color) ? Color.WHITE : Color.BLACK, PorterDuff.Mode.SRC_IN);
-            progressDrawable1.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
-            progressDrawable2.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            backgroundDrawable.setColorFilter(ColorUtility.isDark(color) ? Color.WHITE : Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+            progressDrawable2.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         }
     }
 
