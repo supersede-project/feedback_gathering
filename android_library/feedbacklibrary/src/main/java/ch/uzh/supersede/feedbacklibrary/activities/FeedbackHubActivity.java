@@ -166,10 +166,8 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     }
 
     private void fetchAndroidUser() {
-        if (ACTIVE.check(this)) {
-            AndroidUser androidUser = new AndroidUser(userName);
-            FeedbackService.getInstance(this).getUser(this, androidUser);
-        }
+        AndroidUser androidUser = new AndroidUser(userName);
+        FeedbackService.getInstance(this).getUser(this, androidUser);
     }
 
     @Override
