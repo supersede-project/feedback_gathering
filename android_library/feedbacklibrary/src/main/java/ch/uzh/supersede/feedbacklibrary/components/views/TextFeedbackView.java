@@ -2,18 +2,30 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
-import android.support.design.widget.*;
-import android.text.*;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.*;
-import android.widget.*;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 
 public final class TextFeedbackView extends AbstractFeedbackPartView {
     private TextFeedback textFeedback;
+
+    public TextFeedbackView(LayoutInflater layoutInflater, TextFeedback feedbackPart) {
+        super(layoutInflater);
+        this.viewOrder = feedbackPart.getOrder();
+        this.textFeedback = feedbackPart;
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.text_feedback_enclosing, null));
+        initView();
+    }
 
     @Override
     protected void colorPrimary(int color) {
@@ -84,15 +96,6 @@ public final class TextFeedbackView extends AbstractFeedbackPartView {
             //NOP
         }
     }
-
-    public TextFeedbackView(LayoutInflater layoutInflater, TextFeedback feedbackPart) {
-        super(layoutInflater);
-        this.viewOrder = feedbackPart.getOrder();
-        this.textFeedback = feedbackPart;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.text_feedback_enclosing, null));
-        initView();
-    }
-
 
     private void initView() {
         final TextInputLayout textInputLayout = (TextInputLayout) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_input_layout);

@@ -3,11 +3,13 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
@@ -70,12 +72,12 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
         colorViews(configuration.getLastColorIndex(), getView(R.id.list_root, RelativeLayout.class));
         colorViews(0, getView(R.id.list_layout_scroll, LinearLayout.class));
 
-        if (ACTIVE.check(this)){
+        if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         toggleButtons(getButtons().get(MINE));
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
-        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
+        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
         onPostCreate();
     }
 
@@ -86,7 +88,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
         loadingTextView.setVisibility(View.VISIBLE);
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getFeedbackList(this, this, userName,getTopColor(0));
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this, userName, getTopColor(0));
         } else {
             FeedbackService.getInstance(this).getFeedbackList(this, this, userName, getTopColor(0));
         }
@@ -107,7 +109,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     sort();
 
                     if (!tutorialFinished) {
-                        for (int c = 0; c < scrollListLayout.getChildCount();c++){
+                        for (int c = 0; c < scrollListLayout.getChildCount(); c++) {
                             scrollListLayout.getChildAt(c).setEnabled(false);
                         }
                     }
@@ -225,13 +227,13 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
 
             RelativeLayout root = getView(R.id.list_root, RelativeLayout.class);
 
-            String categoriesLabel = getString(R.string.list_tutorial_title_category)+StringUtility.generateSpace(10);
-            String searchLabel = getString(R.string.list_tutorial_title_search)+StringUtility.generateSpace(10);
-            String filterLabel = getString(R.string.list_tutorial_title_filter)+StringUtility.generateSpace(10);
-            String listLabel = getString(R.string.list_tutorial_title_list)+StringUtility.generateSpace(10);
+            String categoriesLabel = getString(R.string.list_tutorial_title_category) + StringUtility.generateSpace(10);
+            String searchLabel = getString(R.string.list_tutorial_title_search) + StringUtility.generateSpace(10);
+            String filterLabel = getString(R.string.list_tutorial_title_filter) + StringUtility.generateSpace(10);
+            String listLabel = getString(R.string.list_tutorial_title_list) + StringUtility.generateSpace(10);
             float textSize = ScalingUtility
                     .getInstance()
-                    .getMinTextSizeScaledForWidth(20, 75, 0.45, categoriesLabel,searchLabel,filterLabel,listLabel);
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, categoriesLabel, searchLabel, filterLabel, listLabel);
             RelativeLayout lisLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.list_tutorial_content_list), textSize, this, scrollListLayout);
             RelativeLayout filLayout = infoUtility.addInfoBox(root, filterLabel, getString(R.string.list_tutorial_content_filter), textSize, this, filterButton, lisLayout);
             RelativeLayout seaLayout = infoUtility.addInfoBox(root, searchLabel, getString(R.string.list_tutorial_content_search), textSize, this, searchText, filLayout);
@@ -247,7 +249,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     getButtons().get(NEW).setEnabled(true);
                     filterButton.setEnabled(true);
                     searchText.setEnabled(true);
-                    for (int c = 0; c < scrollListLayout.getChildCount();c++){
+                    for (int c = 0; c < scrollListLayout.getChildCount(); c++) {
                         scrollListLayout.getChildAt(c).setEnabled(true);
                     }
                     tutorialFinished = true;

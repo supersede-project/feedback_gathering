@@ -24,24 +24,15 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USE
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackConnector {
-    private HashMap<Integer, View> registeredViews;
-
     private static final FeedbackConnector instance = new FeedbackConnector();
-
-    public static FeedbackConnector getInstance() {
-        return instance;
-    }
+    private HashMap<Integer, View> registeredViews;
 
     private FeedbackConnector() {
         registeredViews = new HashMap<>();
     }
 
-    public void connect(View view, Activity activity) {
-        if (!registeredViews.containsKey(view.getId())) {
-            registeredViews.put(view.getId(), view);
-            view.setOnTouchListener(new FeedbackOnTouchListener(activity, view));
-            onTouchConnector(activity, view, null);
-        }
+    public static FeedbackConnector getInstance() {
+        return instance;
     }
 
     private static void onTouchConnector(Activity activity, View view, MotionEvent event) {
@@ -57,22 +48,6 @@ public class FeedbackConnector {
 
     private static void onListenerTriggered(Activity activity, View view, MotionEvent event) {
         startFeedbackHubWithScreenshotCapture(activity);
-    }
-
-    private static class FeedbackOnTouchListener implements OnTouchListener {
-        private View mView;
-        private Activity mActivity;
-
-        private FeedbackOnTouchListener(Activity activity, View view) {
-            this.mActivity = activity;
-            this.mView = view;
-        }
-
-        @Override
-        public boolean onTouch(View view, MotionEvent event) {
-            onTouchConnector(mActivity, mView, event);
-            return false;
-        }
     }
 
     /**
@@ -105,10 +80,34 @@ public class FeedbackConnector {
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configurationBean);
     }
 
-    public Integer getCurrentUserKarma(Activity activity){
+    public void connect(View view, Activity activity) {
+        if (!registeredViews.containsKey(view.getId())) {
+            registeredViews.put(view.getId(), view);
+            view.setOnTouchListener(new FeedbackOnTouchListener(activity, view));
+            onTouchConnector(activity, view, null);
+        }
+    }
+
+    public Integer getCurrentUserKarma(Activity activity) {
         if (ACTIVE.check(activity)) {
             return FeedbackDatabase.getInstance(activity).readInteger(USER_KARMA, null);
         }
         return null;
+    }
+
+    private static class FeedbackOnTouchListener implements OnTouchListener {
+        private View mView;
+        private Activity mActivity;
+
+        private FeedbackOnTouchListener(Activity activity, View view) {
+            this.mActivity = activity;
+            this.mView = view;
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            onTouchConnector(mActivity, mView, event);
+            return false;
+        }
     }
 }

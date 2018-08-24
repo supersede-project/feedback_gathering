@@ -22,7 +22,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public abstract class AbstractSettingsListItem extends LinearLayout  implements Comparable {
+public abstract class AbstractSettingsListItem extends LinearLayout implements Comparable {
     public static final int PADDING = 10;
     private FeedbackDetailsBean feedbackDetailsBean;
     private LocalConfigurationBean configuration;
@@ -31,35 +31,10 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
     private TextView dateView;
     private TextView titleView;
     private Integer[] colors;
-
-    public AbstractSettingsListItem(Context context){
-        super(context);
-    }
-
-    public FeedbackDetailsBean getFeedbackDetailsBean() {
-        return feedbackDetailsBean;
-    }
-
-    public LinearLayoutCompat.LayoutParams getShortParams() {
-        return shortParams;
-    }
-
     private LinearLayoutCompat.LayoutParams shortParams;
 
-    public LinearLayout getUpperWrapperLayout() {
-        return upperWrapperLayout;
-    }
-
-    public LinearLayout getLowerWrapperLayout() {
-        return lowerWrapperLayout;
-    }
-
-    public TextView getDateView() {
-        return dateView;
-    }
-
-    public TextView getTitleView() {
-        return titleView;
+    public AbstractSettingsListItem(Context context) {
+        super(context);
     }
 
     public AbstractSettingsListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
@@ -98,20 +73,44 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
         });
 
         GradientDrawable gradientDrawable = new GradientDrawable();
-        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK);
         setBackground(gradientDrawable);
+    }
+
+    public FeedbackDetailsBean getFeedbackDetailsBean() {
+        return feedbackDetailsBean;
+    }
+
+    public LinearLayoutCompat.LayoutParams getShortParams() {
+        return shortParams;
+    }
+
+    public LinearLayout getUpperWrapperLayout() {
+        return upperWrapperLayout;
+    }
+
+    public LinearLayout getLowerWrapperLayout() {
+        return lowerWrapperLayout;
+    }
+
+    public TextView getDateView() {
+        return dateView;
+    }
+
+    public TextView getTitleView() {
+        return titleView;
     }
 
     private void startFeedbackDetailsActivity() {
         Intent intent;
-        if (ACTIVE.check(getContext())){
-            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)){
+        if (ACTIVE.check(getContext())) {
+            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
-            }else{
+            } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
             }
-        }else {
-            Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.list_alert_user_level, Toast.LENGTH_SHORT).show();
             return;
         }
         intent.putExtra(EXTRA_KEY_CALLER_CLASS, FeedbackSettingsActivity.class.getName());

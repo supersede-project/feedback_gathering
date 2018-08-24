@@ -6,17 +6,14 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
 public final class PopUp {
-
-    public enum DialogueOption {
-        OK, CANCEL
-    }
 
     private Context context;
     private String title;
@@ -28,9 +25,11 @@ public final class PopUp {
     private EditText inputText;
     private boolean showOk = true;
     private boolean showCancel = true;
-
     private String dialogueOutput = null;
     private DialogueOption dialogueOption = null;
+    public PopUp(Context context) {
+        this.context = context;
+    }
 
     public String getDialogueOutput() {
         return dialogueOutput;
@@ -38,11 +37,6 @@ public final class PopUp {
 
     public DialogueOption getDialogueOption() {
         return dialogueOption;
-    }
-
-
-    public PopUp(Context context) {
-        this.context = context;
     }
 
     public PopUp withTitle(String title) {
@@ -72,9 +66,9 @@ public final class PopUp {
 
     public PopUp withCustomCancel(String cancelLabel, OnClickListener... clickListener) {
         this.cancelLabel = cancelLabel;
-        if (clickListener != null && clickListener.length>0){
+        if (clickListener != null && clickListener.length > 0) {
             this.cancelClickListener = clickListener[0];
-        }else{
+        } else {
             this.cancelClickListener = new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -87,9 +81,9 @@ public final class PopUp {
 
     public PopUp withCustomOk(String okLabel, OnClickListener... clickListener) {
         this.okLabel = okLabel;
-        if (clickListener != null && clickListener.length>0){
+        if (clickListener != null && clickListener.length > 0) {
             this.okClickListener = clickListener[0];
-        }else{
+        } else {
             this.okClickListener = new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -111,7 +105,7 @@ public final class PopUp {
     }
 
     public PopUp buildAndShow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,AlertDialog.THEME_HOLO_DARK);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
 
         TextView titleView = new TextView(context);
         // You Can Customise your Title here
@@ -141,7 +135,7 @@ public final class PopUp {
                 });
             }
         }
-        if (showCancel){
+        if (showCancel) {
             if (cancelClickListener != null) {
                 builder.setNegativeButton(cancelLabel, cancelClickListener);
             } else {
@@ -155,5 +149,9 @@ public final class PopUp {
         }
         builder.show();
         return this;
+    }
+
+    public enum DialogueOption {
+        OK, CANCEL
     }
 }

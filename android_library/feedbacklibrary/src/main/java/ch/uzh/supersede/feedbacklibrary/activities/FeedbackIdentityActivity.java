@@ -1,12 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -16,14 +18,16 @@ import com.nex3z.flowlayout.FlowLayout;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public final class FeedbackIdentityActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
-    private Map<String,String> loadedTags = new TreeMap<>();
+    boolean cancellation = false;
+    private Map<String, String> loadedTags = new TreeMap<>();
     private List<String> createdTags = new ArrayList<>();
     private Button buttonNext;
     private Button buttonBack;
@@ -45,7 +49,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         buttonBack = getView(R.id.identity_button_back, Button.class);
         tagContainer = getView(R.id.identity_container_tags, FlowLayout.class);
         recommendationContainer = getView(R.id.identity_container_recommendations, FlowLayout.class);
-        colorViews(1,getView(R.id.identity_root,RelativeLayout.class));
+        colorViews(1, getView(R.id.identity_root, RelativeLayout.class));
         colorTextOnly(1,
                 getView(R.id.identity_text_info_1, TextView.class),
                 getView(R.id.identity_text_info_2, TextView.class),
@@ -56,16 +60,16 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         getView(R.id.identity_focus_sink, LinearLayout.class).requestFocus();
         createEditableFields();
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
-        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
-        drawLayoutOutlines(recommendationContainer.getId(),tagContainer.getId());
+        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
+        drawLayoutOutlines(recommendationContainer.getId(), tagContainer.getId());
         onPostCreate();
     }
 
     private void drawLayoutOutlines(int... layouts) {
         GradientDrawable gradientDrawable;
-        for (int layout : layouts){
+        for (int layout : layouts) {
             gradientDrawable = new GradientDrawable();
-            gradientDrawable.setStroke(1,ColorUtility.isDark(configuration.getTopColors()[0])? Color.WHITE:Color.BLACK);
+            gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK);
             findViewById(layout).setBackground(gradientDrawable);
         }
     }
@@ -78,7 +82,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         editTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && getString(R.string.identity_input_title).equals(editTitle.getText().toString())){
+                if (hasFocus && getString(R.string.identity_input_title).equals(editTitle.getText().toString())) {
                     editTitle.setText(null);
                 }
             }
@@ -96,33 +100,33 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && !getString(R.string.identity_input_tags).equals(s.toString())){
-                    if (s.toString().toCharArray()[s.length()-1]==' '){
-                        if (s.toString().length()<configuration.getMinTagLength()){
-                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_short)+configuration.getMinTagLength(),Toast.LENGTH_SHORT).show();
-                            editTag.setText(s.toString().substring(0,s.length()-1));
-                            editTag.setSelection(s.length()-1);
-                        }else if (s.toString().length()>configuration.getMaxTagLength()){
-                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
-                            editTag.setText(s.toString().substring(0,s.length()-1));
-                            editTag.setSelection(s.length()-1);
-                        }else if (createdTags.size()==configuration.getMaxTagNumber()){
-                            Toast.makeText(getApplicationContext(), R.string.identity_max_tags,Toast.LENGTH_SHORT).show();
-                            editTag.setText(s.toString().substring(0,s.length()-1));
-                            editTag.setSelection(s.length()-1);
-                        }else{
-                            if (createdTags.contains(s.toString().substring(0,s.length()-1).toLowerCase())){
-                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
-                                editTag.setText(s.toString().substring(0,s.length()-1));
-                                editTag.setSelection(s.length()-1);
-                            }else{
-                                addTag(s.toString().substring(0,s.length()-1));
+                if (s.length() > 0 && !getString(R.string.identity_input_tags).equals(s.toString())) {
+                    if (s.toString().toCharArray()[s.length() - 1] == ' ') {
+                        if (s.toString().length() < configuration.getMinTagLength()) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.identity_too_short) + configuration.getMinTagLength(), Toast.LENGTH_SHORT).show();
+                            editTag.setText(s.toString().substring(0, s.length() - 1));
+                            editTag.setSelection(s.length() - 1);
+                        } else if (s.toString().length() > configuration.getMaxTagLength()) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.identity_too_long) + configuration.getMaxTagLength(), Toast.LENGTH_SHORT).show();
+                            editTag.setText(s.toString().substring(0, s.length() - 1));
+                            editTag.setSelection(s.length() - 1);
+                        } else if (createdTags.size() == configuration.getMaxTagNumber()) {
+                            Toast.makeText(getApplicationContext(), R.string.identity_max_tags, Toast.LENGTH_SHORT).show();
+                            editTag.setText(s.toString().substring(0, s.length() - 1));
+                            editTag.setSelection(s.length() - 1);
+                        } else {
+                            if (createdTags.contains(s.toString().substring(0, s.length() - 1).toLowerCase())) {
+                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate, Toast.LENGTH_SHORT).show();
+                                editTag.setText(s.toString().substring(0, s.length() - 1));
+                                editTag.setSelection(s.length() - 1);
+                            } else {
+                                addTag(s.toString().substring(0, s.length() - 1));
                             }
                         }
-                    }else{
+                    } else {
                         fullTextSearch(s);
                     }
-                }else{
+                } else {
                     recommendationContainer.removeAllViews();
                 }
             }
@@ -130,7 +134,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         editTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && getString(R.string.identity_input_tags).equals(editTag.getText().toString())){
+                if (hasFocus && getString(R.string.identity_input_tags).equals(editTag.getText().toString())) {
                     editTag.setText(null);
                 }
             }
@@ -138,22 +142,22 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         editTag.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
-                    if (createdTags.size()< configuration.getMaxTagNumber()){
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (createdTags.size() < configuration.getMaxTagNumber()) {
                         String s = editTag.getText().toString();
-                        if (s.length()<configuration.getMinTagLength()){
-                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_short)+configuration.getMinTagLength(),Toast.LENGTH_SHORT).show();
-                        }else if (s.length()>configuration.getMaxTagLength()){
-                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
-                        }else{
-                            if (createdTags.contains(s.toLowerCase())){
-                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
-                            }else{
+                        if (s.length() < configuration.getMinTagLength()) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.identity_too_short) + configuration.getMinTagLength(), Toast.LENGTH_SHORT).show();
+                        } else if (s.length() > configuration.getMaxTagLength()) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.identity_too_long) + configuration.getMaxTagLength(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (createdTags.contains(s.toLowerCase())) {
+                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate, Toast.LENGTH_SHORT).show();
+                            } else {
                                 addTag(s);
                             }
                         }
-                    }else{
-                        Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagNumber(),Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.identity_max_tags) + configuration.getMaxTagNumber(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
@@ -163,49 +167,49 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
 
     private void fullTextSearch(Editable s) {
         recommendationContainer.removeAllViews();
-        if (s == null || s.length() == 0){
+        if (s == null || s.length() == 0) {
             return;
         }
         String search = s.toString().toLowerCase();
         int found = 0;
         ArrayList<String> findings = new ArrayList<>();
         ArrayList<String> ignores = new ArrayList<>();
-        for (Map.Entry<String, String> tag : loadedTags.entrySet()){
-            if (tag.getKey().startsWith(search)){
+        for (Map.Entry<String, String> tag : loadedTags.entrySet()) {
+            if (tag.getKey().startsWith(search)) {
                 findings.add(tag.getValue());
                 ignores.add(tag.getKey());
                 found++;
             }
-            if (found == configuration.getMaxTagRecommendationNumber()){
+            if (found == configuration.getMaxTagRecommendationNumber()) {
                 break;
             }
         }
-        for (Map.Entry<String, String> tag : loadedTags.entrySet()){
-            if (tag.getKey().contains(search) && !ignores.contains(tag.getKey())){
+        for (Map.Entry<String, String> tag : loadedTags.entrySet()) {
+            if (tag.getKey().contains(search) && !ignores.contains(tag.getKey())) {
                 findings.add(tag.getValue());
                 found++;
             }
-            if (found == configuration.getMaxTagRecommendationNumber()){
+            if (found == configuration.getMaxTagRecommendationNumber()) {
                 break;
             }
         }
-        for (String matchingTag : findings){
+        for (String matchingTag : findings) {
             Button b = new Button(this);
             b.setText(matchingTag);
             ScalingUtility.getInstance().updateButtonText(b);
-            b.setPadding(5,0,5,0);
+            b.setPadding(5, 0, 5, 0);
             b.setBackground(null);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (createdTags.size()<configuration.getMaxTagNumber()){
-                        if (createdTags.contains(((Button)v).getText().toString().toLowerCase())){
-                            Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
-                        }else{
-                            addTag(((Button)v).getText().toString());
+                    if (createdTags.size() < configuration.getMaxTagNumber()) {
+                        if (createdTags.contains(((Button) v).getText().toString().toLowerCase())) {
+                            Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate, Toast.LENGTH_SHORT).show();
+                        } else {
+                            addTag(((Button) v).getText().toString());
                         }
-                    }else{
-                        Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.identity_max_tags) + configuration.getMaxTagLength(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -217,7 +221,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         createdTags.add(s.toLowerCase());
         Button b = new Button(this);
         b.setText(s);
-        b.setPadding(5,0,5,0);
+        b.setPadding(5, 0, 5, 0);
         b.setBackground(null);
         ScalingUtility.getInstance().updateButtonText(b);
         b.setOnClickListener(new View.OnClickListener() {
@@ -232,28 +236,28 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     }
 
     private void removeTag(View v) {
-        editTag.setText(((Button)v).getText().toString().toLowerCase());
-        editTag.setSelection(((Button)v).getText().length());
-        createdTags.remove(((Button)v).getText().toString().toLowerCase());
+        editTag.setText(((Button) v).getText().toString().toLowerCase());
+        editTag.setSelection(((Button) v).getText().length());
+        createdTags.remove(((Button) v).getText().toString().toLowerCase());
         tagContainer.removeView(v);
     }
 
     @Override
     public void onButtonClicked(View view) {
-        if (!tutorialFinished){
+        if (!tutorialFinished) {
             Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (view.getId() == buttonBack.getId()){
+        if (view.getId() == buttonBack.getId()) {
             onBackPressed();
-        }else if (view.getId() == buttonNext.getId()){
+        } else if (view.getId() == buttonNext.getId()) {
             String message = validateInput();
-            if (message == null){
+            if (message == null) {
                 Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
-                intent.putExtra(EXTRA_KEY_FEEDBACK_TITLE,editTitle.getText().toString());
-                intent.putExtra(EXTRA_KEY_FEEDBACK_TAGS,createdTags.toArray(new String[createdTags.size()]));
-                startActivity(this, FeedbackActivity.class,false, intent);
-            }else{
+                intent.putExtra(EXTRA_KEY_FEEDBACK_TITLE, editTitle.getText().toString());
+                intent.putExtra(EXTRA_KEY_FEEDBACK_TAGS, createdTags.toArray(new String[createdTags.size()]));
+                startActivity(this, FeedbackActivity.class, false, intent);
+            } else {
                 new PopUp(this)
                         .withTitle(getString(R.string.identity_incomplete))
                         .withMessage(message)
@@ -269,19 +273,18 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
 
     private String validateInput() {
         String errorMessage = null;
-        if (getString(R.string.identity_input_title).equals(editTitle.getText().toString())){
+        if (getString(R.string.identity_input_title).equals(editTitle.getText().toString())) {
             errorMessage = getString(R.string.identity_warn_specify_title);
-        } else if (editTitle.getText().length() < configuration.getMinTitleLength()){
-            errorMessage = getString(R.string.identity_warn_title_too_short)+configuration.getMinTitleLength();
-        }else if (editTitle.getText().length() > configuration.getMaxTitleLength()){
-            errorMessage = getString(R.string.identity_warn_title_too_long)+configuration.getMaxTitleLength();
-        }else if (createdTags.size() < configuration.getMinTagNumber()){
-            errorMessage = getString(R.string.identity_warn_too_few_tags)+configuration.getMinTagNumber();
+        } else if (editTitle.getText().length() < configuration.getMinTitleLength()) {
+            errorMessage = getString(R.string.identity_warn_title_too_short) + configuration.getMinTitleLength();
+        } else if (editTitle.getText().length() > configuration.getMaxTitleLength()) {
+            errorMessage = getString(R.string.identity_warn_title_too_long) + configuration.getMaxTitleLength();
+        } else if (createdTags.size() < configuration.getMinTagNumber()) {
+            errorMessage = getString(R.string.identity_warn_too_few_tags) + configuration.getMinTagNumber();
         }
-            return errorMessage;
+        return errorMessage;
     }
 
-    boolean cancellation = false;
     @Override
     public void onBackPressed() {
         if (!cancellation) {
@@ -297,7 +300,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
                         }
                     }).withCustomCancel(getString(R.string.dialog_no))
                     .buildAndShow();
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -317,13 +320,19 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
             String recommendationLabel = getString(R.string.identity_tutorial_title_recommendations);
             String inputTagLabel = getString(R.string.identity_tutorial_title_tag_input);
             String inputTitleLabel = getString(R.string.identity_tutorial_title_title_input);
-            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20,75, 0.45,cancelLabel,continueLabel,selectedTagsLabel,recommendationLabel,inputTagLabel,inputTitleLabel);
-            RelativeLayout mLayout = infoUtility.addInfoBox(root, cancelLabel, getString(R.string.identity_tutorial_content_cancel), textSize,this, buttonBack);
-            RelativeLayout llLayout = infoUtility.addInfoBox(root, continueLabel,getString(R.string.identity_tutorial_content_continue), textSize,this, buttonNext, mLayout);
-            RelativeLayout lrLayout = infoUtility.addInfoBox(root, selectedTagsLabel, getString(R.string.identity_tutorial_content_selected_tags), textSize,this, tagContainer, llLayout);
-            RelativeLayout ulLayout = infoUtility.addInfoBox(root, recommendationLabel, getString(R.string.identity_tutorial_content_recommendations), textSize,this, recommendationContainer, lrLayout);
-            RelativeLayout urLayout = infoUtility.addInfoBox(root, inputTagLabel, getString(R.string.identity_tutorial_content_tag_input, configuration.getMaxTagNumber(), configuration.getMinTagNumber(), configuration.getMinTagLength(), configuration.getMaxTagLength()), textSize,this, editTag, ulLayout);
-            RelativeLayout umLayout = infoUtility.addInfoBox(root, inputTitleLabel, getString(R.string.identity_tutorial_content_title_input,configuration.getMinTitleLength(), configuration.getMaxTitleLength()), textSize,this, editTitle, urLayout);
+            float textSize = ScalingUtility
+                    .getInstance()
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, cancelLabel, continueLabel, selectedTagsLabel, recommendationLabel, inputTagLabel, inputTitleLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, cancelLabel, getString(R.string.identity_tutorial_content_cancel), textSize, this, buttonBack);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, continueLabel, getString(R.string.identity_tutorial_content_continue), textSize, this, buttonNext, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, selectedTagsLabel, getString(R.string.identity_tutorial_content_selected_tags), textSize, this, tagContainer, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, recommendationLabel, getString(R.string.identity_tutorial_content_recommendations), textSize, this, recommendationContainer,
+                    lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, inputTagLabel, getString(R.string.identity_tutorial_content_tag_input, configuration.getMaxTagNumber(), configuration
+                    .getMinTagNumber(), configuration
+                    .getMinTagLength(), configuration.getMaxTagLength()), textSize, this, editTag, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, inputTitleLabel, getString(R.string.identity_tutorial_content_title_input, configuration.getMinTitleLength(), configuration
+                    .getMaxTitleLength()), textSize, this, editTitle, urLayout);
             mLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

@@ -2,19 +2,19 @@ package ch.uzh.supersede.feedbacklibrary.stubs;
 
 import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackResponseBean;
 
 final class PersistentDataSingleton {
-    private List<FeedbackDetailsBean> persistedFeedback = new ArrayList<>();
-    private HashMap<Long,List<FeedbackResponseBean>> persistedFeedbackResponses = new HashMap<>();
-
     private static final PersistentDataSingleton ourInstance = new PersistentDataSingleton();
+    private List<FeedbackDetailsBean> persistedFeedback = new ArrayList<>();
+    private HashMap<Long, List<FeedbackResponseBean>> persistedFeedbackResponses = new HashMap<>();
+
+    private PersistentDataSingleton() {
+    }
 
     static PersistentDataSingleton getInstance() {
         return ourInstance;
-    }
-
-    private PersistentDataSingleton() {
     }
 
     public List<FeedbackDetailsBean> getPersistedFeedback() {

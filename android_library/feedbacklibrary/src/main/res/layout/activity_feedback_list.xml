@@ -103,11 +103,11 @@
                 android:layout_weight="12"
                 android:background="@color/white"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:nextFocusLeft="@id/list_edit_search"
                 android:nextFocusUp="@id/list_edit_search"
                 android:padding="1dp"
                 android:selectAllOnFocus="true"
+                android:singleLine="true"
                 android:text="@string/list_edit_search" />
 
             <Space

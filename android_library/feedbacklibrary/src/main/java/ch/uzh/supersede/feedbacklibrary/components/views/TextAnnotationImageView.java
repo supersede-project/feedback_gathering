@@ -11,9 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 
@@ -46,16 +44,12 @@ public final class TextAnnotationImageView extends AbstractAnnotationView {
         super(context, attrs, defStyle);
     }
 
-    public interface OnTextAnnotationChangedListener {
-        void onTextAnnotationDelete();
+    public String getAnnotationInputText() {
+        return annotationInputText;
     }
 
     public void setAnnotationInputText(String annotationInputText) {
         this.annotationInputText = annotationInputText;
-    }
-
-    public String getAnnotationInputText() {
-        return annotationInputText;
     }
 
     public String getAnnotationInputTextHint() {
@@ -156,10 +150,10 @@ public final class TextAnnotationImageView extends AbstractAnnotationView {
         textAnnotationText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    Log.d("focus","on");
+                if (hasFocus) {
+                    Log.d("focus", "on");
                 } else {
-                    Log.d("focus","off");
+                    Log.d("focus", "off");
                 }
             }
         });
@@ -211,5 +205,9 @@ public final class TextAnnotationImageView extends AbstractAnnotationView {
         dialog.setCancelable(false);
         textAnnotationDialog = dialog.create();
         textAnnotationDialog.show();
+    }
+
+    public interface OnTextAnnotationChangedListener {
+        void onTextAnnotationDelete();
     }
 }

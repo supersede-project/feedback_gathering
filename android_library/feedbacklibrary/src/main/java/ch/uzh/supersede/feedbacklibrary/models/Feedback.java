@@ -60,6 +60,94 @@ public final class Feedback implements Serializable {
         return tags;
     }
 
+    public long getApplicationId() {
+        return applicationId;
+    }
+
+    public long getConfigurationId() {
+        return configurationId;
+    }
+
+    public ContextInformationFeedback getContextInformationFeedback() {
+        return contextInformationFeedback;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getUserIdentification() {
+        return userIdentification;
+    }
+
+    public List<AudioFeedback> getAudioFeedbackList() {
+        return audioFeedbackList;
+    }
+
+    public List<LabelFeedback> getLabelFeedbackList() {
+        return labelFeedbackList;
+    }
+
+    public List<RatingFeedback> getRatingFeedbackList() {
+        return ratingFeedbackList;
+    }
+
+    public List<ScreenshotFeedback> getScreenshotFeedbackList() {
+        return screenshotFeedbackList;
+    }
+
+    public List<TextFeedback> getTextFeedbackList() {
+        return textFeedbackList;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public List<AbstractFeedbackPart> getAttachmentFeedbackList() {
+        return attachmentFeedbackList;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public int getMinVotes() {
+        return minVotes;
+    }
+
+    public int getMaxVotes() {
+        return maxVotes;
+    }
+
+    public Enums.FEEDBACK_STATUS getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public List<FeedbackResponse> getFeedbackResponses() {
+        return feedbackResponses;
+    }
+
     public static class Builder {
         private ContextInformationFeedback contextInformationFeedback;
         private String title;
@@ -155,7 +243,7 @@ public final class Feedback implements Serializable {
             return this;
         }
 
-        public Builder withFeedbackResponses(List<FeedbackResponse> feedbackResponses){
+        public Builder withFeedbackResponses(List<FeedbackResponse> feedbackResponses) {
             this.feedbackResponses = feedbackResponses;
             return this;
         }
@@ -178,95 +266,5 @@ public final class Feedback implements Serializable {
             return bean;
         }
 
-    }
-
-    public long getApplicationId() {
-        return applicationId;
-    }
-
-
-    public long getConfigurationId() {
-        return configurationId;
-    }
-
-
-    public ContextInformationFeedback getContextInformationFeedback() {
-        return contextInformationFeedback;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getUserIdentification() {
-        return userIdentification;
-    }
-
-    public List<AudioFeedback> getAudioFeedbackList() {
-        return audioFeedbackList;
-    }
-
-    public List<LabelFeedback> getLabelFeedbackList() {
-        return labelFeedbackList;
-    }
-
-    public List<RatingFeedback> getRatingFeedbackList() {
-        return ratingFeedbackList;
-    }
-
-    public List<ScreenshotFeedback> getScreenshotFeedbackList() {
-        return screenshotFeedbackList;
-    }
-
-    public List<TextFeedback> getTextFeedbackList() {
-        return textFeedbackList;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public List<AbstractFeedbackPart> getAttachmentFeedbackList() {
-        return attachmentFeedbackList;
-    }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public int getMinVotes() {
-        return minVotes;
-    }
-
-    public int getMaxVotes() {
-        return maxVotes;
-    }
-
-    public Enums.FEEDBACK_STATUS getFeedbackStatus() {
-        return feedbackStatus;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
-
-    public List<FeedbackResponse> getFeedbackResponses() {
-        return feedbackResponses;
     }
 }

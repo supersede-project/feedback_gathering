@@ -15,12 +15,12 @@ public final class CollectionUtility {
         return null;
     }
 
-    public static boolean oneOf(Object o, Object... objects){
-        if (o == null || objects==null || objects.length == 0){
+    public static boolean oneOf(Object o, Object... objects) {
+        if (o == null || objects == null || objects.length == 0) {
             return false;
         }
-        for (Object o_ : objects){
-            if (o.equals(o_)){
+        for (Object o_ : objects) {
+            if (o.equals(o_)) {
                 return true;
             }
         }
@@ -28,12 +28,12 @@ public final class CollectionUtility {
     }
 
     @SuppressWarnings("unchecked")
-    public static  <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end){
-        if (source.size() <= end || end <= begin){
+    public static <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end) {
+        if (source.size() <= end || end <= begin) {
             return (T[]) Array.newInstance(clazz, 0);
         }
-        T[] array = (T[]) Array.newInstance(clazz, end-begin);
-        for (int i = begin; i < end; i++){
+        T[] array = (T[]) Array.newInstance(clazz, end - begin);
+        for (int i = begin; i < end; i++) {
             array[i] = source.get(i);
         }
         return array;

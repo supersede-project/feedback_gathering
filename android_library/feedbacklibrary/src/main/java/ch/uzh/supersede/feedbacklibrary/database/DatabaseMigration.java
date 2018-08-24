@@ -8,8 +8,7 @@ import java.io.File;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.ConfigurationUtility;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.DATABASE_VERSION;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.DATABASE_VERSION_NUMBER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public final class DatabaseMigration implements Runnable {
     private final Context context;

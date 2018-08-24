@@ -13,10 +13,6 @@ public final class EditImageItem {
         this.elementResource = elementResource;
     }
 
-    public interface OnClickListener {
-        void onClick();
-    }
-
     public void click() {
         listener.onClick();
     }
@@ -47,5 +43,9 @@ public final class EditImageItem {
 
     public void setListener(OnClickListener listener) {
         this.listener = listener;
+    }
+
+    public interface OnClickListener {
+        void onClick();
     }
 }

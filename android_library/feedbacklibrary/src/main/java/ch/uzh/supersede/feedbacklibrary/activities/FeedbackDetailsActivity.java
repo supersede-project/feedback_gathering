@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -55,7 +57,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
         creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
         statusText = getView(R.id.details_text_status, TextView.class);
 
-        colorViews(0, upButton, downButton,makePublicButton);
+        colorViews(0, upButton, downButton, makePublicButton);
         colorViews(1, getView(R.id.details_root, RelativeLayout.class));
         colorViews(0, getView(R.id.details_layout_scroll_layout, LinearLayout.class));
         colorViews(configuration.getLastColorIndex(), statusText);
@@ -69,14 +71,14 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
         updateReportStatus(null);
         updateOwnFeedbackCase();
         initStatusText();
-        drawLayoutOutlines(R.id.details_layout_up,R.id.details_layout_mid,R.id.details_layout_low,R.id.details_layout_scroll_container,R.id.details_layout_button);
+        drawLayoutOutlines(R.id.details_layout_up, R.id.details_layout_mid, R.id.details_layout_low, R.id.details_layout_scroll_container, R.id.details_layout_button);
         tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
-        tutorialInitialized  = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
         onPostCreate();
     }
 
     private void initStatusText() {
-        statusText.setText(getString(R.string.details_status,getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+        statusText.setText(getString(R.string.details_status, getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
     }
 
     @Override
@@ -126,17 +128,17 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
         super.updateFeedbackState();
         if (ACTIVE.check(this, true)) {
             if (getFeedbackState().isUpVoted()) {
-                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.green_4),0.4));
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.green_4), 0.4));
                 upButton.setEnabled(false);
                 downButton.setEnabled(true);
             }
             if (getFeedbackState().isDownVoted()) {
-                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.red_5),0.4));
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.red_5), 0.4));
                 downButton.setEnabled(false);
                 upButton.setEnabled(true);
             }
             if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
-                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1),ContextCompat.getColor(this, R.color.black),0.4));
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.black), 0.4));
                 upButton.setEnabled(true);
                 downButton.setEnabled(true);
             }
@@ -220,7 +222,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
      */
     public void updateOwnFeedbackCase() {
         if (ACTIVE.check(getApplicationContext()) && getFeedbackDetailsBean().getUserName().equals(getUserName())) {
-            disableViews(reportButton,upButton,downButton);
+            disableViews(reportButton, upButton, downButton);
         }
     }
 
@@ -266,7 +268,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
             String replyLabel = getString(R.string.detail_tutorial_title_reply);
             float textSize = ScalingUtility
                     .getInstance()
-                    .getMinTextSizeScaledForWidth(20, 75, 0.45, votesLabel,publicLabel,multimediaLabel, replyLabel, subscribeLabel);
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, votesLabel, publicLabel, multimediaLabel, replyLabel, subscribeLabel);
             RelativeLayout repLayout = infoUtility.addInfoBox(root, replyLabel, getString(R.string.detail_tutorial_content_reply), textSize, this, responseButton);
             RelativeLayout subLayout = infoUtility.addInfoBox(root, subscribeLabel, getString(R.string.detail_tutorial_content_subs), textSize, this, subscribeButton, repLayout);
             RelativeLayout mulLayout = infoUtility.addInfoBox(root, multimediaLabel, getString(R.string.detail_tutorial_content_multimedia), textSize, this, audioButton, subLayout);

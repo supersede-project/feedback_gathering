@@ -8,7 +8,8 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
@@ -24,20 +25,20 @@ public final class RepositoryStub {
 
     public static List<FeedbackDetailsBean> getFeedback(Context context, int count, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
         List<FeedbackDetailsBean> feedbackBeans = PersistentDataSingleton.getInstance().getPersistedFeedback();
-        if (!feedbackBeans.isEmpty()){
+        if (!feedbackBeans.isEmpty()) {
             return feedbackBeans; //Already loaded once, in place for offline usage
         }
-        if (ACTIVE.check(context) && FeedbackDatabase.getInstance(context).readBoolean(Constants.USE_STUBS,false)){
+        if (ACTIVE.check(context) && FeedbackDatabase.getInstance(context).readBoolean(Constants.USE_STUBS, false)) {
             List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.OWN);
-            if (!ownFeedbackBeans.isEmpty()){
+            if (!ownFeedbackBeans.isEmpty()) {
                 ownFeedbackPercent = 0; //if own feedback exists, dont create artificial ones
             }
-            for (LocalFeedbackBean bean : ownFeedbackBeans){
-                feedbackBeans.add(getFeedbackDetails(context,new FeedbackBean.Builder().fromLocalFeedbackBean(context,bean)));
+            for (LocalFeedbackBean bean : ownFeedbackBeans) {
+                feedbackBeans.add(getFeedbackDetails(context, new FeedbackBean.Builder().fromLocalFeedbackBean(context, bean)));
             }
         }
         for (int f = 0; f < count; f++) {
-            feedbackBeans.add(getFeedbackDetails(context,getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent)));
+            feedbackBeans.add(getFeedbackDetails(context, getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent)));
         }
         PersistentDataSingleton.getInstance().persistFeedbackBeans(feedbackBeans);
         return feedbackBeans;
@@ -45,13 +46,13 @@ public final class RepositoryStub {
 
     private static List<FeedbackResponseBean> getFeedbackResponses(Context context, int count, long feedbackCreationDate, float developerPercent, float ownerPercent, FeedbackBean feedbackBean) {
         List<FeedbackResponseBean> feedbackResponseBeans = PersistentDataSingleton.getInstance().getPersistedFeedbackResponses(feedbackBean.getFeedbackId());
-        if (!feedbackResponseBeans.isEmpty()){
+        if (!feedbackResponseBeans.isEmpty()) {
             return feedbackResponseBeans;
         }
         for (int f = 0; f < count; f++) {
             feedbackResponseBeans.add(getFeedbackResponse(context, feedbackCreationDate, developerPercent, ownerPercent, feedbackBean));
         }
-        PersistentDataSingleton.getInstance().persistFeedbackResponses(feedbackBean.getFeedbackId(),feedbackResponseBeans);
+        PersistentDataSingleton.getInstance().persistFeedbackResponses(feedbackBean.getFeedbackId(), feedbackResponseBeans);
         return feedbackResponseBeans;
     }
 
@@ -108,7 +109,7 @@ public final class RepositoryStub {
     private static FeedbackBean getFeedback(Context context, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
         long feedbackId = NumberUtility.randomLong();
         boolean ownFeedback = false;
-        if (ownFeedbackPercent != 0){
+        if (ownFeedbackPercent != 0) {
             int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
             ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
         }
@@ -295,14 +296,14 @@ public final class RepositoryStub {
         //TheoreticalCallToRepo
     }
 
-    public static Map<String,String> getFeedbackTags(Context context) {
+    public static Map<String, String> getFeedbackTags(Context context) {
         //TheoreticalCallToRepo
         ArrayList<String> loadedTags = new ArrayList<>(
                 Arrays.asList(
                         "GUI", "Images", "Scaling", "Performance", "Permissions", "Data-Usage", "Improvement", "Development", "Translations",
                         "Battery", "Privacy", "Crashes", "Bugs", "Functionality", "Ideas", "Updates", "Region-Lock", "Content", "Features",
                         "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"));
-        return TagUtility.getFeedbackTags(context,loadedTags);
+        return TagUtility.getFeedbackTags(context, loadedTags);
     }
 
     public static AuthenticateResponse generateAuthenticateResponse() {

@@ -9,7 +9,6 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,20 +55,6 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
     private long currentRecordDuration = 1L;
     private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
 
-    @Override
-    protected void colorPrimary(int color) {
-        getEnclosingLayout().setBackgroundColor(color);
-    }
-
-    @Override
-    protected void colorSecondary(int color) {
-        ((LinearLayout)getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
-    }
-
-    @Override
-    protected void colorTertiary(int color) {
-        //NOP
-    }
     public AudioFeedbackView(LayoutInflater layoutInflater, AudioFeedback audioFeedback, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.viewOrder = audioFeedback.getOrder();
@@ -113,6 +98,21 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
                 handlerRecorder.postDelayed(this, 1000);
             }
         };
+    }
+
+    @Override
+    protected void colorPrimary(int color) {
+        getEnclosingLayout().setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorSecondary(int color) {
+        ((LinearLayout) getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorTertiary(int color) {
+        //NOP
     }
 
     private void addUpdateSeekBarTask() {
@@ -542,16 +542,9 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
         audioFeedback.setDuration(totalDuration);
     }
 
-
-    public interface MultipleAudioMechanismsListener {
-        void onRecordStart(long audioMechanismId);
-
-        void onRecordStop();
-    }
-
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractFeedbackPartView){
+        if (o instanceof AbstractFeedbackPartView) {
             int comparedViewOrder = ((AbstractFeedbackPartView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }
@@ -560,5 +553,11 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
 
     public String getAudioFilePath() {
         return audioFilePath;
+    }
+
+    public interface MultipleAudioMechanismsListener {
+        void onRecordStart(long audioMechanismId);
+
+        void onRecordStop();
     }
 }

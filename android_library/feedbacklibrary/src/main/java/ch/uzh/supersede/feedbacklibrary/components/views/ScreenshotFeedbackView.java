@@ -2,14 +2,12 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -20,7 +18,7 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
@@ -36,23 +34,6 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     private ScreenshotFeedback screenshotFeedback;
     private int buttonColor;
 
-    @Override
-    protected void colorPrimary(int color) {
-        buttonColor = color;
-        deleteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        getEnclosingLayout().setBackgroundColor(color);
-    }
-
-    @Override
-    protected void colorSecondary(int color) {
-        ((LinearLayout)getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
-    }
-
-    @Override
-    protected void colorTertiary(int color) {
-
-    }
-
     public ScreenshotFeedbackView(LayoutInflater layoutInflater, Activity activity, ScreenshotFeedback screenshotFeedback) {
         super(layoutInflater);
         this.viewOrder = screenshotFeedback.getOrder();
@@ -62,8 +43,29 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         initView();
     }
 
+    @Override
+    protected void colorPrimary(int color) {
+        buttonColor = color;
+        deleteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        getEnclosingLayout().setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorSecondary(int color) {
+        ((LinearLayout) getEnclosingLayout()).getChildAt(0).setBackgroundColor(color);
+    }
+
+    @Override
+    protected void colorTertiary(int color) {
+
+    }
+
     private Map<Integer, String> getAllStickerAnnotations() {
         return allStickerAnnotations;
+    }
+
+    public void setAllStickerAnnotations(Map<Integer, String> allStickerAnnotations) {
+        this.allStickerAnnotations = new HashMap<>(allStickerAnnotations);
     }
 
     public void toggleSelectButton(boolean enabled) {
@@ -99,16 +101,12 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
         return screenShotPreviewImageView;
     }
 
-    public void setAllStickerAnnotations(Map<Integer, String> allStickerAnnotations) {
-        this.allStickerAnnotations = new HashMap<>(allStickerAnnotations);
+    private Bitmap getPictureBitmap() {
+        return pictureBitmap;
     }
 
     private void setPictureBitmap(Bitmap pictureBitmap) {
         this.pictureBitmap = pictureBitmap;
-    }
-
-    private Bitmap getPictureBitmap() {
-        return pictureBitmap;
     }
 
     public Bitmap getPictureBitmapAnnotated() {

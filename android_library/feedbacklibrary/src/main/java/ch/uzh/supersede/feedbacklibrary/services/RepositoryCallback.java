@@ -1,8 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import retrofit2.*;
 
 public class RepositoryCallback<T> implements Callback<T> {
     private IFeedbackServiceEventListener callback;

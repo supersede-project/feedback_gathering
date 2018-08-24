@@ -47,8 +47,8 @@
                 <Button
                     android:id="@+id/details_button_tags"
                     android:layout_width="fill_parent"
-                    android:layout_margin="5dp"
                     android:layout_height="0dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="3"
                     android:onClick="onButtonClicked"
                     android:text="@string/details_tags" />
@@ -104,17 +104,17 @@
                 <Space
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/details_button_make_public"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:padding="0dp"
                     android:layout_weight="2"
-                    android:visibility="invisible"
                     android:onClick="onButtonClicked"
-                    android:text="@string/details_make_public"/>
+                    android:padding="0dp"
+                    android:text="@string/details_make_public"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/details_text_user"
@@ -122,9 +122,9 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="0dp"
                     android:gravity="start|center_horizontal"
-                    android:paddingStart="5dp"/>
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
 
                 <TextView
                     android:id="@+id/details_text_status"
@@ -132,9 +132,9 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="0dp"
                     android:gravity="start|center_horizontal"
-                    android:paddingStart="5dp"/>
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
 
                 <TextView
                     android:id="@+id/details_text_title"
@@ -142,9 +142,9 @@
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="0dp"
                     android:gravity="start|center_horizontal"
-                    android:paddingStart="5dp"/>
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -181,8 +181,8 @@
             <ScrollView
                 android:id="@+id/details_layout_scroll_container"
                 android:layout_width="0dp"
-                android:layout_margin="5dp"
                 android:layout_height="fill_parent"
+                android:layout_margin="5dp"
                 android:layout_weight="28">
 
                 <LinearLayout
@@ -214,10 +214,10 @@
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="2"
-                android:onClick="onButtonClicked"
                 android:background="@color/red_5"
-                android:textColor="@color/red_1"
-                android:text="@string/details_report" />
+                android:onClick="onButtonClicked"
+                android:text="@string/details_report"
+                android:textColor="@color/red_1" />
 
             <Button
                 android:id="@+id/details_button_subscribe"

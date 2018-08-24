@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
 
@@ -12,10 +13,10 @@
         android:id="@+id/edil_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="title stub"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        android:layout_toEndOf="@id/edil_element_iv"/>
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/edil_element_iv"
+        android:text="title stub" />
 
     <CheckBox
         android:id="@+id/edil_star_cb"

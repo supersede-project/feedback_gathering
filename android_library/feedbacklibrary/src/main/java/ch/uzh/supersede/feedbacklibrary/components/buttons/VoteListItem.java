@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 
-import static android.widget.ImageView.ScaleType.*;
+import static android.widget.ImageView.ScaleType.CENTER;
 
 public final class VoteListItem extends AbstractSettingsListItem {
 

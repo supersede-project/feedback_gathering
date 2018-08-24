@@ -4,15 +4,15 @@ import okhttp3.ResponseBody;
 
 public final class RestUtility {
 
-    private RestUtility(){
+    private RestUtility() {
 
     }
 
-    public static boolean responseEquals(Object response, Object equalsObject){
-        if (response==null ||equalsObject == null){
+    public static boolean responseEquals(Object response, Object equalsObject) {
+        if (response == null || equalsObject == null) {
             return false;
         }
-        if (response instanceof ResponseBody){
+        if (response instanceof ResponseBody) {
             try {
                 String responseString = ((ResponseBody) response).string();
                 Object castedResponse = equalsObject.getClass().cast(responseString);

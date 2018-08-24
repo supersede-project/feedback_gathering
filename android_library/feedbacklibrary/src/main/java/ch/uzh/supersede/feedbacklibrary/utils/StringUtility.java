@@ -21,7 +21,7 @@ public final class StringUtility {
 
     public static String concatWithDelimiter(String delimiter, String... tokens) {
         String finalString = "";
-        if (tokens == null || tokens.length == 0){
+        if (tokens == null || tokens.length == 0) {
             return finalString;
         }
         for (String t : tokens) {
@@ -58,7 +58,7 @@ public final class StringUtility {
         return join(ObjectUtility.asList(array), separator);
     }
 
-    private static <T> String join(List<T> items, String separator){
+    private static <T> String join(List<T> items, String separator) {
         StringBuilder sb = new StringBuilder();
         if (items.size() > 1) {
             for (int i = 0; i < items.size() - 1; i++) {
@@ -66,7 +66,7 @@ public final class StringUtility {
                 sb.append(separator);
             }
         }
-        if (!items.isEmpty()){
+        if (!items.isEmpty()) {
             sb.append(items.get(items.size() - 1));
         }
         return sb.toString();
@@ -75,22 +75,22 @@ public final class StringUtility {
 
     public static String generateSpace(int i) {
         StringBuilder s = new StringBuilder();
-        for (int e = 0; e < i; e++){
+        for (int e = 0; e < i; e++) {
             s.append(" ");
         }
         return s.toString();
     }
 
     public static String nulLSafe(String str) {
-        return str==null?"":str;
+        return str == null ? "" : str;
     }
 
     public static boolean contains(String text, String... tokens) {
-        if (text == null || tokens == null){
+        if (text == null || tokens == null) {
             return false;
         }
-        for (String token : tokens){
-            if (!text.contains(token)){
+        for (String token : tokens) {
+            if (!text.contains(token)) {
                 return false;
             }
         }
