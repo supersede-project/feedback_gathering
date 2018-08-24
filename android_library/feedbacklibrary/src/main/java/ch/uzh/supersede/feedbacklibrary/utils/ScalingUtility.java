@@ -98,7 +98,7 @@ public final class ScalingUtility {
 
     public void updateEditText(EditText editText) {
         editText.measure(0,0);
-        float textSize = (1f/density)*getTextSizeScaledForHeight(editText.getText().toString(),editText.getTextSize(),0,1f/screenHeight*editText.getMeasuredHeight());
+        float textSize = (1f/(density/(screenHeight/1200f)))*getTextSizeScaledForHeight(editText.getText().toString(),editText.getTextSize(),0,1f/screenHeight*editText.getMeasuredHeight());
         editText.setTextSize(textSize);
     }
 
