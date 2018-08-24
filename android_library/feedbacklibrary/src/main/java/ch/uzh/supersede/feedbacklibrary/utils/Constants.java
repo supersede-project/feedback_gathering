@@ -72,6 +72,7 @@ public final class Constants {
         public static final String USER_NAME = "userName";
         public static final String USER_IS_DEVELOPER = "isDeveloper";
         public static final String USER_KARMA = "userKarma";
+        public static final String USER_FEEDBACK_COUNT = "userKarma";
         public static final String USER_IS_BLOCKED = "userIsBlocked";
         public static final String USER_REPORTED_FEEDBACK = "reportedFeedback";
     }

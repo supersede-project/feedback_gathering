@@ -210,6 +210,13 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
         }
     }
 
+    private void fetchAndroidUser() {
+        if (ACTIVE.check(this)) {
+            AndroidUser androidUser = new AndroidUser(userName);
+            FeedbackService.getInstance(this).getUser(this, androidUser);
+        }
+    }
+
     @Override
     public void onButtonClicked(View view) {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
@@ -282,7 +289,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
-                    updateUserLevel(true);
+                    fetchAndroidUser();
                 }
             };
         } else if (userLevel == ACTIVE) {
@@ -388,6 +395,13 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                 preAllocatedStringStorage[0] = null;
                 updateUserLevel(true);
                 levelButton.setEnabled(true);
+                break;
+            case GET_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    userName = androidUser.getName();
+                }
                 break;
             default:
                 break;
