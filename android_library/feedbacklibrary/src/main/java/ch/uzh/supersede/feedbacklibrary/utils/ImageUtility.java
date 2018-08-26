@@ -1,11 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.*;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.annotation.*;
 import android.util.Log;
 import android.view.View;
 
@@ -26,9 +24,12 @@ public final class ImageUtility {
         HashMap<Integer, ColorMapEntry> colorMap = new HashMap<>();
         int xStep = (int) (bitmap.getWidth() / (double) steps);
         int yStep = (int) (bitmap.getHeight() / (double) steps);
-        for (int y = 0; y < bitmap.getHeight(); y = y + yStep) {
+        for (int y = 0; y < (bitmap.getHeight()); y = y + yStep) {
             for (int x = 0; x < bitmap.getWidth(); x = x + xStep) {
                 int c = bitmap.getPixel(x, y);
+                if (c == -12627531){
+                    continue; // taskbar
+                }
                 if (colorMap.containsKey(c)) {
                     colorMap.get(c).increment();
                 } else {
@@ -38,14 +39,31 @@ public final class ImageUtility {
         }
         ArrayList<ColorMapEntry> sortedColorMap = new ArrayList<>();
         ArrayList<Integer> finalColorList = new ArrayList<>();
+        ArrayList<Integer> filteredColorList = new ArrayList<>();
+        // filter rare colors
         for (Map.Entry<Integer, ColorMapEntry> e : colorMap.entrySet()) {
-            sortedColorMap.add(e.getValue());
+            if (e.getValue().getCount() > 1){
+                sortedColorMap.add(e.getValue());
+            }
         }
+        // sort to rarity
         Collections.sort(sortedColorMap);
         for (ColorMapEntry i : sortedColorMap) {
             finalColorList.add(i.getColor());
         }
-        return CollectionUtility.subArray(Integer.class, finalColorList, 0, nColors);
+        //filter similar colors
+        for (int i : finalColorList) {
+            boolean similar = false;
+            for (int ii : filteredColorList ) {
+                if (i != ii && ColorUtility.getColorDifferences(i,ii)<0.1){
+                    similar = true;
+                }
+            }
+            if (!similar){
+                filteredColorList.add(i);
+            }
+        }
+        return CollectionUtility.subArray(Integer.class, filteredColorList, 0, filteredColorList.size()<nColors?filteredColorList.size():nColors);
     }
 
     /**

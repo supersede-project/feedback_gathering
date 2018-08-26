@@ -98,17 +98,11 @@ public final class ScalingUtility {
         return scaledPx * lines;
     }
 
-    public void updateEditText(EditText editText) {
-        editText.measure(0, 0);
-        float textSize = (1f / (density / (screenHeight / 1200f))) * getTextSizeScaledForHeight(editText
+    public void updateTextView(TextView view) {
+        view.measure(0, 0);
+        float textSize = (1f / (density / (screenHeight / 1200f))) * getTextSizeScaledForHeight(view
                 .getText()
-                .toString(), editText.getTextSize(), 0, 1f / screenHeight * editText.getMeasuredHeight());
-        editText.setTextSize(textSize);
-    }
-
-    public void updateButtonText(Button button) {
-        button.measure(0, 0);
-        float textSize = (1f / density) * getTextSizeScaledForHeight(button.getText().toString(), button.getTextSize(), 0, 1f / screenHeight * button.getMeasuredHeight());
-        button.setTextSize(textSize);
+                .toString(), view.getTextSize(), 0, 1f / screenHeight * view.getMeasuredHeight());
+        view.setTextSize(textSize);
     }
 }

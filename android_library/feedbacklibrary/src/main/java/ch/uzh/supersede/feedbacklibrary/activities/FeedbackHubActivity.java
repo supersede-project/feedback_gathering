@@ -58,7 +58,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
         TextView spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
         TextView spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
         TextView spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95, CUSTOM)) {
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95, CUSTOM, ADAPTIVE)) {
             colorViews(0, listButton, levelButton, feedbackButton, settingsButton);
             colorViews(1, backgroundLayout);
         } else if (getColorCount() == 3) {

@@ -13,20 +13,6 @@ public interface IFeedbackRatingConfiguration {
     int getConfiguredRatingFeedbackOrder();
 
     /**
-     * Set the title for the rating feedback.
-     *
-     * @return title of the rating feedback
-     */
-    String getConfiguredRatingFeedbackTitle();
-
-    /**
-     * Set a unicode icon string as rating icons.
-     *
-     * @return unicode string icon
-     */
-    String getConfiguredRatingFeedbackIcon();
-
-    /**
      * Set maximum possible rating value.
      *
      * @return max rating value

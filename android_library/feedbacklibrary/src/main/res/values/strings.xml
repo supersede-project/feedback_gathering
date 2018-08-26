@@ -163,6 +163,7 @@
     <string name="details_report_error_long">Description too long!</string>
     <string name="details_response_sent">Response sent, thank you!</string>
     <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
+    <string name="details_published">Published!</string>
     <!--DetailsDeveloper-->
     <string name="details_developer_award_karma">Award Karma</string>
     <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>
@@ -202,7 +203,8 @@
     <string name="settings_button_own">Mine</string>
     <string name="settings_button_voted">Voted</string>
     <string name="settings_button_subscribed">Subs</string>
-    <string name="details_published">Published!</string>
+    <string name="settings_reset_tutorial">Reset Tutorial</string>
+    <string name="settings_tutorial">Tutorial</string>
 
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>

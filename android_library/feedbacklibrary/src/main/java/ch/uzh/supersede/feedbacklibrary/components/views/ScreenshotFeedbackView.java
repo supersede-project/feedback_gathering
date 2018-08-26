@@ -46,7 +46,10 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     @Override
     protected void colorPrimary(int color) {
         buttonColor = color;
-        deleteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        boolean imageSelected = pictureBitmap != null || pictureBitmapAnnotated != null;
+        if (imageSelected){
+            deleteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        }
         getEnclosingLayout().setBackgroundColor(color);
     }
 
@@ -79,6 +82,9 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     }
 
     public void toggleEditButton(boolean enabled) {
+        if (!screenshotFeedback.isEditable()){
+           enabled=false;
+        }
         editButton.setEnabled(enabled);
         if (enabled) {
             editButton.setBackground(activity.getResources().getDrawable(R.drawable.pink_button));
@@ -147,6 +153,7 @@ public final class ScreenshotFeedbackView extends AbstractFeedbackPartView {
             }
         });
         refreshPreview(activity.getApplicationContext());
+        toggleButtons();
     }
 
     @Override

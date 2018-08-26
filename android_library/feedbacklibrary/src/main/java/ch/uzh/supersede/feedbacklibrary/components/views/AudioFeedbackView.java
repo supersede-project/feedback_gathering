@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.*;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
@@ -139,7 +141,9 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.audio_hint);
+        TextView textHint = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title);
+        textHint.setText(R.string.audio_hint);
+        textHint.setTextColor(ColorUtility.isDark(audioFeedback.getBackgroundColor())?Color.WHITE:Color.BLACK);
         recordAnimationColorStart = resources.getColor(R.color.black);
         recordAnimationColorEnd = resources.getColor(R.color.accent);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
@@ -153,6 +157,12 @@ public final class AudioFeedbackView extends AbstractFeedbackPartView implements
         initPlayButton();
         initRecordButton();
         initStopButton();
+        clearButton.setColorFilter(ColorUtility.isDark(audioFeedback.getBackgroundColor())?Color.WHITE:Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        playButton.setColorFilter(ColorUtility.isDark(audioFeedback.getBackgroundColor())?Color.WHITE:Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        recordButton.setColorFilter(ColorUtility.isDark(audioFeedback.getBackgroundColor())?Color.WHITE:Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        stopButton.setColorFilter(ColorUtility.isDark(audioFeedback.getBackgroundColor())?Color.WHITE:Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+
+
     }
 
     private void initStopButton() {

@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.res.ColorStateList;
+import android.graphics.*;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -15,6 +16,7 @@ import java.lang.reflect.Method;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 
 public final class TextFeedbackView extends AbstractFeedbackPartView {
     private TextFeedback textFeedback;
@@ -30,10 +32,6 @@ public final class TextFeedbackView extends AbstractFeedbackPartView {
     @Override
     protected void colorPrimary(int color) {
         getEnclosingLayout().setBackgroundColor(color);
-        int childCount = ((LinearLayout) getEnclosingLayout()).getChildCount();
-        for (int p = 0; p < childCount; p++) {
-            handleChildLayoutsForegrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p), color);
-        }
     }
 
     @Override
@@ -41,6 +39,7 @@ public final class TextFeedbackView extends AbstractFeedbackPartView {
         int childCount = ((LinearLayout) getEnclosingLayout()).getChildCount();
         for (int p = 0; p < childCount; p++) {
             handleChildLayoutsBackgrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p), color);
+            handleChildLayoutsForegrounds(((LinearLayout) getEnclosingLayout()).getChildAt(p), color);
         }
     }
 
@@ -67,9 +66,9 @@ public final class TextFeedbackView extends AbstractFeedbackPartView {
             }
         }
         if (v instanceof TextView) {
-            ((TextView) v).setTextColor(color);
+            ((TextView) v).setTextColor(ColorUtility.isDark(color)? Color.WHITE:Color.BLACK);
             if (v instanceof TextInputEditText) {
-                ColorStateList colorStateList = ColorStateList.valueOf(color);
+                ColorStateList colorStateList = ColorStateList.valueOf(ColorUtility.isDark(color)? Color.WHITE:Color.BLACK);
                 ((TextInputEditText) v).setSupportBackgroundTintList(colorStateList);
             }
         }
@@ -84,7 +83,7 @@ public final class TextFeedbackView extends AbstractFeedbackPartView {
                 field.setAccessible(true);
                 int[][] states = new int[][]{{0}};
                 int[] colors = new int[]{
-                        color
+                        ColorUtility.isDark(color)? Color.WHITE:Color.BLACK
                 };
                 ColorStateList colorStateList = new ColorStateList(states, colors);
                 field.set(textInputLayout, colorStateList);

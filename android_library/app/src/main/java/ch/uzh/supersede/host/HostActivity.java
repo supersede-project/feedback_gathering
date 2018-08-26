@@ -12,11 +12,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AppCompatActivity implements
-        IFeedbackBehaviorConfiguration,
         IFeedbackStyleConfiguration,
-        IFeedbackSettingsConfiguration,
-        IFeedbackDeveloperConfiguration,
-        ISimpleFeedbackConfiguration,
+        IFeedbackBehaviorConfiguration,
         IFeedbackEndpointConfiguration {
 
     @Override
@@ -49,68 +46,6 @@ public class HostActivity extends AppCompatActivity implements
         FeedbackConnector.getInstance().connect(view, this);
     }
 
-    //Feedback Layout
-    @Override
-    public int getConfiguredAudioFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
-    }
-
-    @Override
-    public int getConfiguredScreenshotFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
-    }
-
-    @Override
-    public int getConfiguredTextFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredTextFeedbackOrder();
-    }
-
-    @Override
-    public int getConfiguredRatingFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
-    }
-
-    //Feedback Settings
-    @Override
-    public int getConfiguredMinUserNameLength() {
-        return 3;
-    }
-
-    @Override
-    public int getConfiguredMaxUserNameLength() {
-        return 100;
-    }
-
-    @Override
-    public int getConfiguredMinResponseLength() {
-        return 10;
-    }
-
-    @Override
-    public int getConfiguredMaxResponseLength() {
-        return 300;
-    }
-
-    @Override
-    public int getConfiguredMinReportLength() {
-        return 5;
-    }
-
-    @Override
-    public int getConfiguredMaxReportLength() {
-        return 100;
-    }
-
-    @Override
-    public boolean getConfiguredReportEnabled() {
-        return true;
-    }
-
-    //Feedback Developer
-    @Override
-    public boolean isDeveloper() {
-        return false;
-    }
 
     @Override
     public String getConfiguredEndpointLogin() {
@@ -122,13 +57,6 @@ public class HostActivity extends AppCompatActivity implements
         return "password";
     }
 
-    //Feedback Behavior
-    @Override
-    public int getConfiguredPullIntervalMinutes() {
-        return 1;
-    }
-
-    //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
         return FEEDBACK_STYLE.CUSTOM;
@@ -145,5 +73,10 @@ public class HostActivity extends AppCompatActivity implements
     @Override
     public String getConfiguredEndpointUrl() {
         return "http://mt.ronnieschaniel.com:8080/feedback_repository/";
+    }
+
+    @Override
+    public int getConfiguredPullIntervalMinutes() {
+        return 0;
     }
 }

@@ -34,8 +34,6 @@ public final class LocalConfigurationBean implements Serializable {
     private int audioOrder;
     private double audioMaxTime;
     private int ratingOrder;
-    private String ratingTitle;
-    private String ratingIcon;
     private int ratingMaxValue;
     private int ratingDefaultValue;
     private int screenshotOrder;
@@ -119,35 +117,48 @@ public final class LocalConfigurationBean implements Serializable {
     }
 
     private void readDefaultConfiguration() {
-        this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-        this.maxReportLength = DefaultConfiguration.getInstance().getConfiguredMaxReportLength();
-        this.maxResponseLength = DefaultConfiguration.getInstance().getConfiguredMaxResponseLength();
-        this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
-        this.maxTagNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagNumber();
-        this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
-        this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
-        this.maxUserNameLength = DefaultConfiguration.getInstance().getConfiguredMaxUserNameLength();
-        this.minReportLength = DefaultConfiguration.getInstance().getConfiguredMinReportLength();
-        this.minResponseLength = DefaultConfiguration.getInstance().getConfiguredMinResponseLength();
-        this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
-        this.minTagNumber = DefaultConfiguration.getInstance().getConfiguredMinTagNumber();
-        this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
-        this.minUserNameLength = DefaultConfiguration.getInstance().getConfiguredMinUserNameLength();
+        //Rating
+        this.ratingOrder = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
         this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
-        this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
         this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
-        this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
-        this.reportEnabled = DefaultConfiguration.getInstance().getConfiguredReportEnabled();
-        this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
+        //Text
+        this.textOrder = DefaultConfiguration.getInstance().getConfiguredTextFeedbackOrder();
         this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
         this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
         this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
         this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
-        this.audioOrder = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
-        this.ratingOrder = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
+        //Screenshot
         this.screenshotOrder = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
-        this.textOrder = DefaultConfiguration.getInstance().getConfiguredTextFeedbackOrder();
+        this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
+        //Audio
+        this.audioOrder = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackOrder();
+        this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
+        //Behavior
+        this.pullIntervalMinutes = DefaultConfiguration.getInstance().getConfiguredPullIntervalMinutes();
+        //Developer
+        this.isDeveloper = DefaultConfiguration.getInstance().isDeveloper();
+        //Endpoint
         this.endpointUrl = DefaultConfiguration.getInstance().getConfiguredEndpointUrl();
+        this.endpointLogin = DefaultConfiguration.getInstance().getConfiguredEndpointLogin();
+        this.endpointPass = DefaultConfiguration.getInstance().getConfiguredEndpointPassword();
+        //Settings
+        this.minReportLength = DefaultConfiguration.getInstance().getConfiguredMinReportLength();
+        this.maxReportLength = DefaultConfiguration.getInstance().getConfiguredMaxReportLength();
+        this.minResponseLength = DefaultConfiguration.getInstance().getConfiguredMinResponseLength();
+        this.maxResponseLength = DefaultConfiguration.getInstance().getConfiguredMaxResponseLength();
+        this.minUserNameLength = DefaultConfiguration.getInstance().getConfiguredMinUserNameLength();
+        this.maxUserNameLength = DefaultConfiguration.getInstance().getConfiguredMaxUserNameLength();
+        this.reportEnabled = DefaultConfiguration.getInstance().getConfiguredReportEnabled();
+        //Style
+        this.style = DefaultConfiguration.getInstance().getConfiguredFeedbackStyle();
+        //Title and Tag
+        this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
+        this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
+        this.minTagNumber = DefaultConfiguration.getInstance().getConfiguredMinTagNumber();
+        this.maxTagNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagNumber();
+        this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
+        this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
+        this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
     }
 
     private void readFeedbackConfiguration(ISimpleFeedbackConfiguration simpleFeedbackConfiguration) {
@@ -164,8 +175,6 @@ public final class LocalConfigurationBean implements Serializable {
 
     private void readFeedbackConfiguration(IFeedbackRatingConfiguration ratingConfiguration) {
         this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
-        this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
-        this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
         this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
         this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
     }
@@ -297,13 +306,6 @@ public final class LocalConfigurationBean implements Serializable {
         return ratingOrder;
     }
 
-    public String getRatingTitle() {
-        return ratingTitle;
-    }
-
-    public String getRatingIcon() {
-        return ratingIcon;
-    }
 
     public int getRatingMaxValue() {
         return ratingMaxValue;
