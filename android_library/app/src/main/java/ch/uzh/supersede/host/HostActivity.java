@@ -13,6 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AppCompatActivity implements
         IFeedbackStyleConfiguration,
+        IFeedbackBehaviorConfiguration,
         IFeedbackEndpointConfiguration {
 
     @Override
@@ -56,7 +57,6 @@ public class HostActivity extends AppCompatActivity implements
         return "password";
     }
 
-    //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
         return FEEDBACK_STYLE.CUSTOM;
@@ -73,5 +73,10 @@ public class HostActivity extends AppCompatActivity implements
     @Override
     public String getConfiguredEndpointUrl() {
         return "http://mt.ronnieschaniel.com:8080/feedback_repository/";
+    }
+
+    @Override
+    public int getConfiguredPullIntervalMinutes() {
+        return 0;
     }
 }
