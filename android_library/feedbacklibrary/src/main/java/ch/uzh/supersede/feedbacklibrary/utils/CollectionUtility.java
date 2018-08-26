@@ -29,7 +29,7 @@ public final class CollectionUtility {
 
     @SuppressWarnings("unchecked")
     public static <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end) {
-        if (source.size() <= end || end <= begin) {
+        if (source.size() < end || end <= begin) {
             return (T[]) Array.newInstance(clazz, 0);
         }
         T[] array = (T[]) Array.newInstance(clazz, end - begin);

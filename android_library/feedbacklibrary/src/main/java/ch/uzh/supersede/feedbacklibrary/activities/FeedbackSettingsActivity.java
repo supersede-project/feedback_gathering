@@ -51,13 +51,16 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
         votedButton = setOnClickListener(getView(R.id.settings_button_voted, Button.class));
         subscribedButton = setOnClickListener(getView(R.id.settings_button_subscribed, Button.class));
 
-        ToggleButton useStubsToggle = getView(R.id.settings_toggle_use_stubs, ToggleButton.class);
-        useStubsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(USE_STUBS, false));
-        useStubsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        Button resetTutorial = getView(R.id.settings_button_reset_tutorial, Button.class);
+        resetTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isEnabled) {
-                FeedbackDatabase.getInstance(compoundButton.getContext()).writeBoolean(USE_STUBS, isEnabled);
-                execFillFeedbackList();
+            public void onClick(View v) {
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_SETTINGS, false).apply();
+                Toast.makeText(getApplicationContext(), "Tutorials reset.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -72,17 +75,15 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
         });
 
         colorTextOnly(0,
-                getView(R.id.settings_text_use_stubs, TextView.class),
+                getView(R.id.settings_text_reset_tutorial, TextView.class),
                 getView(R.id.settings_text_enable_notifications, TextView.class),
-                getView(R.id.settings_text_feature_3, TextView.class),
                 getView(R.id.settings_text_title_general, TextView.class),
                 getView(R.id.settings_text_title_feedback, TextView.class));
 
 
         colorViews(1,
-                getView(R.id.settings_toggle_use_stubs, ToggleButton.class),
-                getView(R.id.settings_toggle_enable_notifications, ToggleButton.class),
-                getView(R.id.settings_toggle_feature_3, ToggleButton.class));
+                getView(R.id.settings_button_reset_tutorial, Button.class),
+                getView(R.id.settings_toggle_enable_notifications, ToggleButton.class));
         colorShape(0, votedButton, subscribedButton);
 
         if (getColorCount() == 3) {

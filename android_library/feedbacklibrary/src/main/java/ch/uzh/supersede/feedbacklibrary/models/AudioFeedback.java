@@ -7,12 +7,15 @@ import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 public final class AudioFeedback extends AbstractMultipartFeedback {
     private String audioPath;
     private double maxTime;
+    private int backgroundColor;
+
     @Expose
     private int duration;
 
     public AudioFeedback(LocalConfigurationBean configuration) {
         super(configuration.getAudioOrder());
         this.maxTime = configuration.getAudioMaxTime();
+        this.backgroundColor = configuration.getTopColors()[1];
         setPart("audio");
         setFileExtension("mp3");
     }
@@ -35,5 +38,13 @@ public final class AudioFeedback extends AbstractMultipartFeedback {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

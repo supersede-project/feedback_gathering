@@ -15,7 +15,6 @@ public final class RatingFeedback extends AbstractFeedbackPart {
 
     public RatingFeedback(LocalConfigurationBean configuration) {
         super(configuration.getRatingOrder());
-        this.ratingIcon = configuration.getRatingIcon();
         this.maxRating = configuration.getRatingMaxValue();
         this.defaultRating = configuration.getRatingDefaultValue();
     }

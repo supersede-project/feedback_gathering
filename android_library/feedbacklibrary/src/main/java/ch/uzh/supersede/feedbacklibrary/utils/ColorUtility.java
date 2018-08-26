@@ -2,8 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.*;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -40,6 +39,17 @@ public final class ColorUtility {
                         Math.abs(Color.green(a) - Color.green(b)) +
                         Math.abs(Color.blue(a) - Color.blue(b)));
 
+    }
+
+    public static float getColorToneDifferences(int a, int b) {
+        float redDiff = Math.abs(Color.red(a) - Color.red(b));
+        float greenDiff = Math.abs(Color.green(a) - Color.green(b));
+        float blueDiff = Math.abs(Color.blue(a) - Color.blue(b));
+        float finalDiffB = Math.abs(redDiff - greenDiff);
+        float finalDiffR = Math.abs(blueDiff - greenDiff);;
+        float finalDiffG = Math.abs(blueDiff - redDiff);
+        float max = NumberUtility.max(finalDiffB, finalDiffR, finalDiffG);
+        return 1f/255f*max;
     }
 
     public static int adjustColorToBackground(int backgroundColor, int color, double differenceThreshold) {

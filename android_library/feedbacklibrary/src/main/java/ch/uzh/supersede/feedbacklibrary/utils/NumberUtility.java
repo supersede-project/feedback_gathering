@@ -113,4 +113,14 @@ public final class NumberUtility {
         return (long) Math.pow(10d, (double) maxDigits);
     }
 
+    public static float max(float... numbers) {
+        if (numbers == null){
+            return 0f;
+        }
+        float max = numbers[0];
+        for (float n : numbers){
+            max = n>max?n:max;
+        }
+        return max;
+    }
 }

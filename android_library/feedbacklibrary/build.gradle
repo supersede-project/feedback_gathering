@@ -40,6 +40,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+//task copyDependencies(type: Copy) {
+//    from configurations.compile{
+//        exclude group: 'com.android.support'
+//    }
+//    into 'lib'
+//}
+
 repositories {
     google()
 }

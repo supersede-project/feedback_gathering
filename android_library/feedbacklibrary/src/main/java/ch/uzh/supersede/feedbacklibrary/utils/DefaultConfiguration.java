@@ -1,5 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import android.graphics.Color;
+
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 
 public final class DefaultConfiguration implements
@@ -53,7 +55,7 @@ public final class DefaultConfiguration implements
 
     @Override
     public int getConfiguredMinUserNameLength() {
-        return 5;
+        return 3;
     }
 
     @Override
@@ -123,27 +125,17 @@ public final class DefaultConfiguration implements
 
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return null;
+        return FEEDBACK_STYLE.LIGHT;
     }
 
     @Override
     public int[] getConfiguredCustomStyle() {
-        return new int[0];
+        return new int[]{Color.WHITE,Color.BLACK,Color.WHITE};
     }
 
     @Override
     public double getConfiguredAudioFeedbackMaxTime() {
         return 15.0;
-    }
-
-    @Override
-    public String getConfiguredRatingFeedbackTitle() {
-        return "Please select a Rating";
-    }
-
-    @Override
-    public String getConfiguredRatingFeedbackIcon() {
-        return "";
     }
 
     @Override
@@ -163,12 +155,12 @@ public final class DefaultConfiguration implements
 
     @Override
     public String getConfiguredTextFeedbackHint() {
-        return "Enter a Feedback-Text here...";
+        return "Enter your description here...";
     }
 
     @Override
     public String getConfiguredTextFeedbackLabel() {
-        return "Text";
+        return "Description";
     }
 
     @Override
@@ -178,7 +170,7 @@ public final class DefaultConfiguration implements
 
     @Override
     public int getConfiguredTextFeedbackMinLength() {
-        return 3;
+        return 10;
     }
 
     @Override
@@ -188,12 +180,12 @@ public final class DefaultConfiguration implements
 
     @Override
     public String getConfiguredEndpointUrl() {
-        return "https://google.ch";
+        return "https://www.supersede.eu/";
     }
 
     @Override
     public String getConfiguredEndpointLogin() {
-        return "admin";
+        return "username";
     }
 
     @Override

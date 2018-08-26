@@ -76,9 +76,9 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
 
     private void createEditableFields() {
         editTitle = getView(R.id.identity_edit_title, EditText.class);
-        ScalingUtility.getInstance().updateEditText(editTitle);
+        ScalingUtility.getInstance().updateTextView(editTitle);
         editTag = getView(R.id.identity_edit_tag, EditText.class);
-        ScalingUtility.getInstance().updateEditText(editTag);
+        ScalingUtility.getInstance().updateTextView(editTag);
         editTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -196,7 +196,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         for (String matchingTag : findings) {
             Button b = new Button(this);
             b.setText(matchingTag);
-            ScalingUtility.getInstance().updateButtonText(b);
+            ScalingUtility.getInstance().updateTextView(b);
             b.setPadding(5, 0, 5, 0);
             b.setBackground(null);
             b.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +223,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         b.setText(s);
         b.setPadding(5, 0, 5, 0);
         b.setBackground(null);
-        ScalingUtility.getInstance().updateButtonText(b);
+        ScalingUtility.getInstance().updateTextView(b);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,32 +26,40 @@
             android:layout_marginStart="50dp"
             android:layout_weight="25"
             android:orientation="vertical"
-            android:weightSum="9">
+            android:weightSum="12">
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="3"
                 android:orientation="horizontal"
-                android:weightSum="10">
+                android:weightSum="5">
 
                 <TextView
-                    android:id="@+id/settings_text_use_stubs"
+                    android:id="@+id/settings_text_reset_tutorial"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
-                    android:gravity="center_vertical|end"
-                    android:text="@string/settings_use_stubs"
-                    android:visibility="gone" />
+                    android:gravity="center"
+                    android:text="@string/settings_tutorial" />
+            </LinearLayout>
 
-                <ToggleButton
-                    android:id="@+id/settings_toggle_use_stubs"
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <Button
+                    android:id="@+id/settings_button_reset_tutorial"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
                     android:layout_weight="5"
-                    android:visibility="gone" />
+                    android:text="@string/settings_reset_tutorial"/>
             </LinearLayout>
 
             <LinearLayout
@@ -82,26 +90,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
-                    android:layout_weight="5" />
-
-                <TextView
-                    android:id="@+id/settings_text_feature_3"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="5"
-                    android:gravity="center_vertical|end"
-                    android:text="#feature 3#"
-                    android:visibility="gone" />
-
-                <ToggleButton
-                    android:id="@+id/settings_toggle_feature_3"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="1dp"
-                    android:layout_weight="5"
-                    android:enabled="false"
-                    android:visibility="gone" />
+                    android:layout_weight="5" />/>
             </LinearLayout>
         </LinearLayout>
 

@@ -62,6 +62,7 @@ public final class RatingFeedbackView extends AbstractFeedbackPartView {
         this.ratingBar = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating));
         this.ratingBar.setNumStars(ratingFeedback.getMaxRating());
         this.ratingBar.setStepSize(1.0f);
+        this.ratingBar.setRating(ratingFeedback.getDefaultRating());
     }
 
     @Override
