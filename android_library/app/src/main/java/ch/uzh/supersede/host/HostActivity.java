@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
-import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AppCompatActivity implements
@@ -77,6 +76,6 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 0;
+        return 1;
     }
 }
