@@ -197,8 +197,8 @@ public final class FeedbackBean implements Serializable {
             bean.userName = localFeedbackBean.getOwner() == 1 ? FeedbackDatabase.getInstance(context).readString(USER_NAME, null) : GeneratorStub.BagOfNames.pickRandom();
             bean.timeStamp = localFeedbackBean.getCreationDate();
             bean.upVotes = localFeedbackBean.getVotes();
-            bean.maxUpVotes = 50; //FIXME mbo
-            bean.minUpVotes = -30; //FIXME mbo
+            bean.maxUpVotes = 50;
+            bean.minUpVotes = -30;
             bean.responses = localFeedbackBean.getResponses();
             bean.feedbackStatus = localFeedbackBean.getFeedbackStatus();
             bean.isPublic = false;
