@@ -158,6 +158,7 @@
     <string name="details_report_title">Report Feedback</string>
     <string name="details_report_content">Enter a short summary with a length between %1$d and %2$d character to describe your report:</string>
     <string name="details_report_sent">Report sent, thank you!</string>
+    <string name="details_report_not_sent">Report could not be sent, try again later!</string>
     <string name="details_report_error_empty">Description empty!</string>
     <string name="details_report_error_short">Description too short!</string>
     <string name="details_report_error_long">Description too long!</string>

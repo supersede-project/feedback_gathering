@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -184,7 +186,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
                 } else if (report.length() > configuration.getMaxReportLength()) {
                     Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
                 } else {
-                    FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, getFeedbackDetailsBean(), null);
+                    FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, getFeedbackDetailsBean(), new FeedbackReportRequestBody(getFeedbackDetailsBean().getFeedbackId(),getUserName(),report));
                     dialog.dismiss();
                 }
             }
@@ -226,15 +228,28 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
         }
     }
 
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventFailed(eventType,response);
+        switch (eventType) {
+            case CREATE_FEEDBACK_REPORT:
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_not_sent, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+        }
+    }
+
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         super.onEventCompleted(eventType, response);
         switch (eventType) {
             case CREATE_FEEDBACK_REPORT:
             case CREATE_FEEDBACK_REPORT_MOCK:
-                if (response instanceof String) {
+                if (response instanceof FeedbackReport) {
                     Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_sent, Toast.LENGTH_SHORT).show();
-                    updateReportStatus((String) response);
+                    updateReportStatus(((FeedbackReport) response).getReason());
                 }
                 break;
             case EDIT_FEEDBACK_PUBLICATION:
