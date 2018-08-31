@@ -4,13 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.TextView;
 
-public class PopUp {
+import java.lang.reflect.Field;
 
-    public enum DialogueOption {
-        OK, CANCEL;
-    }
+import ch.uzh.supersede.feedbacklibrary.R;
+
+public final class PopUp {
 
     private Context context;
     private String title;
@@ -22,9 +25,11 @@ public class PopUp {
     private EditText inputText;
     private boolean showOk = true;
     private boolean showCancel = true;
-
     private String dialogueOutput = null;
     private DialogueOption dialogueOption = null;
+    public PopUp(Context context) {
+        this.context = context;
+    }
 
     public String getDialogueOutput() {
         return dialogueOutput;
@@ -32,11 +37,6 @@ public class PopUp {
 
     public DialogueOption getDialogueOption() {
         return dialogueOption;
-    }
-
-
-    public PopUp(Context context) {
-        this.context = context;
     }
 
     public PopUp withTitle(String title) {
@@ -51,18 +51,46 @@ public class PopUp {
 
     public PopUp withInput(final EditText inputText) {
         this.inputText = inputText;
+        this.inputText.setTextColor(Color.WHITE);
+        this.inputText.setGravity(Gravity.CENTER);
+        Field f;
+        try {
+            f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(this.inputText, R.drawable.white_cursor);
+        } catch (Exception e) {
+            //NOP
+        }
         return this;
     }
 
-    public PopUp withCustomCancel(String cancelLabel, OnClickListener clickListener) {
+    public PopUp withCustomCancel(String cancelLabel, OnClickListener... clickListener) {
         this.cancelLabel = cancelLabel;
-        this.cancelClickListener = clickListener;
+        if (clickListener != null && clickListener.length > 0) {
+            this.cancelClickListener = clickListener[0];
+        } else {
+            this.cancelClickListener = new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            };
+        }
         return this;
     }
 
-    public PopUp withCustomOk(String okLabel, OnClickListener clickListener) {
+    public PopUp withCustomOk(String okLabel, OnClickListener... clickListener) {
         this.okLabel = okLabel;
-        this.okClickListener = clickListener;
+        if (clickListener != null && clickListener.length > 0) {
+            this.okClickListener = clickListener[0];
+        } else {
+            this.okClickListener = new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            };
+        }
         return this;
     }
 
@@ -77,8 +105,19 @@ public class PopUp {
     }
 
     public PopUp buildAndShow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
+
+        TextView titleView = new TextView(context);
+        // You Can Customise your Title here
+        titleView.setText(title);
+        titleView.setBackgroundColor(Color.DKGRAY);
+        titleView.setPadding(10, 10, 10, 10);
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextColor(Color.WHITE);
+        titleView.setTextSize(20);
+
+        builder.setCustomTitle(titleView);
+
         builder.setMessage(message);
 
         if (inputText != null) {
@@ -91,24 +130,28 @@ public class PopUp {
                 builder.setPositiveButton("OK", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
             }
         }
-        if (showCancel){
+        if (showCancel) {
             if (cancelClickListener != null) {
-                builder.setPositiveButton(okLabel, cancelClickListener);
+                builder.setNegativeButton(cancelLabel, cancelClickListener);
             } else {
                 builder.setNegativeButton("Cancel", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
             }
         }
         builder.show();
         return this;
+    }
+
+    public enum DialogueOption {
+        OK, CANCEL
     }
 }

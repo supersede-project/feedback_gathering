@@ -2,34 +2,22 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.List;
-
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
-public class AudioFeedback extends AbstractMultipartFeedback {
+public final class AudioFeedback extends AbstractMultipartFeedback {
     private String audioPath;
     private double maxTime;
+    private int backgroundColor;
+
     @Expose
     private int duration;
 
-    public AudioFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getAudioOrder());
+    public AudioFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getAudioOrder());
         this.maxTime = configuration.getAudioMaxTime();
-    }
-
-    @Override
-    public boolean isValid(List<String> errorMessage) {
-        return true;
-    }
-
-    @Override
-    public String getPartString() {
-        return "audio";
-    }
-
-    @Override
-    public String getFilePath() {
-        return audioPath;
+        this.backgroundColor = configuration.getTopColors()[1];
+        setPart("audio");
+        setFileExtension("mp3");
     }
 
     public String getAudioPath() {
@@ -38,7 +26,6 @@ public class AudioFeedback extends AbstractMultipartFeedback {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
-        initPartFeedback(audioPath); //FIXME [jfo] not gudd
     }
 
     public double getMaxTime() {
@@ -51,5 +38,13 @@ public class AudioFeedback extends AbstractMultipartFeedback {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

@@ -4,44 +4,86 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public abstract class AbstractSettingsListItem extends LinearLayout {
+public abstract class AbstractSettingsListItem extends LinearLayout implements Comparable {
     public static final int PADDING = 10;
-    private LocalFeedbackBean feedbackBean;
+    private FeedbackDetailsBean feedbackDetailsBean;
+    private LocalConfigurationBean configuration;
     private LinearLayout upperWrapperLayout;
     private LinearLayout lowerWrapperLayout;
     private TextView dateView;
     private TextView titleView;
     private Integer[] colors;
+    private LinearLayoutCompat.LayoutParams shortParams;
 
-    public LocalFeedbackBean getFeedbackBean() {
-        return feedbackBean;
+    public AbstractSettingsListItem(Context context) {
+        super(context);
+    }
+
+    public AbstractSettingsListItem(Context context, int visibleTiles, FeedbackDetailsBean feedbackDetailsBean, LocalConfigurationBean configuration, int backgroundColor) {
+        super(context);
+        this.feedbackDetailsBean = feedbackDetailsBean;
+        this.colors = configuration.getTopColors();
+        this.configuration = configuration;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                                 .getDefaultDisplay()
+                                 .getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+        int partHeight = NumberUtility.divide(screenHeight, visibleTiles + 3);
+        int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
+        LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight);
+        masterParams.setMargins(5, 5, 5, 5);
+        setLayoutParams(masterParams);
+        setOrientation(VERTICAL);
+        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(LayoutParams.MATCH_PARENT, partHeight / 2);
+        shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
+        int textColor = ColorUtility.getTextColor(context, backgroundColor);
+        upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
+        lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
+        titleView = createTextView(shortParams, context, feedbackDetailsBean.getTitle(), Gravity.START, PADDING, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackDetailsBean.getTimeStamp())), Gravity.END, PADDING, textColor);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackDetailsBean.getFeedbackStatus().getColor(), 0.4);
+        TextView statusView = createTextView(shortParams, context, feedbackDetailsBean.getFeedbackStatus().getLabel(),
+                Gravity.START, PADDING, statusColor);
+        lowerWrapperLayout.addView(statusView);
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFeedbackDetailsActivity();
+            }
+        });
+
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setStroke(1, ColorUtility.isDark(configuration.getTopColors()[0]) ? Color.WHITE : Color.BLACK);
+        setBackground(gradientDrawable);
+    }
+
+    public FeedbackDetailsBean getFeedbackDetailsBean() {
+        return feedbackDetailsBean;
     }
 
     public LinearLayoutCompat.LayoutParams getShortParams() {
         return shortParams;
     }
-
-    private LinearLayoutCompat.LayoutParams shortParams;
 
     public LinearLayout getUpperWrapperLayout() {
         return upperWrapperLayout;
@@ -59,57 +101,22 @@ public abstract class AbstractSettingsListItem extends LinearLayout {
         return titleView;
     }
 
-    public AbstractSettingsListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
-        super(context);
-        this.feedbackBean = feedbackBean;
-        this.colors = configuration.getTopColors();
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager()
-                                 .getDefaultDisplay()
-                                 .getMetrics(displayMetrics);
-        int screenHeight = displayMetrics.heightPixels;
-        int screenWidth = displayMetrics.widthPixels;
-        int partHeight = NumberUtility.divide(screenHeight, visibleTiles + 3);
-        int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
-        LayoutParams masterParams = new LayoutParams(screenWidth, partHeight);
-        masterParams.setMargins(5, 5, 5, 5);
-        setLayoutParams(masterParams);
-        setOrientation(VERTICAL);
-        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
-        shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-
-        int textColor;
-        if (ColorUtility.isDark(backgroundColor)) {
-            textColor = ContextCompat.getColor(context, R.color.white);
-        } else {
-            textColor = ContextCompat.getColor(context, R.color.black);
-        }
-
-        upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, PADDING, textColor);
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getCreationDate())), Gravity.END, PADDING, textColor);
-        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackBean.getFeedbackStatus().getColor(), 0.4);
-        TextView statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel(),
-                Gravity.START, PADDING, statusColor);
-
-        setBackgroundColor(backgroundColor);
-        lowerWrapperLayout.addView(statusView);
-
-        setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startFeedbackDetailsActivity();
-                return false;
-            }
-        });
-    }
-
     private void startFeedbackDetailsActivity() {
-        Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+        Intent intent;
+        if (ACTIVE.check(getContext())) {
+            if (FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
+                intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
+            } else {
+                intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.list_alert_user_level, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        intent.putExtra(EXTRA_KEY_CALLER_CLASS, FeedbackSettingsActivity.class.getName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, RepositoryStub.getFeedback(getContext(), feedbackBean));
+        intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
         getContext().startActivity(intent);
         ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }

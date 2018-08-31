@@ -1,27 +1,20 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IAudioFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackBehavior;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackDeveloper;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackSettings;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ILabelFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IRatingFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IScreenshotFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ITextFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ITitleFeedbackConfiguration;
+import android.graphics.Color;
 
-public class DefaultConfiguration implements
-        IFeedbackBehavior,
-        IFeedbackStyle,
-        IFeedbackSettings,
-        IFeedbackDeveloper,
-        IAudioFeedbackConfiguration,
-        ILabelFeedbackConfiguration,
-        IRatingFeedbackConfiguration,
-        IScreenshotFeedbackConfiguration,
-        ITextFeedbackConfiguration,
-        ITitleFeedbackConfiguration {
+import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
+
+public final class DefaultConfiguration implements
+        IFeedbackBehaviorConfiguration,
+        IFeedbackStyleConfiguration,
+        IFeedbackSettingsConfiguration,
+        IFeedbackDeveloperConfiguration,
+        IFeedbackAudioConfiguration,
+        IFeedbackRatingConfiguration,
+        IFeedbackScreenshotConfiguration,
+        IFeedbackTextConfiguration,
+        IFeedbackTitleAndTagConfiguration,
+        IFeedbackEndpointConfiguration {
     private static DefaultConfiguration defaultConfiguration;
 
     private DefaultConfiguration() {
@@ -35,12 +28,6 @@ public class DefaultConfiguration implements
     }
 
     //ORDERS
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return -1;
-    }
-
     @Override
     public int getConfiguredRatingFeedbackOrder() {
         return 1;
@@ -68,52 +55,87 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredMinUserNameLength() {
-        return 0;
+        return 3;
     }
 
     @Override
     public int getConfiguredMaxUserNameLength() {
-        return 0;
+        return 35;
     }
 
     @Override
     public int getConfiguredMinResponseLength() {
-        return 0;
+        return 10;
     }
 
     @Override
     public int getConfiguredMaxResponseLength() {
-        return 0;
+        return 255;
+    }
+
+    @Override
+    public int getConfiguredMinReportLength() {
+        return 10;
+    }
+
+    @Override
+    public int getConfiguredMaxReportLength() {
+        return 255;
+    }
+
+    @Override
+    public boolean getConfiguredReportEnabled() {
+        return true;
+    }
+
+    @Override
+    public int getConfiguredMinTitleLength() {
+        return 5;
+    }
+
+    @Override
+    public int getConfiguredMaxTitleLength() {
+        return 100;
+    }
+
+    @Override
+    public int getConfiguredMinTagLength() {
+        return 3;
+    }
+
+    @Override
+    public int getConfiguredMaxTagLength() {
+        return 20;
+    }
+
+    @Override
+    public int getConfiguredMinTagNumber() {
+        return 1;
+    }
+
+    @Override
+    public int getConfiguredMaxTagNumber() {
+        return 5;
+    }
+
+    @Override
+    public int getConfiguredMaxTagRecommendationNumber() {
+        return 5;
     }
 
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return null;
+        return FEEDBACK_STYLE.LIGHT;
+    }
+
+    @Override
+    public int[] getConfiguredCustomStyle() {
+        return new int[]{Color.WHITE,Color.BLACK,Color.WHITE};
     }
 
     @Override
     public double getConfiguredAudioFeedbackMaxTime() {
         return 15.0;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackMaxCount() {
-        return 5;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackMinCount() {
-        return 2;
-    }
-
-    @Override
-    public String getConfiguredRatingFeedbackTitle() {
-        return "Please select a Rating";
-    }
-
-    @Override
-    public String getConfiguredRatingFeedbackIcon() {
-        return "";
     }
 
     @Override
@@ -133,12 +155,12 @@ public class DefaultConfiguration implements
 
     @Override
     public String getConfiguredTextFeedbackHint() {
-        return "Enter a Feedback-Text here...";
+        return "Enter your description here...";
     }
 
     @Override
     public String getConfiguredTextFeedbackLabel() {
-        return "Text";
+        return "Description";
     }
 
     @Override
@@ -148,11 +170,26 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredTextFeedbackMinLength() {
-        return 3;
+        return 10;
     }
 
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 0;
+        return 5;
+    }
+
+    @Override
+    public String getConfiguredEndpointUrl() {
+        return "https://www.supersede.eu/";
+    }
+
+    @Override
+    public String getConfiguredEndpointLogin() {
+        return "username";
+    }
+
+    @Override
+    public String getConfiguredEndpointPassword() {
+        return "password";
     }
 }

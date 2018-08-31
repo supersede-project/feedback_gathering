@@ -1,15 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-public class BorderView extends View {
+public final class BorderView extends View {
     private Rect rect;
     private Paint paint;
 

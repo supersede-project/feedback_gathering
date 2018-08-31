@@ -1,47 +1,47 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.*;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
+import android.text.*;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 
-import java.util.*;
-
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.database.DatabaseMigration;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
-@SuppressWarnings({"squid:MaximumInheritanceDepth","squid:S1170"})
-public class FeedbackHubActivity extends AbstractBaseActivity {
+@SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
+public final class FeedbackHubActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     private Button listButton;
     private Button levelButton;
     private Button feedbackButton;
     private Button settingsButton;
     private LinearLayout backgroundLayout;
     private TextView spaceTop;
-    private TextView spaceLeft;
-    private TextView spaceRight;
-    private TextView spaceBottom;
     private TextView statusText;
     private String userName;
-    private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +54,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         settingsButton = getView(R.id.hub_button_settings, Button.class);
         backgroundLayout = getView(R.id.hub_layout_background, LinearLayout.class);
         spaceTop = getView(R.id.hub_space_color_top, TextView.class);
-        spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
-        spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
-        spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2){
-            colorViews(0,backgroundLayout);
-            colorViews(1,listButton,levelButton,feedbackButton,settingsButton);
-        }else if (getColorCount()==3){
+        TextView spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
+        TextView spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
+        TextView spaceRight = getView(R.id.hub_space_color_right, TextView.class);
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95, CUSTOM, ADAPTIVE)) {
+            colorViews(0, listButton, levelButton, feedbackButton, settingsButton);
+            colorViews(1, backgroundLayout);
+        } else if (getColorCount() == 3) {
             if (getConfiguration().isColoringVertical()) {
                 colorViews(0, listButton, levelButton, spaceTop);
                 colorViews(1, backgroundLayout);
                 colorViews(2, feedbackButton, settingsButton, spaceBottom);
-            }else{
+            } else {
                 colorViews(0, listButton, spaceLeft, feedbackButton);
                 colorViews(1, backgroundLayout);
                 colorViews(2, levelButton, spaceRight, settingsButton);
@@ -77,18 +77,51 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         restoreHostApplicationNameToPreferences();
         onPostCreate();
         if (ACTIVE.check(this)) {
+            execDatabaseMigration();
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         updateUserLevel(false);
-        invokeVersionControl(2,R.id.hub_button_list,R.id.hub_button_settings);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false);
+        if (!tutorialFinished && !tutorialInitialized) {
+            RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
+            String statusLabel = getString(R.string.hub_feedback_status_label) + StringUtility.generateSpace(10);
+            String createLabel = getString(R.string.hub_feedback_create_label);
+            String settingsLabel = getString(R.string.hub_feedback_settings_label);
+            String listLabel = getString(R.string.hub_feedback_list_label);
+            String lvlLabel = getString(R.string.hub_feedback_user_lvl_label) + StringUtility.generateSpace(10);
+            String infoLabel = getString(R.string.hub_feedback_info_label);
+            float textSize = ScalingUtility.getInstance().getMinTextSizeScaledForWidth(20, 75, 0.45, statusLabel, createLabel, settingsLabel, listLabel, lvlLabel, infoLabel);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, statusLabel, getString(R.string.hub_feedback_status_info), textSize, this, statusText);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, createLabel, getString(R.string.hub_feedback_create_info), textSize, this, feedbackButton, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, settingsLabel, getString(R.string.hub_feedback_settings_info), textSize, this, settingsButton, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, listLabel, getString(R.string.hub_feedback_list_info), textSize, this, listButton, lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, lvlLabel, getString(R.string.hub_feedback_user_lvl_info), textSize, this, levelButton, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, infoLabel, getString(R.string.hub_feedback_info_info), textSize, this, spaceTop, urLayout);
+            mLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, true).apply();
+                    return false;
+                }
+            });
+            colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, true).apply();
+        }
     }
 
     private void restoreHostApplicationNameToPreferences() {
         String extraHostApplicationName = getIntent().getStringExtra(EXTRA_KEY_HOST_APPLICATION_NAME);
-        String preferencesHostApplicationName = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME,null);
-        if (preferencesHostApplicationName == null && extraHostApplicationName != null){
+        String preferencesHostApplicationName = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, null);
+        if (preferencesHostApplicationName == null && extraHostApplicationName != null) {
             getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, extraHostApplicationName).apply();
-        }else if (preferencesHostApplicationName == null && hostApplicationName != null){
+        } else if (preferencesHostApplicationName == null && hostApplicationName != null) {
             getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, hostApplicationName).apply();
         }
     }
@@ -96,7 +129,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        updateUserLevel(false);
+        authenticateAndStartService();
         restoreHostApplicationNameToPreferences();
     }
 
@@ -107,98 +140,89 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         restoreHostApplicationNameToPreferences();
     }
 
+    private void execDatabaseMigration() {
+        new DatabaseMigration(getApplicationContext(), configuration).run();
+    }
+
+    private void authenticateAndStartService() {
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getEndpointLogin(), configuration.getEndpointPass()));
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
+    }
+
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
 
-        if (getColorCount() == 2){
-            enableView(levelButton,1);
-            disableViews(settingsButton,feedbackButton,listButton);
-        }else if (getColorCount()==3){
-            if (getConfiguration().isColoringVertical()) {
-                enableView(levelButton,0);
-            }else{
-                enableView(levelButton,2);
-            }
+        disableViews(settingsButton, feedbackButton, listButton);
+
+        enableView(levelButton, viewToColorMap.get(levelButton));
+        statusText.setText(null);
+        if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck) && !ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            enableView(listButton, viewToColorMap.get(listButton), true);
         }
-        statusText.setVisibility(View.GONE);
-        if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            enableView(listButton,1,VersionUtility.getDateVersion()>1);
+        if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            fetchAndroidUser();
         }
-        if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            statusText.setVisibility(View.VISIBLE);
-            Utils.persistScreenshot(this,cachedScreenshot);
-            int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
-            int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
-            int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
-            int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
-            int allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL).size();
-            if (configuration.hasAtLeastNTopColors(2) ) {
-                statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
-                        allFeedbackBeans,
-                        ownFeedbackBeans,
-                        respondedFeedbackBeans,
-                        upVotedFeedbackBeans,
-                        downVotedFeedbackBeans)
-                        .replace(PRIMARY_COLOR_STRING, ColorUtility.isDark(ColorUtility.getBackgroundColorOfView(backgroundLayout))? WHITE_HEX : BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
-                                ColorUtility.getBackgroundColorOfView(backgroundLayout),
-                                configuration.getTopColors()[1],
-                                0.3)))));
-            }else{
-                statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,
-                        allFeedbackBeans,
-                        ownFeedbackBeans,
-                        respondedFeedbackBeans,
-                        upVotedFeedbackBeans,
-                        downVotedFeedbackBeans)
-                        .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
-                        .replace(SECONDARY_COLOR_STRING,DARK_BLUE)));
-            }
-            if (getColorCount() == 2){
-                enableView(feedbackButton,1);
-                enableView(settingsButton,1,VersionUtility.getDateVersion()>1);
-            }else if (getColorCount()==3){
-                if (getConfiguration().isColoringVertical()) {
-                    enableView(feedbackButton,2);
-                    enableView(settingsButton,2,VersionUtility.getDateVersion()>1);
-                }else{
-                    enableView(feedbackButton,0);
-                    enableView(settingsButton,2,VersionUtility.getDateVersion()>1);
-                }
-            }
-        }
-        if (ADVANCED.check(getApplicationContext(),ignoreDatabaseCheck)){
+        if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
             disableViews(levelButton);
         }
     }
 
+    private void fetchAndroidUser() {
+        AndroidUser androidUser = new AndroidUser(userName);
+        FeedbackService.getInstance(this).getUser(this, androidUser);
+    }
+
     @Override
     public void onButtonClicked(View view) {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        if (!tutorialFinished) {
+            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (view != null) {
             int i = view.getId();
             if (i == R.id.hub_button_list) {
-                startActivity(this, FeedbackListActivity.class);
+                startActivity(this, FeedbackListActivity.class, false);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackActivity.class);
+                boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
+                if (userIsDeveloper) {
+                    startActivity(this, FeedbackListDeveloperActivity.class, false);
+                } else {
+                    startActivity(this, FeedbackIdentityActivity.class, false);
+                }
             } else if (i == R.id.hub_button_settings) {
-                startActivity(this, FeedbackSettingsActivity.class);
+                startActivity(this, FeedbackSettingsActivity.class, false);
             } else if (i == R.id.hub_button_user_level) {
-                switch (userLevel.getLevel()){
+                switch (userLevel.getLevel()) {
                     case 0:
                         new PopUp(this)
-                            .withTitle(getString(R.string.hub_access_1))
-                            .withMessage(getString(R.string.hub_access_1_description))
-                            .withCustomOk(getString(R.string.hub_confirm), getClickListener(PASSIVE)).buildAndShow();
+                                .withTitle(getString(R.string.hub_access_1))
+                                .withMessage(getString(R.string.hub_access_1_description))
+                                .withCustomOk(getString(R.string.hub_confirm), getClickListener(PASSIVE)).buildAndShow();
                         break;
                     case 1:
-                        final EditText nameInputText = new EditText(this);
-                        nameInputText.setMaxLines(1);
-                        new PopUp(this)
-                                .withTitle(getString(R.string.hub_access_2))
-                                .withMessage(getString(R.string.hub_access_2_description))
-                                .withInput(nameInputText)
-                                .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE,nameInputText)).buildAndShow();
+                        if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
+                            //der callback ob der server antwortet. generell speichern dieses status in einem state?
+                            final EditText nameInputText = new EditText(this);
+                            nameInputText.setSingleLine();
+                            nameInputText.setMaxLines(1);
+                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            )});
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? getString(R.string.hub_access_2_and_3_description, configuration.getMinUserNameLength(),
+                                            configuration
+                                                    .getMaxUserNameLength()) : getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
+                                    .withInput(nameInputText)
+                                    .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
+                        } else {
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(getString(R.string.hub_access_2_fail))
+                                    .withoutCancel()
+                                    .withCustomOk(getString(R.string.hub_confirm)).buildAndShow();
+                        }
                         break;
                     case 2:
                         new PopUp(this)
@@ -208,30 +232,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                         break;
                     default:
                         break;
-                }
-            } else {
-                //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
-                tapCounter++;
-                if (tapCounter >= 5 && ACTIVE.check(this)){
-                    tapCounter = 0;
-                    FeedbackDatabase.getInstance(this).writeString(USER_NAME,null);
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER,false);
-                    List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN);
-                    List<LocalFeedbackBean> subscribedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(SUBSCRIBED);
-                    List<LocalFeedbackBean> votedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(VOTED);
-                    List<LocalFeedbackBean> respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED);
-                    List<LocalFeedbackBean> allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL);
-                    FeedbackDatabase.getInstance(this).wipeAllStoredFeedback();
-                    Toast.makeText(this, "DEVELOPER: Username resetted!\n"+
-                            allFeedbackBeans.size()+" Local Feedback-Entries deleted, containing\n"+
-                                    ownFeedbackBeans.size()+" own Feedback-Entries\n"+
-                                    subscribedFeedbackBeans.size()+" subscribed Feedback-Entries\n"+
-                                    votedFeedbackBeans.size()+" voted Feedback-Entries\n"+
-                                    respondedFeedbackBeans.size()+" responded Feedback-Entries.",
-                            Toast.LENGTH_SHORT).show();
-                    userName = null;
-                    statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,0,0,0,0,0).replace(PRIMARY_COLOR_STRING,DARK_BLUE)));
-                    updateUserLevel(false);
                 }
             }
         }
@@ -244,33 +244,33 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
-                    getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR,true).apply();
+                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR, true).apply();
                     updateUserLevel(true);
                 }
             };
-        }else if (userLevel == ACTIVE) {
+        } else if (userLevel == ACTIVE) {
             return new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String inputString = inputEditText[0].getText().toString();
-                    if (inputString.length() < configuration.getMinUserNameLength()){
-                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
+                    if (inputString.length() < configuration.getMinUserNameLength()) {
+                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (inputString.length() > configuration.getMaxUserNameLength()){
-                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
+                    if (inputString.length() > configuration.getMaxUserNameLength()) {
+                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     preAllocatedStringStorage[0] = inputString;
                     dialog.cancel();
-                    if (ACTIVE.getMissing(getApplicationContext()).length==0){
+                    if (ACTIVE.getMissing(getApplicationContext()).length == 0) {
                         handleAllPermissionsGranted(true); //Can only happen when Developer reset their UserName
-                    }else{
+                    } else {
                         ActivityCompat.requestPermissions(FeedbackHubActivity.this, ACTIVE.getMissing(getApplicationContext()), PERMISSION_REQUEST_ALL);
                     }
                 }
             };
-        }else if (userLevel == ADVANCED) {
+        } else if (userLevel == ADVANCED) {
             return new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -312,22 +312,130 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
 
     private void handleAllPermissionsGranted(boolean reload) {
         updateUserLevel(true);
-        if (ACTIVE.check(this,true) && preAllocatedStringStorage[0] != null){
-            String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
-            if (name == null){
-                Toast.makeText(this,getString(configuration.isDeveloper()?R.string.hub_developer_registered:R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
-                preAllocatedStringStorage[0] = RepositoryStub.registerAndGetUniqueName(preAllocatedStringStorage[0],false);
-                FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
-                FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, configuration.isDeveloper());
-                userName = preAllocatedStringStorage[0];
-            }else{
+        if (ACTIVE.check(this, true) && preAllocatedStringStorage[0] != null) {
+            String name = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
+            if (name == null) {
+                Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_registered, preAllocatedStringStorage[0]), Toast.LENGTH_SHORT)
+                     .show();
+                FeedbackService.getInstance(this).createUser(this, new AndroidUser(preAllocatedStringStorage[0], configuration.isDeveloper()));
+                userName = USER_NAME_CREATING;
+                levelButton.setEnabled(false);
+            } else {
                 userName = name;
-                Toast.makeText(this,getString(configuration.isDeveloper()?R.string.hub_developer_registered:R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_restored, name), Toast.LENGTH_SHORT).show();
+                preAllocatedStringStorage[0] = null;
             }
-            preAllocatedStringStorage[0] = null;
         }
-        if (reload){
+        if (reload) {
             updateUserLevel(true);
         }
+    }
+
+    private void updateHubViews() {
+        enableView(listButton, viewToColorMap.get(listButton), true);
+        ConfigurationUtility.execStoreStateToDatabase(this, configuration);
+        ImageUtility.persistScreenshot(this, cachedScreenshot);
+        int ownFeedbackCount = FeedbackDatabase.getInstance(this).readInteger(USER_FEEDBACK_COUNT, 0);
+        int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
+        int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
+        int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
+        int userKarma = FeedbackDatabase.getInstance(this).readInteger(USER_KARMA, 0);
+        if (configuration.hasAtLeastNTopColors(2)) {
+            Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                    userKarma,
+                    ownFeedbackCount,
+                    respondedFeedbackBeans,
+                    upVotedFeedbackBeans,
+                    downVotedFeedbackBeans)
+                    .replace(PRIMARY_COLOR_STRING, ColorUtility.isDark(ColorUtility.getBackgroundColorOfView(backgroundLayout)) ? WHITE_HEX : BLACK_HEX)
+                    .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
+                            ColorUtility.getBackgroundColorOfView(backgroundLayout),
+                            configuration.getTopColors()[1],
+                            0.3))));
+            float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
+            this.statusText.setTextSize(textSize);
+            this.statusText.setText(hubStatusText);
+        } else {
+            Spanned hubStatusText = Html.fromHtml(getString(R.string.hub_status, userName,
+                    userKarma,
+                    ownFeedbackCount,
+                    respondedFeedbackBeans,
+                    upVotedFeedbackBeans,
+                    downVotedFeedbackBeans)
+                    .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
+                    .replace(SECONDARY_COLOR_STRING, DARK_BLUE));
+            float textSize = ScalingUtility.getInstance().getTextSizeScaledForHeight(hubStatusText.toString(), 20, 0, 0.4);
+            this.statusText.setTextSize(textSize);
+            this.statusText.setText(hubStatusText);
+        }
+
+        boolean userIsDeveloper = FeedbackDatabase.getInstance(this).readBoolean(USER_IS_DEVELOPER, false);
+        if (userIsDeveloper) {
+            feedbackButton.setText(R.string.hub_feedback_developer_list);
+        } else {
+            feedbackButton.setText(R.string.hub_feedback_create);
+        }
+
+        enableView(feedbackButton, viewToColorMap.get(feedbackButton));
+        enableView(settingsButton, viewToColorMap.get(settingsButton));
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case AUTHENTICATE:
+                if (response instanceof AuthenticateResponse) {
+                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
+                    updateUserLevel(false);
+                }
+                break;
+            case CREATE_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, androidUser.isDeveloper());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_BLOCKED, androidUser.isBlocked());
+                    FeedbackDatabase.newInstance(this).writeDouble(DATABASE_VERSION, DATABASE_VERSION_NUMBER);
+                    userName = androidUser.getName();
+                }
+                preAllocatedStringStorage[0] = null;
+                updateUserLevel(true);
+                levelButton.setEnabled(true);
+                break;
+            case GET_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_FEEDBACK_COUNT, androidUser.getFeedbackCount());
+                    userName = androidUser.getName();
+                    updateHubViews();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        updateHubViews();
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        updateHubViews();
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
+    }
+
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false).apply();
+        }
+        super.onPause();
     }
 }

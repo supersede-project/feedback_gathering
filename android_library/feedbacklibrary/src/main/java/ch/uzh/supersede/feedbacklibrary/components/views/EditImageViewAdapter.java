@@ -3,13 +3,8 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import java.util.List;
 
@@ -18,12 +13,12 @@ import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 
-public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
+public final class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
 
     private List<EditImageItem> items;
     private Context context;
 
-    public EditImageViewAdapter (List<EditImageItem> items){
+    EditImageViewAdapter(List<EditImageItem> items) {
         this.items = items;
     }
 
@@ -68,7 +63,7 @@ public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdap
         return items.size();
     }
 
-    static class EditImageViewHolder extends RecyclerView.ViewHolder{
+    static class EditImageViewHolder extends RecyclerView.ViewHolder {
         View view;
 
         ImageView elementImageView;
@@ -78,8 +73,8 @@ public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdap
         EditImageViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            elementImageView = (ImageView)itemView.findViewById(R.id.edil_element_iv);
-            starCheckBox = (CheckBox)itemView.findViewById(R.id.edil_star_cb);
+            elementImageView = (ImageView) itemView.findViewById(R.id.edil_element_iv);
+            starCheckBox = (CheckBox) itemView.findViewById(R.id.edil_star_cb);
             titleTextView = (TextView) itemView.findViewById(R.id.edil_title_tv);
         }
     }

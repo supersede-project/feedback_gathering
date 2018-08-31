@@ -7,7 +7,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
-public class TextFeedback extends AbstractFeedbackPart {
+public final class TextFeedback extends AbstractFeedbackPart {
     private String hint;
     private String label;
     private Integer maxLength;
@@ -15,8 +15,8 @@ public class TextFeedback extends AbstractFeedbackPart {
     @Expose
     private String text;
 
-    public TextFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getTextOrder());
+    public TextFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getTextOrder());
         this.hint = configuration.getTextHint();
         this.label = configuration.getTextLabel();
         this.maxLength = configuration.getTextMaxLength();

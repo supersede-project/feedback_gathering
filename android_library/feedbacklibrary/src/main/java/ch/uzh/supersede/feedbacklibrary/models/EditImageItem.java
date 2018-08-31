@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-public class EditImageItem {
+public final class EditImageItem {
     private String title;
     private int elementResource;
     private OnClickListener listener;
@@ -11,10 +11,6 @@ public class EditImageItem {
     public EditImageItem(String title, int elementResource) {
         this.title = title;
         this.elementResource = elementResource;
-    }
-
-    public interface OnClickListener {
-        void onClick();
     }
 
     public void click() {
@@ -47,5 +43,9 @@ public class EditImageItem {
 
     public void setListener(OnClickListener listener) {
         this.listener = listener;
+    }
+
+    public interface OnClickListener {
+        void onClick();
     }
 }

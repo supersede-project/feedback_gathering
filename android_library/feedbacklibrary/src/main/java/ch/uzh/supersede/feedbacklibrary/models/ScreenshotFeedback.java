@@ -4,35 +4,22 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
-public class ScreenshotFeedback extends AbstractMultipartFeedback {
-    private String imagePath;
+public final class ScreenshotFeedback extends AbstractMultipartFeedback {
     private boolean isEditable;
+    private List<String> textAnnotations;
 
-    public ScreenshotFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getScreenshotOrder());
+    public ScreenshotFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getScreenshotOrder());
         this.isEditable = configuration.isScreenshotIsEditable();
-    }
-
-    @Override
-    public boolean isValid(List<String> errorMessage) {
-        return true;
-    }
-
-    @Override
-    public String getPartString() {
-        return "screenshot";
-    }
-
-    @Override
-    public String getFilePath() {
-        return imagePath;
-    }
-
-    public String getImagePath() {
-        return imagePath;
+        setPart("screenshot");
+        setFileExtension(".png");
     }
 
     public boolean isEditable() {
         return isEditable;
+    }
+
+    public List<String> getTextAnnotations() {
+        return textAnnotations;
     }
 }

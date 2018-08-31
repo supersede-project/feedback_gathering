@@ -5,49 +5,116 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
-public class FeedbackDetailsBean implements Serializable {
+public final class FeedbackDetailsBean implements Serializable {
 
-    private UUID feedbackUid;
-    private String title;
+    private long feedbackId;
     private String description;
     private String userName;
-    private String[] labels;
     private long timeStamp;
     private int upVotes;
     private FEEDBACK_STATUS feedbackStatus;
     private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
     private FeedbackBean feedbackBean;
     private byte[] bitmapBytes;
+    private String bitmapName;
+    private String audioFileName;
+    private String contextData;
+    private boolean isSubscribed;
+    private boolean isPublic;
 
     private FeedbackDetailsBean() {
     }
 
+    public String getTitle() {
+        return feedbackBean.getTitle();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public int getUpVotes() {
+        return upVotes;
+    }
+
+    public String getUpVotesAsText() {
+        return FeedbackUtility.getUpvotesAsText(upVotes);
+    }
+
+    public List<FeedbackResponseBean> getResponses() {
+        return feedbackResponses;
+    }
+
+    public FEEDBACK_STATUS getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public FeedbackBean getFeedbackBean() {
+        return feedbackBean;
+    }
+
+    public String[] getTags() {
+        return feedbackBean.getTags();
+    }
+
+    public long getFeedbackId() {
+        return feedbackId;
+    }
+
+    public Bitmap getBitmap() {
+        return ImageUtility.bytesToImage(bitmapBytes);
+    }
+
+    public String getBitmapName() {
+        return bitmapName;
+    }
+
+    public String getAudioFileName() {
+        return audioFileName;
+    }
+
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public String getContextData() {
+        return contextData;
+    }
+
     public static class Builder {
-        private UUID feedbackUid;
-        private String title;
+        private long feedbackId;
         private String description;
         private String userName;
-        private String[] labels;
         private long timeStamp;
         private int upVotes;
         private FEEDBACK_STATUS feedbackStatus;
         private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
         private byte[] bitmap;
+        private String bitmapName;
+        private String audioFileName;
+        private String contextData;
         private FeedbackBean feedbackBean;
+        private boolean isSubscribed;
+        private boolean isPublic;
 
         public Builder() {
             //NOP
-        }
-
-        public Builder withTitle(String title) {
-            this.title = title;
-            return this;
         }
 
         public Builder withDescription(String description) {
@@ -57,11 +124,6 @@ public class FeedbackDetailsBean implements Serializable {
 
         public Builder withUserName(String userName) {
             this.userName = userName;
-            return this;
-        }
-
-        public Builder withLabels(String... labels) {
-            this.labels = labels;
             return this;
         }
 
@@ -90,8 +152,8 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withFeedbackUid(UUID feedbackUid) {
-            this.feedbackUid = feedbackUid;
+        public Builder withFeedbackId(long feedbackId) {
+            this.feedbackId = feedbackId;
             return this;
         }
 
@@ -100,73 +162,51 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
+        public Builder withBitmapName(String bitmapName) {
+            this.bitmapName = bitmapName;
+            return this;
+        }
+
+        public Builder withAudioFileName(String audioFileName) {
+            this.audioFileName = audioFileName;
+            return this;
+        }
+
+        public Builder withSubscription(boolean isSubscribed) {
+            this.isSubscribed = isSubscribed;
+            return this;
+        }
+
+        public Builder isPublic(boolean isPublic) {
+            this.isPublic = isPublic;
+            return this;
+        }
+
+        public Builder withContext(String contextData) {
+            this.contextData = contextData;
+            return this;
+        }
+
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackUid, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
+            if (CompareUtility.notNull(feedbackId, timeStamp, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
-                bean.feedbackUid = feedbackUid;
-                bean.title = this.title;
+                bean.feedbackId = feedbackId;
                 bean.description = this.description;
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
-                bean.labels = labels;
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
                 bean.bitmapBytes = this.bitmap;
+                bean.bitmapName = this.bitmapName;
+                bean.audioFileName = this.audioFileName;
+                bean.isSubscribed = this.isSubscribed;
+                bean.isPublic = this.isPublic;
+                bean.contextData = this.contextData;
                 return bean;
             }
             return null;
         }
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public int getUpVotes() {
-        return upVotes;
-    }
-
-    public String getUpVotesAsText() {
-        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
-    }
-
-    public List<FeedbackResponseBean> getResponses() {
-        return feedbackResponses;
-    }
-
-    public FEEDBACK_STATUS getFeedbackStatus() {
-        return feedbackStatus;
-    }
-
-    public FeedbackBean getFeedbackBean() {
-        return feedbackBean;
-    }
-
-    public String[] getLabels() {
-        return labels;
-    }
-
-    public UUID getFeedbackUid() {
-        return feedbackUid;
-    }
-
-    public Bitmap getBitmap() {
-        return ImageUtility.bytesToImage(bitmapBytes);
-    }
-
-
 }

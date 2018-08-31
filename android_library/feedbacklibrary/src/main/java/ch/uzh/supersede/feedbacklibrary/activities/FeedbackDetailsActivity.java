@@ -1,200 +1,320 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.app.Dialog;
-import android.content.*;
-import android.graphics.drawable.ColorDrawable;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.InputFilter;
 import android.view.*;
 import android.widget.*;
 
-import java.util.*;
-
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.models.*;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.EDITABLE;
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_REPORTED_FEEDBACK;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsActivity extends AbstractBaseActivity {
-    public static RESPONSE_MODE mode = READING;
-    private FeedbackDetailsBean feedbackDetailsBean;
-    private LocalFeedbackState feedbackState;
-    private static LinearLayout responseLayout;
-    private static ScrollView scrollContainer;
-    private TextView votesText;
-    private TextView userText;
-    private TextView statusText;
-    private TextView titleText;
-    private TextView descriptionText;
+public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivity implements IFeedbackServiceEventListener {
     private Button upButton;
     private Button downButton;
-    private Button imageButton;
-    private Button audioButton;
-    private Button labelButton;
-    private Button subscribeButton;
-    private Button responseButton;
+    private Button reportButton;
     private Button makePublicButton;
-    private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
+    private TextView statusText;
+    private boolean creationMode = false;
+
+    @Override
+    protected void initViews() {
+        setContentView(R.layout.activity_feedback_details);
+        setMode(READING);
+        setCallback(this);
+        setResponseLayout(getView(R.id.details_layout_scroll_layout, LinearLayout.class));
+        setScrollContainer(getView(R.id.details_layout_scroll_container, ScrollView.class));
+        setVotesText(getView(R.id.details_text_votes, TextView.class));
+        setUserText(getView(R.id.details_text_user, TextView.class));
+        setTitleText(getView(R.id.details_text_title, TextView.class));
+        setDescriptionText(getView(R.id.details_text_description, TextView.class));
+        setImageButton(getView(R.id.details_button_images, Button.class));
+        setAudioButton(getView(R.id.details_button_audio, Button.class));
+        setTagButton(getView(R.id.details_button_tags, Button.class));
+        setSubscribeButton(getView(R.id.details_button_subscribe, Button.class));
+        setResponseButton(getView(R.id.details_button_response, Button.class));
+
+        upButton = getView(R.id.details_button_up, Button.class);
+        downButton = getView(R.id.details_button_down, Button.class);
+        reportButton = getView(R.id.details_button_report, Button.class);
+        makePublicButton = getView(R.id.details_button_make_public, Button.class);
+        creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION, false);
+        statusText = getView(R.id.details_text_status, TextView.class);
+
+        colorViews(0, upButton, downButton, makePublicButton);
+        colorViews(1, getView(R.id.details_root, RelativeLayout.class));
+        colorViews(0, getView(R.id.details_layout_scroll_layout, LinearLayout.class));
+        colorViews(configuration.getLastColorIndex(), statusText);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mode = READING;
-        setContentView(R.layout.activity_feedback_details);
-        responseLayout = getView(R.id.details_layout_scroll_layout, LinearLayout.class);
-        scrollContainer = getView(R.id.details_layout_scroll_container, ScrollView.class);
-        votesText = getView(R.id.details_text_votes, TextView.class);
-        userText = getView(R.id.details_text_user, TextView.class);
-        statusText = getView(R.id.details_text_status, TextView.class);
-        titleText = getView(R.id.details_text_title, TextView.class);
-        descriptionText = getView(R.id.details_text_description, TextView.class);
-        upButton = getView(R.id.details_button_up, Button.class);
-        downButton = getView(R.id.details_button_down, Button.class);
-        imageButton = getView(R.id.details_button_images, Button.class);
-        audioButton = getView(R.id.details_button_audio, Button.class);
-        labelButton = getView(R.id.details_button_labels, Button.class);
-        subscribeButton = getView(R.id.details_button_subscribe, Button.class);
-        responseButton = getView(R.id.details_button_response, Button.class);
-        makePublicButton = getView(R.id.details_button_make_public, Button.class);
-        FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
-        FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
-        if (cachedFeedbackDetailsBean != null) {
-            feedbackDetailsBean = cachedFeedbackDetailsBean;
-            feedbackBean = feedbackDetailsBean.getFeedbackBean();
-        } else if (feedbackBean != null) {
-            feedbackDetailsBean = RepositoryStub.getFeedbackDetails(this, feedbackBean);
-        }
-        if (feedbackDetailsBean != null) {
-            updateFeedbackState();
-            for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, FIXED);
-                responseList.add(feedbackResponseListItem);
-            }
-            Collections.sort(responseList);
-            for (FeedbackResponseListItem item : responseList) {
-                responseLayout.addView(item);
-            }
-            votesText.setText(feedbackDetailsBean.getUpVotesAsText());
-            userText.setText(getString(R.string.details_user, feedbackDetailsBean.getUserName()));
-            statusText.setText(getString(R.string.details_status, feedbackDetailsBean.getFeedbackStatus().getLabel()));
-            titleText.setText(getString(R.string.details_title, feedbackDetailsBean.getTitle()));
-            descriptionText.setText(feedbackDetailsBean.getDescription());
+        setCallerClass(ObjectUtility.getCallerClass(getIntent()));
 
-            if (feedbackDetailsBean.getFeedbackBean() != null && feedbackDetailsBean.getFeedbackBean().isOwnFeedback(getApplicationContext())) {
-                upButton.setEnabled(false);
-                downButton.setEnabled(false);
-                if (!feedbackDetailsBean.getFeedbackBean().isPublic()) {
-                    makePublicButton.setVisibility(View.VISIBLE);
-                }
-            }
-        }else{
-            this.onBackPressed();
-        }
+        updateReportStatus(null);
+        updateOwnFeedbackCase();
+        initStatusText();
+        drawLayoutOutlines(R.id.details_layout_up, R.id.details_layout_mid, R.id.details_layout_low, R.id.details_layout_scroll_container, R.id.details_layout_button);
         onPostCreate();
     }
 
-    private void updateFeedbackState() {
-        feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(feedbackDetailsBean.getFeedbackBean());
-        if (feedbackState.isSubscribed()){
-            subscribeButton.setText(getString(R.string.details_unsubscribe));
-            subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
-        }else{
-            subscribeButton.setText(getString(R.string.details_subscribe));
-            subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.black));
+    private void initStatusText() {
+        statusText.setText(getString(R.string.details_status, getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+    }
+
+    @Override
+    protected void initFeedbackDetailView() {
+        super.initFeedbackDetailView();
+        if (!configuration.isReportEnabled()) {
+            reportButton.setVisibility(View.GONE);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getSubscribeButton().getLayoutParams();
+            layoutParams.weight = 3;
+            getSubscribeButton().setLayoutParams(layoutParams);
+            layoutParams = (LinearLayout.LayoutParams) getResponseButton().getLayoutParams();
+            layoutParams.weight = 3;
+            getResponseButton().setLayoutParams(layoutParams);
         }
-        if (feedbackState.isUpVoted()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.green_4));
-            upButton.setEnabled(false);
-        }
-        if (feedbackState.isDownVoted()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
-            downButton.setEnabled(false);
-        }
-        if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.black));
-            upButton.setEnabled(true);
-            downButton.setEnabled(true);
+        if (getFeedbackDetailsBean() != null) {
+            statusText.setText(getString(R.string.details_status, getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+
+            if (getFeedbackDetailsBean().getFeedbackBean() != null && getFeedbackDetailsBean().getFeedbackBean().isOwnFeedback(getApplicationContext())) {
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+                if (!getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
+                    makePublicButton.setVisibility(View.VISIBLE);
+                }
+            }
+        } else {
+            this.onBackPressed();
         }
     }
 
     @Override
     public void onButtonClicked(View view) {
-        if (view.getId() == labelButton.getId()) {
-            new PopUp(this)
-                    .withTitle(getString(R.string.details_labels))
-                    .withoutCancel()
-                    .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getLabels())).buildAndShow();
-        }else if (view.getId() == imageButton.getId()) {
-            final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
-            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
-            imageView.setImageBitmap(feedbackDetailsBean.getBitmap());
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    builder.dismiss();
-                }
-            });
-            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            builder.show();
-        }else if (view.getId() == upButton.getId()) {
-            RepositoryStub.sendUpVote(this, feedbackDetailsBean.getFeedbackBean());
-            votesText.setText(feedbackDetailsBean.getFeedbackBean().upVote());
-        }else if (view.getId() == downButton.getId()){
-            RepositoryStub.sendDownVote(this, feedbackDetailsBean.getFeedbackBean());
-            votesText.setText(feedbackDetailsBean.getFeedbackBean().downVote());
-        }else if (view.getId() == subscribeButton.getId()){
-            RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
-        }else if (view.getId() == responseButton.getId() && mode == READING){
-            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,configuration,EDITABLE);
-            //Get to the Bottom
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
-            responseLayout.addView(item);
-            //Show new Entry
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
-            item.requestInputFocus();
-        }else if (view.getId() == makePublicButton.getId()){
-            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    makePublicButton.setVisibility(View.INVISIBLE);
-                    RepositoryStub.makeFeedbackPublic(feedbackDetailsBean);
-                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
-                    dialog.cancel();
-                }
-            };
-            new PopUp(this)
-                    .withTitle(getString(R.string.details_make_public_title))
-                    .withCustomOk("Confirm",okClickListener)
-                    .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
+        super.onButtonClicked(view);
+        if (view.getId() == upButton.getId()) {
+            handleUpVoteButtonClicked();
+        } else if (view.getId() == downButton.getId()) {
+            handleDownVoteButtonClicked();
+        } else if (view.getId() == makePublicButton.getId()) {
+            handlePublicationButtonClicked();
+        } else if (view.getId() == reportButton.getId()) {
+            handleReportButtonClicked();
         }
         updateFeedbackState();
     }
 
-    public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
-            String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
-            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
-            boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
-            FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
-            FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);
-            //Get to the Bottom
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
-            responseLayout.addView(item);
-            //Show new Entry
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
+    @Override
+    protected void updateFeedbackState() {
+        super.updateFeedbackState();
+        if (ACTIVE.check(this, true)) {
+            if (getFeedbackState().isUpVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.green_4), 0.4));
+                upButton.setEnabled(false);
+                downButton.setEnabled(true);
+            }
+            if (getFeedbackState().isDownVoted()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.red_5), 0.4));
+                downButton.setEnabled(false);
+                upButton.setEnabled(true);
+            }
+            if (getFeedbackState().isEqualVoted() && getFeedbackDetailsBean().getFeedbackBean().isPublic()) {
+                getVotesText().setTextColor(ColorUtility.adjustColorToBackground(getTopColor(1), ContextCompat.getColor(this, R.color.black), 0.4));
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+            }
+        }
+    }
+
+    protected void handleUpVoteButtonClicked() {
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), UP_VOTED);
+        getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().upVote());
+    }
+
+    protected void handleDownVoteButtonClicked() {
+        FeedbackDatabase.getInstance(this).writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), DOWN_VOTED);
+        getVotesText().setText(getFeedbackDetailsBean().getFeedbackBean().downVote());
+    }
+
+    protected void handlePublicationButtonClicked() {
+        DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                makePublicButton.setVisibility(View.INVISIBLE);
+                FeedbackService.getInstance(getApplicationContext()).editFeedbackPublication(FeedbackDetailsActivity.this, getFeedbackDetailsBean().getFeedbackBean(), true);
+                dialog.cancel();
+            }
+        };
+        new PopUp(this)
+                .withTitle(getString(R.string.details_make_public_title))
+                .withCustomOk("Confirm", okClickListener)
+                .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
+    }
+
+    protected void handleReportButtonClicked() {
+        final EditText reportReason = new EditText(this);
+        reportReason.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxReportLength())});
+        DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String report = reportReason.getText().toString();
+                if (!StringUtility.hasText(report)) {
+                    Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_empty, Toast.LENGTH_SHORT).show();
+                } else if (report.length() < configuration.getMinReportLength()) {
+                    Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_short, Toast.LENGTH_SHORT).show();
+                } else if (report.length() > configuration.getMaxReportLength()) {
+                    Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
+                } else {
+                    FeedbackService.getInstance(getApplicationContext()).createFeedbackReport(FeedbackDetailsActivity.this, getFeedbackDetailsBean(), new FeedbackReportRequestBody(getFeedbackDetailsBean().getFeedbackId(),getUserName(),report));
+                    dialog.dismiss();
+                }
+            }
+        };
+        new PopUp(this)
+                .withTitle(getString(R.string.details_report_title))
+                .withInput(reportReason)
+                .withCustomOk("Confirm", okClickListener)
+                .withMessage(getString(R.string.details_report_content, configuration.getMinReportLength(), configuration.getMaxReportLength())).buildAndShow();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (creationMode) {
+            startActivity(this, FeedbackHubActivity.class, true);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void updateReportStatus(String report) {
+        if (ACTIVE.check(getApplicationContext())) {
+            if (report != null) {
+                FeedbackDatabase.getInstance(getApplicationContext()).writeString(USER_REPORTED_FEEDBACK + getFeedbackDetailsBean().getFeedbackBean().getFeedbackId(), report);
+            }
+            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_REPORTED_FEEDBACK + getFeedbackDetailsBean().getFeedbackBean().getFeedbackId(), null) != null) {
+                disableViews(reportButton);
+            }
+        }
+    }
+
+    /**
+     * disable certain buttons on own feedback
+     */
+    public void updateOwnFeedbackCase() {
+        if (ACTIVE.check(getApplicationContext()) && getFeedbackDetailsBean().getUserName().equals(getUserName())) {
+            disableViews(reportButton, upButton, downButton);
+        }
+    }
+
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventFailed(eventType,response);
+        switch (eventType) {
+            case CREATE_FEEDBACK_REPORT:
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_not_sent, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        super.onEventCompleted(eventType, response);
+        switch (eventType) {
+            case CREATE_FEEDBACK_REPORT:
+            case CREATE_FEEDBACK_REPORT_MOCK:
+                if (response instanceof FeedbackReport) {
+                    Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_sent, Toast.LENGTH_SHORT).show();
+                    updateReportStatus(((FeedbackReport) response).getReason());
+                }
+                break;
+            case EDIT_FEEDBACK_PUBLICATION:
+            case EDIT_FEEDBACK_PUBLICATION_MOCK:
+                Toast.makeText(FeedbackDetailsActivity.this, R.string.details_published, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false);
+        if (!tutorialFinished && !tutorialInitialized) {
+            imageButton.setEnabled(false);
+            audioButton.setEnabled(false);
+            tagButton.setEnabled(false);
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
+            makePublicButton.setEnabled(false);
+            reportButton.setEnabled(false);
+            responseButton.setEnabled(false);
+            subscribeButton.setEnabled(false);
+
+            RelativeLayout root = getView(R.id.details_root, RelativeLayout.class);
+
+            String votesLabel = getString(R.string.detail_tutorial_title_votes);
+            String publicLabel = getString(R.string.detail_tutorial_title_public);
+            String multimediaLabel = getString(R.string.detail_tutorial_title_multimedia);
+            String subscribeLabel = getString(R.string.detail_tutorial_title_subs);
+            String replyLabel = getString(R.string.detail_tutorial_title_reply);
+            float textSize = ScalingUtility
+                    .getInstance()
+                    .getMinTextSizeScaledForWidth(20, 75, 0.45, votesLabel, publicLabel, multimediaLabel, replyLabel, subscribeLabel);
+            RelativeLayout repLayout = infoUtility.addInfoBox(root, replyLabel, getString(R.string.detail_tutorial_content_reply), textSize, this, responseButton);
+            RelativeLayout subLayout = infoUtility.addInfoBox(root, subscribeLabel, getString(R.string.detail_tutorial_content_subs), textSize, this, subscribeButton, repLayout);
+            RelativeLayout mulLayout = infoUtility.addInfoBox(root, multimediaLabel, getString(R.string.detail_tutorial_content_multimedia), textSize, this, audioButton, subLayout);
+            RelativeLayout pubLayout = infoUtility.addInfoBox(root, publicLabel, getString(R.string.detail_tutorial_content_public), textSize, this, downButton, mulLayout);
+            RelativeLayout votLayout = infoUtility.addInfoBox(root, votesLabel, getString(R.string.detail_tutorial_content_votes), textSize, this, votesText, pubLayout);
+            repLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, true).apply();
+                    imageButton.setEnabled(true);
+                    audioButton.setEnabled(true);
+                    tagButton.setEnabled(true);
+                    upButton.setEnabled(true);
+                    downButton.setEnabled(true);
+                    makePublicButton.setEnabled(true);
+                    reportButton.setEnabled(true);
+                    responseButton.setEnabled(true);
+                    subscribeButton.setEnabled(true);
+                    updateFeedbackState();
+                    return false;
+                }
+            });
+            colorShape(1, mulLayout, subLayout, repLayout, pubLayout, votLayout);
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, true).apply();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false).apply();
+        }
+        super.onPause();
     }
 }
 

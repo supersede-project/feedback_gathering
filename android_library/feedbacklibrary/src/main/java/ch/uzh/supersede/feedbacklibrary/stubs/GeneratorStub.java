@@ -4,15 +4,12 @@ import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
-public class GeneratorStub {
+public final class GeneratorStub {
 
     private GeneratorStub() {
     }
 
     public static class BagOfFeedback {
-
-        private BagOfFeedback() {
-        }
 
         private static String[] feedbacks = new String[]{
                 "The GUI is way too confusing.",
@@ -26,18 +23,20 @@ public class GeneratorStub {
                 "I bought the founders-package but i didn't get any rewards!!",
         };
 
+        private BagOfFeedback() {
+        }
+
         public static String pickRandom() {
             return feedbacks[NumberUtility.randomPosition(feedbacks)];
         }
+
         public static String[] pickRandomWithTitle() {
             int i = NumberUtility.randomPosition(feedbacks);
             return new String[]{feedbacks[i], BagOfFeedbackTitles.pickSpecific(i)};
         }
     }
-    public static class BagOfFeedbackTitles {
 
-        private BagOfFeedbackTitles() {
-        }
+    public static class BagOfFeedbackTitles {
 
         private static String[] titles = new String[]{
                 "GUI",
@@ -51,6 +50,9 @@ public class GeneratorStub {
                 "Refund",
         };
 
+        private BagOfFeedbackTitles() {
+        }
+
         public static String pickRandom() {
             return titles[NumberUtility.randomPosition(titles)];
         }
@@ -62,9 +64,6 @@ public class GeneratorStub {
     }
 
     public static class BagOfResponses {
-
-        private BagOfResponses() {
-        }
 
         private static String[] names = new String[]{
                 "Nice idea!",
@@ -90,15 +89,16 @@ public class GeneratorStub {
                 "Isn't this implemented alread?",
         };
 
+        private BagOfResponses() {
+        }
+
         public static String pickRandom() {
             return names[NumberUtility.randomPosition(names)];
         }
 
     }
-    public static class BagOfNames {
 
-        private BagOfNames() {
-        }
+    public static class BagOfNames {
 
         private static String[] names = new String[]{
                 "Daniel", "Josua", "Marco", "Hye", "Shena", "Shaunta", "Mirian", "Sherrell", "Alec", "Loren", "Hien", "Chas", "Belkis", "Thanh", "Hisako", "Jay", "Obdulia", "Yoshiko", "Tama",
@@ -106,15 +106,15 @@ public class GeneratorStub {
                 "Lia", "Shantay", "Audrie", "Garrett", "Gloria", "Antoine", "Hazel", "Kamala", "Leeanne", "Yang", "Ethyl", "Jerrell", "Herbert", "Marcela", "Erich", "Vesta"
         };
 
+        private BagOfNames() {
+        }
+
         public static String pickRandom() {
             return names[NumberUtility.randomPosition(names)];
         }
     }
 
-    public static class BagOfLabels {
-
-        private BagOfLabels() {
-        }
+    public static class BagOfTags {
 
         private static String[] labels = new String[]{
                 "GUI", "Images", "Scaling", "Performance", "Permissions", "Data-Usage", "Improvement", "Development", "Translations",
@@ -122,14 +122,17 @@ public class GeneratorStub {
                 "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"
         };
 
+        private BagOfTags() {
+        }
+
         public static String pickRandom() {
             return labels[NumberUtility.randomPosition(labels)];
         }
 
-        public static String[] pickRandom(int maxCount){
+        public static String[] pickRandom(int maxCount) {
             ArrayList<String> labels = new ArrayList<>();
-            int upperBound = NumberUtility.randomInt(1,maxCount);
-            for (int i = 0; i < upperBound; i++){
+            int upperBound = NumberUtility.randomInt(1, maxCount);
+            for (int i = 0; i < upperBound; i++) {
                 labels.add(pickRandom());
             }
             return labels.toArray(new String[labels.size()]);

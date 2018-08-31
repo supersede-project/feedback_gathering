@@ -8,20 +8,24 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackState;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.ALL;
 
 
-public class FeedbackDatabase extends AbstractFeedbackDatabase {
+public final class FeedbackDatabase extends AbstractFeedbackDatabase {
 
 
+    private static final String KARMA_IDENTIFIER = "Karma#";
     private static FeedbackDatabase instance = null;
-    private FeedbackDbHelper databaseHelper = null;
+    private FeedbackDbHelper databaseHelper;
+
+    private FeedbackDatabase(Context context) {
+        databaseHelper = new FeedbackDbHelper(context);
+    }
 
     public static FeedbackDatabase getInstance(Context context) {
         if (instance == null) {
@@ -30,10 +34,13 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return instance;
     }
 
-    private FeedbackDatabase(Context context) {
-        databaseHelper = new FeedbackDbHelper(context);
+    public static FeedbackDatabase newInstance(Context context) {
+        return instance = new FeedbackDatabase(context);
     }
 
+    protected String getDatabaseName() {
+        return databaseHelper.getDatabaseName();
+    }
 
     public long writeDouble(String key, Double value) {
         ContentValues values = new ContentValues();
@@ -52,7 +59,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
     public long writeBoolean(String key, boolean value) {
         ContentValues values = new ContentValues();
         values.put(NumberTableEntry.COLUMN_NAME_KEY, key);
-        values.put(NumberTableEntry.COLUMN_NAME_VALUE, value?1:0);
+        values.put(NumberTableEntry.COLUMN_NAME_VALUE, value ? 1 : 0);
         return insert(NumberTableEntry.TABLE_NAME, NumberTableEntry.COLUMN_NAME_KEY, key, values);
     }
 
@@ -117,7 +124,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         }
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(FeedbackTableEntry.TABLE_NAME, new String[]{
-                FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID,
+                FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID,
                 FeedbackTableEntry.COLUMN_NAME_TITLE,
                 FeedbackTableEntry.COLUMN_NAME_VOTES,
                 FeedbackTableEntry.COLUMN_NAME_RESPONSES,
@@ -146,9 +153,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_OWNER,
                 FeedbackTableEntry.COLUMN_NAME_VOTED,
                 FeedbackTableEntry.COLUMN_NAME_SUBSCRIBED,
-                FeedbackTableEntry.COLUMN_NAME_RESPONDED}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + LIKE + QUOTES + feedbackBean
-                .getFeedbackUid()
-                .toString() + QUOTES, null, null, null, null, null);
+                FeedbackTableEntry.COLUMN_NAME_RESPONDED}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()), null, null, null, null, null);
         if (cursor.moveToFirst()) {
             LocalFeedbackState localFeedbackState = new LocalFeedbackState(cursor);
             cursor.close();
@@ -176,9 +181,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_VOTED,
                 FeedbackTableEntry.COLUMN_NAME_VOTED_TIMESTAMP,
                 FeedbackTableEntry.COLUMN_NAME_RESPONDED,
-                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + LIKE + QUOTES + feedbackBean
-                .getFeedbackUid()
-                .toString() + QUOTES, null, null, null, null, null);
+                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()), null, null, null, null, null);
         long newRowId = 0;
         if (cursor.moveToFirst()) {
             subscribed = cursor.getInt(0);
@@ -187,7 +190,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
             votedTime = cursor.getLong(3);
             responded = cursor.getInt(4);
             respondedTime = cursor.getLong(5);
-            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         }
         switch (mode) {
             case CREATED:
@@ -214,7 +217,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 respondedTime = System.currentTimeMillis();
                 break;
         }
-        values.put(FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        values.put(FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         values.put(FeedbackTableEntry.COLUMN_NAME_TITLE, feedbackBean.getTitle());
         values.put(FeedbackTableEntry.COLUMN_NAME_VOTES, feedbackBean.getUpVotes());
         values.put(FeedbackTableEntry.COLUMN_NAME_RESPONSES, feedbackBean.getResponses());
@@ -230,14 +233,37 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
 
         //Removal
         if (subscribed == 0 && owner == 0 && voted == 0 && responded == 0) {
-            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         } else {
             newRowId = db.insert(FeedbackTableEntry.TABLE_NAME, "null", values);
+            writeTags(db, feedbackBean.getFeedbackId(), feedbackBean.getTags());
         }
 
         cursor.close();
         db.close();
         return newRowId;
+    }
+
+    private void writeTags(SQLiteDatabase db, Long feedbackId, String[] tags) {
+        for (String tag : (tags == null ? new String[0] : tags)) {
+            ContentValues values = new ContentValues();
+            values.put(TagTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackId));
+            values.put(TagTableEntry.COLUMN_NAME_TAG, tag);
+            db.insert(TagTableEntry.TABLE_NAME, "null", values);
+        }
+    }
+
+    public String[] readTags(Long feedbackId) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(true, TagTableEntry.TABLE_NAME, new String[]{TagTableEntry.COLUMN_NAME_TAG}, TagTableEntry.COLUMN_NAME_FEEDBACK_ID + (feedbackId == null ? NEQ + ZERO : EQ +
+                        feedbackId), null, null, null, null,
+                null);
+        ArrayList<String> tags = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            tags.add(cursor.getString(0));
+        }
+        cursor.close();
+        return tags.toArray(new String[tags.size()]);
     }
 
     public void wipeAllStoredFeedback() {
@@ -250,11 +276,19 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
     }
 
     public void deleteFeedbackWithoutClose(SQLiteDatabase db, LocalFeedbackBean feedbackBean) {
-        deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
     }
 
     public void deleteFeedback(LocalFeedbackBean feedbackBean) {
-        delete(FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        delete(FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
+    }
+
+    public void writeConfiguration(LocalConfigurationBean config) {
+        writeByte(CONFIGURATION, ObjectUtility.toByteArray(config));
+    }
+
+    public LocalConfigurationBean readConfiguration() {
+        return ObjectUtility.toSerializable(readBytes(CONFIGURATION), LocalConfigurationBean.class);
     }
 
     public Double readDouble(String key, Double valueIfNull) {
@@ -283,16 +317,17 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
 
     public Boolean readBoolean(String key, Boolean valueIfNull) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + LIKE + QUOTES + key + QUOTES, null, null, null, null, null);
+        Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + LIKE + QUOTES + key + QUOTES, null, null, null,
+                null, null);
         Integer i = null;
         if (cursor.moveToFirst()) {
             i = cursor.getInt(0);
         }
         cursor.close();
-        if (i == null){
+        if (i == null) {
             return valueIfNull;
         }
-        return i==1?true:false;
+        return i == 1;
     }
 
     public Integer readInteger(String key, Integer valueIfNull) {
@@ -386,5 +421,12 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         newRowId = db.insert(tableName, "null", values);
         db.close();
         return newRowId;
+    }
+
+    public Integer storeKarma(long feedbackId, Integer karma) {
+        Integer karmaStored = readInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)), 0);
+        karmaStored += karma;
+        writeInteger(KARMA_IDENTIFIER.concat(String.valueOf(feedbackId)), karmaStored);
+        return karmaStored;
     }
 }

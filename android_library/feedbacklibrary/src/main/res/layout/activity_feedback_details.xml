@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,7 @@
         android:weightSum="60">
 
         <LinearLayout
+            android:id="@+id/details_layout_up"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="20"
@@ -28,6 +30,7 @@
                     android:id="@+id/details_button_images"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="3"
                     android:onClick="onButtonClicked"
                     android:text="@string/details_images" />
@@ -36,18 +39,19 @@
                     android:id="@+id/details_button_audio"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="3"
-                    android:enabled="false"
                     android:onClick="onButtonClicked"
                     android:text="@string/details_audio" />
 
                 <Button
-                    android:id="@+id/details_button_labels"
+                    android:id="@+id/details_button_tags"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="5dp"
                     android:layout_weight="3"
                     android:onClick="onButtonClicked"
-                    android:text="@string/details_labels" />
+                    android:text="@string/details_tags" />
             </LinearLayout>
 
             <LinearLayout
@@ -55,12 +59,12 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="6"
                 android:orientation="vertical"
-                android:weightSum="6">
+                android:weightSum="13">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="4"
                     android:orientation="horizontal"
                     android:weightSum="9">
 
@@ -97,46 +101,55 @@
                         android:text="@string/details_plus" />
                 </LinearLayout>
 
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <Button
                     android:id="@+id/details_button_make_public"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
+                    android:layout_weight="2"
                     android:onClick="onButtonClicked"
-                    android:text="@string/details_make_public"/>
+                    android:padding="0dp"
+                    android:text="@string/details_make_public"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/details_text_user"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/cyanDark"
-                    android:padding="5dp" />
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
 
                 <TextView
                     android:id="@+id/details_text_status"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/cyanDark"
-                    android:padding="5dp" />
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
 
                 <TextView
                     android:id="@+id/details_text_title"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/cyanDark"
-                    android:padding="5dp" />
-
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:padding="0dp"
+                    android:paddingStart="5dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_mid"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
@@ -149,11 +162,11 @@
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="9"
-                android:background="@color/cyanDark"
                 android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_low"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="25"
@@ -163,12 +176,13 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="2" />
+                android:layout_weight="1" />
 
             <ScrollView
                 android:id="@+id/details_layout_scroll_container"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
+                android:layout_margin="5dp"
                 android:layout_weight="28">
 
                 <LinearLayout
@@ -180,21 +194,37 @@
                 </LinearLayout>
             </ScrollView>
 
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/details_layout_button"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
             android:orientation="horizontal"
-            android:weightSum="8">
+            android:weightSum="6">
+
+            <Button
+                android:id="@+id/details_button_report"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:background="@color/red_5"
+                android:onClick="onButtonClicked"
+                android:text="@string/details_report"
+                android:textColor="@color/red_1" />
 
             <Button
                 android:id="@+id/details_button_subscribe"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:onClick="onButtonClicked"
                 android:text="@string/details_subscribe" />
 
@@ -203,10 +233,10 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:onClick="onButtonClicked"
                 android:text="@string/details_response" />
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.ContentFrameLayout>
+</RelativeLayout>

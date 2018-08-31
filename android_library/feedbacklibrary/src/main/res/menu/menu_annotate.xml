@@ -1,5 +1,4 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity">
@@ -8,11 +7,11 @@
         android:id="@+id/supersede_feedbacklibrary_action_annotate_cancel"
         android:icon="@drawable/ic_clear_white_24dp"
         android:title="@string/image_annotation_cancel"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/supersede_feedbacklibrary_action_annotate_accept"
         android:icon="@drawable/ic_check_white_24dp"
         android:title="@string/image_annotation_finish"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

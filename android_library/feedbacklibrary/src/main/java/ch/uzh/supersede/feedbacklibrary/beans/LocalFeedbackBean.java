@@ -2,13 +2,9 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.database.Cursor;
 
-import java.io.Serializable;
-import java.util.Random;
-import java.util.UUID;
-
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 
-public class LocalFeedbackBean {
+public final class LocalFeedbackBean {
     private long creationDate;
     private long votedDate;
     private long subscribedDate;
@@ -20,11 +16,11 @@ public class LocalFeedbackBean {
     private int responses;
     private String feedbackStatusLabel;
     private int responded;
-    private UUID feedbackUid;
+    private long feedbackId;
     private String title;
 
     public LocalFeedbackBean(Cursor cursor) {
-        this.feedbackUid = UUID.fromString(cursor.getString(0));
+        this.feedbackId = cursor.getLong(0);
         this.title = cursor.getString(1);
         this.votes = cursor.getInt(2);
         this.responses = cursor.getInt(3);
@@ -71,8 +67,8 @@ public class LocalFeedbackBean {
         return responses;
     }
 
-    public UUID getFeedbackUid() {
-        return feedbackUid;
+    public long getFeedbackId() {
+        return feedbackId;
     }
 
     public String getTitle() {
@@ -87,7 +83,7 @@ public class LocalFeedbackBean {
         return responded;
     }
 
-    public Enums.FEEDBACK_STATUS getFeedbackStatus(){
+    public Enums.FEEDBACK_STATUS getFeedbackStatus() {
         return Enums.resolveFeedbackStatus(feedbackStatusLabel);
     }
 }

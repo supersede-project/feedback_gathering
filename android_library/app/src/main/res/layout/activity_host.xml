@@ -33,7 +33,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/host_application_screen_text" />
+            android:text="@string/host_application_screen_text"
+            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:onClick="onButtonClicked"
                 android:text="@string/button_host_trigger_1" />
 
             <Button
@@ -61,7 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:onClick="onButtonClicked"
                 android:text="@string/button_host_trigger_2" />
         </LinearLayout>
     </LinearLayout>

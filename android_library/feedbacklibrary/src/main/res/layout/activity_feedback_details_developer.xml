@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_developer_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="60">
+
+        <LinearLayout
+            android:id="@+id/details_developer_layout_up"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:weightSum="9">
+
+                <Button
+                    android:id="@+id/details_developer_button_images"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_images" />
+
+                <Button
+                    android:id="@+id/details_developer_button_audio"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_audio" />
+
+                <Button
+                    android:id="@+id/details_developer_button_tags"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_tags" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:weightSum="14">
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <Button
+                        android:id="@+id/details_developer_button_context"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_developer_context" />
+
+                    <TextView
+                        android:id="@+id/details_developer_text_votes"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="3"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/details_developer_button_delete"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_developer_delete" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <Button
+                        android:id="@+id/details_developer_button_award_karma"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:onClick="onButtonClicked"
+                        android:padding="0dp"
+                        android:text="@string/details_developer_award_karma" />
+
+                    <Button
+                        android:id="@+id/details_developer_button_revoke_karma"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:onClick="onButtonClicked"
+                        android:padding="0dp"
+                        android:text="@string/details_developer_revoke_karma" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/details_developer_text_user"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp" />
+
+                <Spinner
+                    android:id="@+id/details_developer_spinner_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp" />
+
+                <TextView
+                    android:id="@+id/details_developer_text_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:gravity="start|center_horizontal"
+                    android:paddingStart="5dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/details_developer_layout_mid"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <TextView
+                android:id="@+id/details_developer_text_description"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="9"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/details_developer_layout_low"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="25"
+            android:orientation="horizontal"
+            android:weightSum="30">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+
+            <ScrollView
+                android:id="@+id/details_developer_layout_scroll_container"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="28">
+
+                <LinearLayout
+                    android:id="@+id/details_developer_layout_scroll_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/details_developer_layout_button"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <Button
+                android:id="@+id/details_developer_button_subscribe"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:onClick="onButtonClicked"
+                android:text="@string/details_subscribe" />
+
+            <Button
+                android:id="@+id/details_developer_button_response"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:onClick="onButtonClicked"
+                android:text="@string/details_response" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.ContentFrameLayout>

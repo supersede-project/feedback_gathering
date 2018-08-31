@@ -2,18 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PointF;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -21,17 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
-public class AnnotateImageView extends AppCompatImageView {
-
-    public enum Mode {
-        DRAW, ERASER
-    }
-
-    public enum Drawer {
-        PEN, LINE, ARROW, RECTANGLE, CIRCLE, ELLIPSE, QUADRATIC_BEZIER, CUBIC_BEZIER
-    }
+public final class AnnotateImageView extends AppCompatImageView {
 
     private final Paint emptyPaint = new Paint();
     private Bitmap bitmap = null;
@@ -70,13 +54,11 @@ public class AnnotateImageView extends AppCompatImageView {
     private ImageButton undoButton = null;
     private ImageButton redoButton = null;
     private Context context;
-
     public AnnotateImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
         setup();
     }
-
     public AnnotateImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
@@ -129,12 +111,6 @@ public class AnnotateImageView extends AppCompatImageView {
         return path;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-        this.bitmapInitial = bitmap;
-        invalidate();
-    }
-
     private void enableUndoDisableRedo() {
         undoButton.setEnabled(true);
         undoButton.setAlpha(1.0F);
@@ -143,14 +119,14 @@ public class AnnotateImageView extends AppCompatImageView {
         noActionExecuted = false;
     }
 
-    public void onCroppedRefresh(Context context){
-        setBitmap(Utils.loadAnnotatedImageFromDatabase(context));
+    public void onCroppedRefresh(Context context) {
+        setBitmap(ImageUtility.loadAnnotatedImageFromDatabase(context));
         resetHistory();
     }
 
     private void resetHistory() {
-        undoButton = (ImageButton) ((Activity)context).findViewById(R.id.supersede_feedbacklibrary_undo_btn);
-        redoButton = (ImageButton) ((Activity)context).findViewById(R.id.supersede_feedbacklibrary_redo_btn);
+        undoButton = (ImageButton) ((Activity) context).findViewById(R.id.supersede_feedbacklibrary_undo_btn);
+        redoButton = (ImageButton) ((Activity) context).findViewById(R.id.supersede_feedbacklibrary_redo_btn);
 
         if (undoButton != null && redoButton != null) {
             undoButton.setEnabled(false);
@@ -162,7 +138,7 @@ public class AnnotateImageView extends AppCompatImageView {
                         redoButton.setEnabled(undo());
                         redoButton.setAlpha(1.0F);
                     }
-                    if (!isUndoable()){
+                    if (!isUndoable()) {
                         undoButton.setEnabled(false);
                         undoButton.setAlpha(0.4F);
                         setNoActionExecuted(true);
@@ -221,6 +197,12 @@ public class AnnotateImageView extends AppCompatImageView {
         return Bitmap.createBitmap(getDrawingCache(), 0, 0, width, height);
     }
 
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        this.bitmapInitial = bitmap;
+        invalidate();
+    }
+
     public int getBitmapHeight() {
         return bitmap.getHeight();
     }
@@ -233,6 +215,14 @@ public class AnnotateImageView extends AppCompatImageView {
         return blur;
     }
 
+    public void setBlur(float blur) {
+        if (blur >= 0) {
+            this.blur = blur;
+        } else {
+            this.blur = 0F;
+        }
+    }
+
     private Path getCurrentPath() {
         return pathList.get(historyPointer - 1);
     }
@@ -241,16 +231,32 @@ public class AnnotateImageView extends AppCompatImageView {
         return paintFillColor;
     }
 
+    public void setPaintFillColor(int color) {
+        paintFillColor = color;
+    }
+
     public int getPaintStrokeColor() {
         return paintStrokeColor;
+    }
+
+    public void setPaintStrokeColor(int color) {
+        paintStrokeColor = color;
     }
 
     public Paint.Style getPaintStyle() {
         return paintStyle;
     }
 
+    public void setPaintStyle(Paint.Style style) {
+        this.paintStyle = style;
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public boolean isRedoable() {
@@ -402,8 +408,8 @@ public class AnnotateImageView extends AppCompatImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // Only adjust the relativeLayout when the AnnotateImageView has not been laid out yet
         if (oldw == 0 && oldh == 0) {
-            bitmap = Utils.scaleBitmap(bitmap, w, h);
-            bitmapInitial = Utils.scaleBitmap(bitmapInitial, w, h);
+            bitmap = ImageUtility.scaleBitmap(bitmap, w, h);
+            bitmapInitial = ImageUtility.scaleBitmap(bitmapInitial, w, h);
             RelativeLayout relativeLayout = (RelativeLayout) getParent();
             ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
             if (relativeLayoutLayoutParams != null) {
@@ -443,6 +449,7 @@ public class AnnotateImageView extends AppCompatImageView {
         }
         return false;
     }
+
     public boolean undo() {
         if (historyPointer > 1) {
             historyPointer--;
@@ -454,14 +461,6 @@ public class AnnotateImageView extends AppCompatImageView {
 
     public void setBaseColor(int color) {
         this.baseColor = color;
-    }
-
-    public void setBlur(float blur) {
-        if (blur >= 0) {
-            this.blur = blur;
-        } else {
-            this.blur = 0F;
-        }
     }
 
     public void setDrawer(Drawer drawer) {
@@ -492,14 +491,6 @@ public class AnnotateImageView extends AppCompatImageView {
         }
     }
 
-    public void setPaintFillColor(int color) {
-        paintFillColor = color;
-    }
-
-    public void setPaintStrokeColor(int color) {
-        paintStrokeColor = color;
-    }
-
     public void setPaintStrokeWidth(float width) {
         if (width >= 0) {
             paintStrokeWidth = width;
@@ -508,16 +499,8 @@ public class AnnotateImageView extends AppCompatImageView {
         }
     }
 
-    public void setPaintStyle(Paint.Style style) {
-        this.paintStyle = style;
-    }
-
     public void setRedoButton(ImageButton redoButton) {
         this.redoButton = redoButton;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public void setUndoButton(ImageButton undoButton) {
@@ -549,5 +532,13 @@ public class AnnotateImageView extends AppCompatImageView {
                 paintList.remove(historyPointer);
             }
         }
+    }
+
+    public enum Mode {
+        DRAW, ERASER
+    }
+
+    public enum Drawer {
+        PEN, LINE, ARROW, RECTANGLE, CIRCLE, ELLIPSE, QUADRATIC_BEZIER, CUBIC_BEZIER
     }
 }

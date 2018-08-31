@@ -1,27 +1,17 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.*;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.R;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+public final class DialogUtils {
 
-public class DialogUtils {
-
-    private DialogUtils(){
+    private DialogUtils() {
     }
 
     /**
@@ -51,15 +41,13 @@ public class DialogUtils {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
             List<String> messages = getArguments().getStringArrayList("messages");
-            StringBuilder message = new StringBuilder("");
+            String message = "";
             if (messages != null) {
-                for (String s : messages) {
-                    message.append(s).append(" \n");
-                }
+                message = StringUtility.concatWithDelimiter("\n", messages);
             }
-            builder.setMessage(message.toString()).setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.dialog_close), new DialogInterface.OnClickListener() {
+            builder.setMessage(message).setNegativeButton(getResources().getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }

@@ -1,13 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
 import java.io.Serializable;
-import java.util.UUID;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
-public class FeedbackResponseBean implements Serializable{
+public final class FeedbackResponseBean implements Serializable {
 
-    private UUID feedbackUid;
+    private long responseId;
+    private long feedbackId;
     private String userName;
     private String content;
     private long timeStamp;
@@ -17,8 +17,37 @@ public class FeedbackResponseBean implements Serializable{
     private FeedbackResponseBean() {
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public boolean isFeedbackOwner() {
+        return isFeedbackOwner;
+    }
+
+    public boolean isDeveloper() {
+        return isDeveloper;
+    }
+
+    public long getFeedbackId() {
+        return feedbackId;
+    }
+
+    public long getResponseId() {
+        return responseId;
+    }
+
     public static class Builder {
-        private UUID feedbackUid;
+        private long responseId;
+        private long feedbackId;
         private String userName;
         private String content;
         private long timeStamp;
@@ -43,56 +72,40 @@ public class FeedbackResponseBean implements Serializable{
             this.timeStamp = timeStamp;
             return this;
         }
+
         public Builder isFeedbackOwner(boolean isFeedbackOwner) {
             this.isFeedbackOwner = isFeedbackOwner;
             return this;
         }
+
         public Builder isDeveloper(boolean isDeveloper) {
             this.isDeveloper = isDeveloper;
             return this;
         }
 
-        public Builder withFeedbackUid(UUID feedbackUid) {
-            this.feedbackUid = feedbackUid;
+        public Builder withFeedbackId(long feedbackId) {
+            this.feedbackId = feedbackId;
+            return this;
+        }
+
+        public Builder withResponseId(long responseId) {
+            this.responseId = responseId;
             return this;
         }
 
         public FeedbackResponseBean build() {
-            if (CompareUtility.notNull(feedbackUid,content,userName,timeStamp)) {
+            if (CompareUtility.notNull(feedbackId, content, userName, timeStamp)) {
                 FeedbackResponseBean bean = new FeedbackResponseBean();
-                bean.feedbackUid = feedbackUid;
+                bean.feedbackId = feedbackId;
                 bean.content = this.content;
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.isFeedbackOwner = this.isFeedbackOwner;
                 bean.isDeveloper = this.isDeveloper;
+                bean.responseId = this.responseId;
                 return bean;
             }
             return null;
         }
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public boolean isFeedbackOwner() {
-        return isFeedbackOwner;
-    }
-
-    public boolean isDeveloper() {
-        return isDeveloper;
-    }
-
-    public UUID getFeedbackUid() {
-        return feedbackUid;
     }
 }

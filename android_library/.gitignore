@@ -1,6 +1,6 @@
 # Built application files
-*.apk
 *.ap_
+android_library/app/release/
 
 # Files for the Dalvik VM
 *.dex

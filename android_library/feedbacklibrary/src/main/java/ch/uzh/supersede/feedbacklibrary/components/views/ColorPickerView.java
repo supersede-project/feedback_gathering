@@ -1,12 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.SweepGradient;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +9,7 @@ import android.widget.TextView;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.*;
 
-public class ColorPickerView extends View {
+public final class ColorPickerView extends View {
     private TextView textView;
     private Paint mPaint;
     private Paint mCenterPaint;

@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import java.lang.reflect.Array;
 import java.util.List;
 
-public class CollectionUtility {
+public final class CollectionUtility {
 
     private CollectionUtility() {
     }
@@ -15,24 +15,25 @@ public class CollectionUtility {
         return null;
     }
 
-    public static boolean oneOf(Object o, Object... objects){
-        if (o == null || objects==null || objects.length == 0){
+    public static boolean oneOf(Object o, Object... objects) {
+        if (o == null || objects == null || objects.length == 0) {
             return false;
         }
-        for (Object o_ : objects){
-            if (o.equals(o_)){
+        for (Object o_ : objects) {
+            if (o.equals(o_)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static  <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end){
-        if (source.size() <= end || end <= begin){
+    @SuppressWarnings("unchecked")
+    public static <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end) {
+        if (source.size() < end || end <= begin) {
             return (T[]) Array.newInstance(clazz, 0);
         }
-        T[] array = (T[]) Array.newInstance(clazz, end-begin);
-        for (int i = begin; i < end; i++){
+        T[] array = (T[]) Array.newInstance(clazz, end - begin);
+        for (int i = begin; i < end; i++) {
             array[i] = source.get(i);
         }
         return array;

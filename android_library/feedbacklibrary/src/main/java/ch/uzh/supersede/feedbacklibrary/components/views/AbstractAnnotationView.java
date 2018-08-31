@@ -3,10 +3,8 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 

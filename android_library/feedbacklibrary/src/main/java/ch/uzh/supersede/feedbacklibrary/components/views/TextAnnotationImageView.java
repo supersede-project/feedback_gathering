@@ -11,19 +11,16 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;
 import static android.view.Gravity.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.BUTTON_SIZE_DP;
 
-public class TextAnnotationImageView extends AbstractAnnotationView {
+public final class TextAnnotationImageView extends AbstractAnnotationView {
     private TextView annotationNumber;
     private ImageView editAnnotation;
 
@@ -47,16 +44,12 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         super(context, attrs, defStyle);
     }
 
-    public interface OnTextAnnotationChangedListener {
-        void onTextAnnotationDelete();
+    public String getAnnotationInputText() {
+        return annotationInputText;
     }
 
     public void setAnnotationInputText(String annotationInputText) {
         this.annotationInputText = annotationInputText;
-    }
-
-    public String getAnnotationInputText() {
-        return annotationInputText;
     }
 
     public String getAnnotationInputTextHint() {
@@ -141,7 +134,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         }
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         // Inflating the custom layout
-        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.mechanism_text, null);
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.text_feedback, null);
 
         final TextInputLayout textAnnotationLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
         final TextInputEditText textAnnotationText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);
@@ -157,10 +150,10 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         textAnnotationText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    Log.d("focus","on");
+                if (hasFocus) {
+                    Log.d("focus", "on");
                 } else {
-                    Log.d("focus","off");
+                    Log.d("focus", "off");
                 }
             }
         });
@@ -212,5 +205,9 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         dialog.setCancelable(false);
         textAnnotationDialog = dialog.create();
         textAnnotationDialog.show();
+    }
+
+    public interface OnTextAnnotationChangedListener {
+        void onTextAnnotationDelete();
     }
 }

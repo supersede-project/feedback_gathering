@@ -13,20 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 
-public class EditImageDialog extends DialogFragment {
+public final class EditImageDialog extends DialogFragment {
 
     private List<EditImageItem> items;
     private Map<String, EditImageItem> allImageEditItems;
@@ -34,6 +31,14 @@ public class EditImageDialog extends DialogFragment {
     private Map<String, EditImageItem> colorEditItems;
 
     private OnEditImageListener listener;
+
+    public EditImageDialog() {
+        super();
+        items = new ArrayList<>();
+        allImageEditItems = new HashMap<>();
+        quickEditItems = new HashMap<>();
+        colorEditItems = new HashMap<>();
+    }
 
     @Override
     public void onAttach(Context activity) {
@@ -46,14 +51,6 @@ public class EditImageDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnColorChangeDialogListener");
         }
-    }
-
-    public EditImageDialog() {
-        super();
-        items = new ArrayList<>();
-        allImageEditItems = new HashMap<>();
-        quickEditItems = new HashMap<>();
-        colorEditItems = new HashMap<>();
     }
 
     @Override
@@ -223,7 +220,7 @@ public class EditImageDialog extends DialogFragment {
         }
     }
 
-    private AnnotateImageActivity getAnnotateImageActivity(){
+    private AnnotateImageActivity getAnnotateImageActivity() {
         if (getActivity() instanceof AnnotateImageActivity) {
             return (AnnotateImageActivity) getActivity();
         } else {
