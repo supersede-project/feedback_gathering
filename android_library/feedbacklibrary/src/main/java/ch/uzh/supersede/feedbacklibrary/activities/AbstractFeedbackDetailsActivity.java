@@ -548,7 +548,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
         super.onDestroy();
     }
 
-    private void execFinalize() {
+    protected void execFinalize() {
         if (!getFeedbackState().isEqualVoted()) {
             FeedbackService.getInstance(getApplicationContext()).createVote(this, feedbackDetailsBean, getFeedbackState().isUpVoted() ? 1 : -1, userName);
         } else if (getFeedbackState().isEqualVoted() && initiallyVoted) {
