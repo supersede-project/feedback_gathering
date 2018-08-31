@@ -6,16 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -32,8 +29,6 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
     private Button makePublicButton;
     private TextView statusText;
     private boolean creationMode = false;
-    private boolean tutorialFinished = false;
-    private boolean tutorialInitialized = false;
 
     @Override
     protected void initViews() {
@@ -74,8 +69,6 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
         updateOwnFeedbackCase();
         initStatusText();
         drawLayoutOutlines(R.id.details_layout_up, R.id.details_layout_mid, R.id.details_layout_low, R.id.details_layout_scroll_container, R.id.details_layout_button);
-        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
-        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
         onPostCreate();
     }
 
@@ -263,6 +256,8 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false);
         if (!tutorialFinished && !tutorialInitialized) {
             imageButton.setEnabled(false);
             audioButton.setEnabled(false);
@@ -303,14 +298,23 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
                     reportButton.setEnabled(true);
                     responseButton.setEnabled(true);
                     subscribeButton.setEnabled(true);
-                    tutorialFinished = true;
                     updateFeedbackState();
                     return false;
                 }
             });
             colorShape(1, mulLayout, subLayout, repLayout, pubLayout, votLayout);
-            tutorialInitialized = true;
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, true).apply();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false).apply();
+        }
+        super.onPause();
     }
 }
 

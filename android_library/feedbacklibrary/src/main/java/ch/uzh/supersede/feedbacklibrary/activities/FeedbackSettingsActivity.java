@@ -1,6 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
-import android.content.Context;
+import android.content.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.*;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.ServiceUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW;
@@ -59,7 +58,10 @@ public final class FeedbackSettingsActivity extends AbstractBaseActivity impleme
                 getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_DETAILS, false).apply();
                 getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false).apply();
                 getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false).apply();
-                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_SETTINGS, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_DETAILS, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_IDENTITY, false).apply();
+                getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_LIST, false).apply();
                 Toast.makeText(getApplicationContext(), "Tutorials reset.", Toast.LENGTH_SHORT).show();
             }
         });

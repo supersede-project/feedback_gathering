@@ -40,7 +40,6 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     private TextView spaceTop;
     private TextView statusText;
     private String userName;
-    private boolean tutorialInitialized = false;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
 
@@ -88,6 +87,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     @Override
     protected void createInfoBubbles() {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false);
         if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
             String statusLabel = getString(R.string.hub_feedback_status_label) + StringUtility.generateSpace(10);
@@ -112,7 +112,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
                 }
             });
             colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
-            tutorialInitialized = true;
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, true).apply();
         }
     }
 
@@ -429,4 +429,13 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_HUB, false).apply();
+        }
+        super.onPause();
+    }
 }

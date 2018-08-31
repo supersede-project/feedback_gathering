@@ -79,7 +79,7 @@
     <string name="hub_feedback_status_info">This field will summarize your statistics.\nUser-level 2 required.</string>
     <string name="hub_feedback_list_info">This button lets you access the feedback for this app.\nUser-level 1 required.</string>
     <string name="hub_feedback_user_lvl_info">This button lets you register an account and thereby increase your user-level which you need to access certain functions.</string>
-    <string name="hub_feedback_settings_info">Use this button to undertake the app some adaptions regarding notifications and other cool stuff!\nUser-level 2 required.</string>
+    <string name="hub_feedback_settings_info">Use this button to change settings regarding notifications and other cool stuff!\nUser-level 2 required.</string>
     <string name="hub_feedback_create_info">Create your own feedback by using this button.\nUser-level 2 required.</string>
     <string name="hub_feedback_info_info">This bubble will guide you through this application\'s feedback functionality.\nTap on it to continue!</string>
     <string name="hub_status">&lt;b>&lt;font color="#secondaryColorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>
@@ -125,7 +125,7 @@
     <string name="list_tutorial_title_search">Search Field</string>
     <string name="list_tutorial_title_filter">Filter Options</string>
     <string name="list_tutorial_title_list">Feedback List</string>
-    <string name="list_tutorial_content_list">Here you will see a list of already created feedback. In this case, the list is empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
+    <string name="list_tutorial_content_list">Here you will see a list of already created feedback. In this case, the list is most likely empty because you\'re currently in your own feedback category. By clicking on an existing entry, you will be forwarded to the actual feedback.</string>
     <string name="list_tutorial_content_filter">This option lets you filter out statuses.</string>
     <string name="list_tutorial_content_search">You can search within the provided feedback list by entering a search term here.</string>
     <string name="list_tutorial_content_category">There are four available categories: MINE, TOP, HOT and NEW. The first one shows only feedback that you provided while the other ones sort all the existing feedback according to number of comments, number of votes or date.</string>
@@ -184,16 +184,16 @@
     <string name="details_developer_delete">Delete</string>
     <string name="details_developer_revoke_karma">Revoke Karma</string>
     <string name="details_developer_context">Context</string>
-    <string name="detail_tutorial_title_votes">Voting and Karma-System</string>
+    <string name="detail_tutorial_title_votes">Voting and Karma</string>
     <string name="detail_tutorial_title_multimedia">Multimedia Files</string>
     <string name="detail_tutorial_title_subs">Subscription Feature</string>
-    <string name="detail_tutorial_title_reply">Responding to Feedback</string>
-    <string name="detail_tutorial_title_public">Private / Public Feedback</string>
-    <string name="detail_tutorial_content_reply">It is possible send a response to a feedback. Responses made by the creator are colored red while developer-responses have a golden color.</string>
+    <string name="detail_tutorial_title_reply">Feedback Responses</string>
+    <string name="detail_tutorial_title_public">Private/Public Feedback</string>
+    <string name="detail_tutorial_content_reply">It is possible to respond to a feedback. Responses made by the creator are colored red while developer responses have a golden color.</string>
     <string name="detail_tutorial_content_subs">Subscribing to a feedback grants you the option to receive notifications when the linked feedback is being updated.</string>
     <string name="detail_tutorial_content_multimedia">Based on the available multimedia files, these buttons will be toggled on and off individually.</string>
     <string name="detail_tutorial_content_votes">Every feedback, except your own, can be voted by you. Feedback that receives votes grants its creator karma. Said karma can then be used to unlock certain features.</string>
-    <string name="detail_tutorial_content_public">After you create your own feedback, you can choose to make it public. If you don\'t, other users wont see it. Developers always see any feedback.</string>
+    <string name="detail_tutorial_content_public">After you create your own feedback, you can choose to make it public. If you don\'t, other users wont see it. Developers can see unpublished feedback as well.</string>
     <!--Feedback-->
 
     <!--Settings-->
