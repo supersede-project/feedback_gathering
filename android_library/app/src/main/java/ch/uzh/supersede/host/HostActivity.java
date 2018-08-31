@@ -8,21 +8,23 @@ import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AppCompatActivity implements
         IFeedbackStyleConfiguration,
         IFeedbackBehaviorConfiguration,
-        IFeedbackEndpointConfiguration {
+        IFeedbackEndpointConfiguration,
+        IFeedbackDeveloperConfiguration{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.root_layout);
-        Button feedbackButton = (Button) findViewById(R.id.button_host_feedback);
-        Button dummyButton1 = (Button) findViewById(R.id.button_host_trigger_1);
-        Button dummyButton2 = (Button) findViewById(R.id.button_host_trigger_2);
+        Button feedbackButton = (Button) findViewById(R.id.host_button_feedback);
+        TextView mode = (TextView) findViewById(R.id.host_text_mode);
+        TextView karma = (TextView) findViewById(R.id.host_text_karma);
         CoordinatorLayout cLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         double primaryColorDouble = ((double) Color.BLACK) * Math.random();
         int primaryColor = (int) primaryColorDouble;
@@ -32,12 +34,29 @@ public class HostActivity extends AppCompatActivity implements
         double secondaryColorDouble = ((double) Color.BLACK) * Math.random();
         int secondaryColor = (int) secondaryColorDouble;
         feedbackButton.setBackgroundColor(secondaryColor);
-        dummyButton1.setBackgroundColor(secondaryColor);
-        dummyButton2.setBackgroundColor(secondaryColor);
+        feedbackButton.setTextColor(ColorUtility.isDark(secondaryColor)? Color.WHITE:Color.BLACK);
+        mode.setBackgroundColor(secondaryColor);
+        mode.setTextColor(ColorUtility.isDark(secondaryColor)? Color.WHITE:Color.BLACK);
+        mode.setText(getString(R.string.host_mode,isDeveloper()?getString(R.string.host_developer):getString(R.string.host_user)));
+        karma.setBackgroundColor(secondaryColor);
+        karma.setTextColor(ColorUtility.isDark(secondaryColor)? Color.WHITE:Color.BLACK);
+        karma.setText(getString(R.string.host_karma,0));
+
+
 
         Integer currentUserKarma = FeedbackConnector.getInstance().getCurrentUserKarma(this);
         if (currentUserKarma != null) {
-            Toast.makeText(getApplicationContext(), "Karma of current user = " + currentUserKarma, Toast.LENGTH_LONG).show();
+            karma.setText(getString(R.string.host_karma,currentUserKarma));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView karma = (TextView) findViewById(R.id.host_text_karma);
+        Integer currentUserKarma = FeedbackConnector.getInstance().getCurrentUserKarma(this);
+        if (currentUserKarma != null) {
+            karma.setText(getString(R.string.host_karma,currentUserKarma));
         }
     }
 
@@ -63,10 +82,7 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public int[] getConfiguredCustomStyle() {
-        //        return new int[]{-9869962,-12394740}; //Viper
-        //        return new int[]{-12394740,-9869962}; // Razor
-        //        return new int[]{-1528179, -13089991}; //Creme
-        return new int[]{-16047514, -9992786, -5126707}; //Blue
+        return new int[]{-16047514, -9992786, -5126707};
     }
 
     @Override
@@ -77,5 +93,10 @@ public class HostActivity extends AppCompatActivity implements
     @Override
     public int getConfiguredPullIntervalMinutes() {
         return 1;
+    }
+
+    @Override
+    public boolean isDeveloper() {
+        return false;
     }
 }

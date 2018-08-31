@@ -146,7 +146,6 @@ public final class TextAnnotationImageView extends AbstractAnnotationView {
         // Set the hint and enable it
         textAnnotationLayout.setHintEnabled(true);
         textAnnotationLayout.setHint(getAnnotationInputTextHint());
-        //TODO somekind of listener here:
         textAnnotationText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

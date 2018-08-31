@@ -42,26 +42,30 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button_host_feedback"
+                android:id="@+id/host_button_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:onClick="onFeedbackClicked"
-                android:text="@string/button_host_feedback" />
+                android:text="@string/host_feedback_connector" />
 
-            <Button
-                android:id="@+id/button_host_trigger_1"
+            <TextView
+                android:id="@+id/host_text_mode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/button_host_trigger_1" />
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="@string/host_karma" />
 
-            <Button
-                android:id="@+id/button_host_trigger_2"
+            <TextView
+                android:id="@+id/host_text_karma"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/button_host_trigger_2" />
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="@string/host_karma" />
         </LinearLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

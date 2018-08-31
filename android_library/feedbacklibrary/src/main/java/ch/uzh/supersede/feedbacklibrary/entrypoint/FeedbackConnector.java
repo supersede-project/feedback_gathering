@@ -84,9 +84,9 @@ public class FeedbackConnector {
     public void connect(View view, Activity activity) {
         if (!registeredViews.containsKey(view.getId())) {
             registeredViews.put(view.getId(), view);
-            view.setOnTouchListener(new FeedbackOnTouchListener(activity, view));
-            onTouchConnector(activity, view, null);
         }
+        view.setOnTouchListener(new FeedbackOnTouchListener(activity, view));
+        onTouchConnector(activity, view, null);
     }
 
     public Integer getCurrentUserKarma(Activity activity) {
