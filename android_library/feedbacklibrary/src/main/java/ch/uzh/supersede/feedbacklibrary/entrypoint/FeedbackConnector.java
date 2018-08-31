@@ -64,6 +64,7 @@ public class FeedbackConnector {
         }
         getActivityConfiguration(activity, intent, screenshot);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }

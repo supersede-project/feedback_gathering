@@ -1,14 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.*;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -18,8 +16,7 @@ import com.nex3z.flowlayout.FlowLayout;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
@@ -35,8 +32,6 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     private EditText editTag;
     private FlowLayout tagContainer;
     private FlowLayout recommendationContainer;
-    private boolean tutorialInitialized = false;
-    private boolean tutorialFinished = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,8 +54,6 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
         colorViews(0, buttonBack, buttonNext);
         getView(R.id.identity_focus_sink, LinearLayout.class).requestFocus();
         createEditableFields();
-        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
-        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
         drawLayoutOutlines(recommendationContainer.getId(), tagContainer.getId());
         onPostCreate();
     }
@@ -244,7 +237,7 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
 
     @Override
     public void onButtonClicked(View view) {
-        if (!tutorialFinished) {
+        if (!getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false)) {
             Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -309,6 +302,8 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_IDENTITY, false);
         if (!tutorialFinished && !tutorialInitialized) {
             editTitle.setEnabled(false);
             editTag.setEnabled(false);
@@ -340,12 +335,11 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
                     getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, true).apply();
                     editTitle.setEnabled(true);
                     editTag.setEnabled(true);
-                    tutorialFinished = true;
                     return false;
                 }
             });
             colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
-            tutorialInitialized = true;
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_IDENTITY, true).apply();
         }
     }
 
@@ -369,5 +363,15 @@ public final class FeedbackIdentityActivity extends AbstractBaseActivity impleme
     @Override
     public void onConnectionFailed(EventType eventType) {
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
+    }
+
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_IDENTITY, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_IDENTITY, false).apply();
+        }
+        super.onPause();
     }
 }

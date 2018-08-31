@@ -3,13 +3,11 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
@@ -30,8 +28,6 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
     private TextView loadingTextView;
-    private boolean tutorialFinished = false;
-    private boolean tutorialInitialized = false;
     private String userName;
     private Button filterButton;
 
@@ -76,8 +72,6 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
         toggleButtons(getButtons().get(MINE));
-        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
-        tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
         onPostCreate();
     }
 
@@ -108,7 +102,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     loadingTextView.setVisibility(View.INVISIBLE);
                     sort();
 
-                    if (!tutorialFinished) {
+                    if (!getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false)) {
                         for (int c = 0; c < scrollListLayout.getChildCount(); c++) {
                             scrollListLayout.getChildAt(c).setEnabled(false);
                         }
@@ -217,6 +211,8 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_LIST, false);
         if (!tutorialFinished && !tutorialInitialized) {
             getButtons().get(MINE).setEnabled(false);
             getButtons().get(HOT).setEnabled(false);
@@ -252,12 +248,21 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
                     for (int c = 0; c < scrollListLayout.getChildCount(); c++) {
                         scrollListLayout.getChildAt(c).setEnabled(true);
                     }
-                    tutorialFinished = true;
                     return false;
                 }
             });
             colorShape(1, seaLayout, filLayout, lisLayout, catLayout);
-            tutorialInitialized = true;
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_LIST, true).apply();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_LIST, false);
+        boolean tutorialInitialized = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_LIST, false);
+        if (!tutorialFinished && tutorialInitialized){
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_INIT_LIST, false).apply();
+        }
+        super.onPause();
     }
 }
