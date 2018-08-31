@@ -391,11 +391,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                 break;
             case CREATE_VOTE:
             case CREATE_VOTE_MOCK:
-                if (response instanceof FeedbackVote) {
-                    int voteCount = feedbackDetailsBean.getUpVotes() + ((FeedbackVote) response).getVote();
-                    votesText.setText(FeedbackUtility.getUpvotesAsText(voteCount));
-                }
-                break;
+                //NOP
+               break;
             default:
                 break;
         }
@@ -531,10 +528,8 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
                 audioButton.setText(R.string.details_audio_stop);
                 isAudioPlaying = true;
             }
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Audio",e.getMessage());
         }
     }
 
