@@ -4,8 +4,7 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.ContentFrameLayout;
+import android.support.v7.widget.*;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
@@ -28,6 +27,7 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
     private Button awardKarmaButton;
     private Button revokeKarmaButton;
     private Spinner statusSpinner;
+    private int karmaState;
 
     @Override
     protected void initViews() {
@@ -64,6 +64,9 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
         initStatusSpinner();
         drawLayoutOutlines(R.id.details_developer_layout_up, R.id.details_developer_layout_mid, R.id.details_developer_layout_low, R.id.details_developer_layout_scroll_container, R.id
                 .details_developer_layout_button);
+
+        karmaState = getFeedbackDetailsBean().getUpVotes();
+
         onPostCreate();
     }
 
@@ -111,16 +114,14 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                         String karmaString = String.valueOf(karma * karmaModifier[0]);
                         karma = FeedbackDatabase.getInstance(getApplicationContext()).storeKarma(getFeedbackDetailsBean().getFeedbackId(), karma);
                         FeedbackService.getInstance(getApplicationContext()).createVote(getCallback(), getFeedbackDetailsBean(), karma, userName);
-                        RepositoryStub.sendKarma(getFeedbackDetailsBean(), karma);
-                        Toast
-                                .makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0] > 0 ? R.string.details_developer_karma_awarded : R.string
-                                        .details_developer_karma_revoked, karmaString, getFeedbackDetailsBean()
-                                        .getUserName()), Toast.LENGTH_SHORT)
-                                .show();
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(karmaModifier[0] > 0 ? R.string.details_developer_karma_awarded : R.string
+                                .details_developer_karma_revoked, karmaString, getFeedbackDetailsBean().getUserName()), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                         FeedbackDatabase
                                 .getInstance(getApplicationContext())
                                 .writeFeedback(getFeedbackDetailsBean().getFeedbackBean(), view.getId() == awardKarmaButton.getId() ? UP_VOTED : DOWN_VOTED);
+                        karmaState += Integer.parseInt(karmaInputText.getText().toString())*karmaModifier[0];
+                        votesText.setText((karmaState>0?"+":"")+karmaState);
                     } else {
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_error), Toast.LENGTH_SHORT).show();
                     }
@@ -154,6 +155,11 @@ public final class FeedbackDetailsDeveloperActivity extends AbstractFeedbackDeta
                     .withMessage(getFeedbackDetailsBean().getContextData()).buildAndShow();
         }
         updateFeedbackState();
+    }
+
+    @Override
+    protected void execFinalize() {
+        //NOP, the karma mechanism overrides the voting mechanism
     }
 }
 
