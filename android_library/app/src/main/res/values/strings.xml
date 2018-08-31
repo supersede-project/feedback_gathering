@@ -7,7 +7,9 @@
     <string name="action_feedback">Feedback</string>
 
     <!-- Buttons -->
-    <string name="button_host_feedback">Feedback-Connector</string>
-    <string name="button_host_trigger_1">Button</string>
-    <string name="button_host_trigger_2">Button</string>
+    <string name="host_feedback_connector">Feedback-Connector</string>
+    <string name="host_karma">Karma: %1$d</string>
+    <string name="host_mode">Mode: %1$s</string>
+    <string name="host_user">User</string>
+    <string name="host_developer">Developer</string>
 </resources>
