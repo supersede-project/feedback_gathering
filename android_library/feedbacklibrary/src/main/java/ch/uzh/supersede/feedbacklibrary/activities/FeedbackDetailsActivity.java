@@ -83,8 +83,7 @@ public final class FeedbackDetailsActivity extends AbstractFeedbackDetailsActivi
             reportButton.setVisibility(View.GONE);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getSubscribeButton().getLayoutParams();
             layoutParams.weight = 3;
-            getSubscribeButton().setLayoutParams(layoutParams);
-            layoutParams = (LinearLayout.LayoutParams) getResponseButton().getLayoutParams();
+            getSubscribeButton().setLayoutParams(layoutParams);layoutParams = (LinearLayout.LayoutParams) getResponseButton().getLayoutParams();
             layoutParams.weight = 3;
             getResponseButton().setLayoutParams(layoutParams);
         }

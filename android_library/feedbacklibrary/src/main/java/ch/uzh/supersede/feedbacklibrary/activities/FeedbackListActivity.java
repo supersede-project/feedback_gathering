@@ -140,7 +140,7 @@ public final class FeedbackListActivity extends AbstractFeedbackListActivity {
             case GET_FEEDBACK_LIST:
             case GET_FEEDBACK_LIST_MOCK:
                 loadingTextView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), R.string.list_alert_event, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.api_service_connection_failed_toast, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

@@ -334,7 +334,9 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
     private void updateHubViews() {
         enableView(listButton, viewToColorMap.get(listButton), true);
         ConfigurationUtility.execStoreStateToDatabase(this, configuration);
-        ImageUtility.persistScreenshot(this, cachedScreenshot);
+        if (ACTIVE.check(this)){
+            ImageUtility.persistScreenshot(this, cachedScreenshot);
+        }
         int ownFeedbackCount = FeedbackDatabase.getInstance(this).readInteger(USER_FEEDBACK_COUNT, 0);
         int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
         int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
@@ -425,7 +427,7 @@ public final class FeedbackHubActivity extends AbstractBaseActivity implements I
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        updateHubViews();
+        Toast.makeText(this, R.string.api_service_connection_failed_toast, Toast.LENGTH_SHORT).show();
         Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
