@@ -74,7 +74,10 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:gravity="center"
-                        android:background="@drawable/ic_star_black_24dp"/>
+                        android:background="@drawable/ic_star_black_24dp"
+                        android:text="3.5"
+                        android:textColor="@color/white"
+                        android:visibility="invisible"/>
 
                     <Button
                         android:id="@+id/details_button_down"
