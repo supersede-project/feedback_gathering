@@ -71,6 +71,10 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
+    window.onerror = function (errorMsg, url, lineNumber) {
+        alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber);
+    };
+
     $.fn.feedbackPlugin.defaults = {
         'color': '#ffffff',
         'lang': 'de',

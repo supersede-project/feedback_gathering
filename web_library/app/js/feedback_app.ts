@@ -22,7 +22,7 @@ export class FeedbackApp {
     }
 
     loadApplicationConfiguration(userId:string) {
-        if(userId !== undefined && userId !== '' && this.endUserApplicationService !== null) {
+        if(userId && this.endUserApplicationService) {
             this.loadApplicationConfigurationForEndUser(userId);
         } else {
             this.loadApplicationConfigurationForAnonymousUser();
