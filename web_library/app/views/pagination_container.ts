@@ -66,7 +66,13 @@ export class PaginationContainer {
         feedbackPage.hide();
         nextPage.show();
 
-        this.navigationCallback(this.activePage);
+        if(!this.activePage) {
+            this.activePage = 1;
+        }
+
+        if(this.navigationCallback) {
+            this.navigationCallback(this.activePage);
+        }
 
         // show top of dialog
         jQuery('html, body').animate({
@@ -82,6 +88,8 @@ export class PaginationContainer {
         feedbackPage.hide();
         this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]').show();
 
-        this.navigationCallback(this.activePage);
+        if(this.navigationCallback) {
+            this.navigationCallback(this.activePage);
+        }
     }
 }

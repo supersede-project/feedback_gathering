@@ -38,6 +38,7 @@ describe('PullConfiguration object', () => {
                         clearInput: 0,
                         mandatory: 1,
                         mandatoryReminder: 'Please fill in the text field',
+                        mechanismStyle: '',
                         boxWidth: '100%',
                         boxPaddingLeft: '0',
                         boxPaddingRight: '20px',
@@ -54,6 +55,7 @@ describe('PullConfiguration object', () => {
                         ownAllowed: 0,
                         ownLabel: null,
                         multiple: 0,
+                        labelStyle: '',
                         defaultOption: null,
                         asDropdown: false,
                         breakAfterOption: false,
@@ -79,9 +81,10 @@ describe('PullConfiguration object', () => {
                                 value: 'Very good'
                             }
                         ],
-                        inputType: 'radio',
+                        inputType: 'checkbox',
                         mandatory: null,
                         mandatoryReminder: null,
+                        mechanismStyle: '',
                         boxWidth: '100%',
                         boxPaddingLeft: '0',
                         boxPaddingRight: '20px'

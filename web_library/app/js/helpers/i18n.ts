@@ -63,8 +63,8 @@ export class I18nHelper {
      *  The overriden translation object
      */
     static overrideLocales = function (data, customLocales):{} {
-        if(customLocales && customLocales.dialog) {
-            data = jQuery.extend(true, data, customLocales.dialog);
+        if(customLocales) {
+            data = jQuery.extend(true, data, customLocales);
         }
         return data;
     };
