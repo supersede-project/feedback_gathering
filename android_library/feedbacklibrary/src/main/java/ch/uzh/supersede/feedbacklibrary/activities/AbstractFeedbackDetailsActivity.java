@@ -245,6 +245,7 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
     protected void initFeedbackDetailView() {
         if (getFeedbackDetailsBean() != null) {
             updateFeedbackState();
+            setupRating();
             initiallyVoted = !getFeedbackState().isEqualVoted();
             for (FeedbackResponseBean bean : getFeedbackDetailsBean().getResponses()) {
                 FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, getFeedbackDetailsBean().getFeedbackBean(), bean, configuration, this, FIXED);
@@ -261,6 +262,17 @@ public abstract class AbstractFeedbackDetailsActivity extends AbstractBaseActivi
             descriptionText.setText(getFeedbackDetailsBean().getDescription());
         } else {
             this.onBackPressed();
+        }
+    }
+
+    protected void setupRating() {
+        Button ratingView = getView(R.id.details_button_rating, Button.class);
+        if (ratingView != null) {
+            ratingView.setTextColor(ColorUtility.isDark(configuration.getTopColors()[1]) ? Color.BLACK : Color.WHITE);
+            ratingView.setBackground(getApplicationContext()
+                    .getResources()
+                    .getDrawable(ColorUtility.isDark(configuration.getTopColors()[1]) ? R.drawable.ic_star_white_24dp : R.drawable.ic_star_black_24dp));
+            ratingView.setText(String.valueOf(getFeedbackDetailsBean().getFeedbackBean().getRating()));
         }
     }
 

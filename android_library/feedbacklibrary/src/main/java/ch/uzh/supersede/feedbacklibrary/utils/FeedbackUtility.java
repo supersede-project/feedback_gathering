@@ -155,8 +155,12 @@ public final class FeedbackUtility {
         int upVotes = feedback.getVotes();
         int responses = (feedback.getFeedbackResponses() != null) ? feedback.getFeedbackResponses().size() : 0;
         boolean isPublic = feedback.isPublic();
+        long rating = 0;
+        if (feedback.getRatingFeedbackList() != null && !feedback.getRatingFeedbackList().isEmpty()){
+            rating = feedback.getRatingFeedbackList().get(0).getRating();
+        }
 
-        String contextData = buildContextData(feedback.getContextInformationFeedback());
+        String contextData = buildContextData(feedback.getContextInformationFeedback(),feedback.getTitle(),rating);
 
         String description = null;
         if (!feedback.getTextFeedbackList().isEmpty()) {
@@ -197,6 +201,7 @@ public final class FeedbackUtility {
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
                 .withStatus(status)
+                .withRating(rating)
                 .isPublic(isPublic)
                 .build();
         List<FeedbackResponseBean> feedbackResponses = feedbackResponseListToFeedbackResponseBeans(feedbackBean, feedback.getId(), feedback.getFeedbackResponses());
@@ -216,10 +221,12 @@ public final class FeedbackUtility {
                 .build();
     }
 
-    private static String buildContextData(ContextInformationFeedback contextInformation) {
+    private static String buildContextData(ContextInformationFeedback contextInformation, String title, long rating) {
         StringBuilder sb = new StringBuilder();
         String newLine = "\n";
         if (contextInformation != null) {
+            sb.append("Title: ").append(StringUtility.nulLSafe(title)).append(newLine);
+            sb.append("Rating: ").append(String.valueOf(rating)).append(newLine);
             sb.append("Android Version: ").append(StringUtility.nulLSafe(contextInformation.getAndroidVersion())).append(newLine);
             sb.append("Resolution: ").append(StringUtility.nulLSafe(contextInformation.getResolution())).append(newLine);
             sb.append(parseMetaData(contextInformation.getMetaData()));

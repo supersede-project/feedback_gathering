@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HostApplication</string>
+    <string name="app_name_dev">HostApplication Developer</string>
     <string name="host_application_screen_text">This represents the Host-Application\n\n<b>The current Layout will change its Colors to make Differences in Screenshot-Captures visible.\n</b></string>
 
     <!-- Action bar -->

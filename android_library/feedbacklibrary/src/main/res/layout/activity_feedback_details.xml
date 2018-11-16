@@ -76,8 +76,7 @@
                         android:gravity="center"
                         android:background="@drawable/ic_star_black_24dp"
                         android:text="3.5"
-                        android:textColor="@color/white"
-                        android:visibility="invisible"/>
+                        android:textColor="@color/white"/>
 
                     <Button
                         android:id="@+id/details_button_down"

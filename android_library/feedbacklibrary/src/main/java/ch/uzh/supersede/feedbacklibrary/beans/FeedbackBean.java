@@ -15,6 +15,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 public final class FeedbackBean implements Serializable {
 
     private long feedbackId;
+    private long rating;
     private String title;
     private String[] tags;
     private String userName;
@@ -74,6 +75,10 @@ public final class FeedbackBean implements Serializable {
         return feedbackId;
     }
 
+    public long getRating() {
+        return rating;
+    }
+
     public String downVote() {
         upVotes--;
         return getVotesAsText();
@@ -98,6 +103,7 @@ public final class FeedbackBean implements Serializable {
 
     public static class Builder {
         private long feedbackId;
+        private long rating;
         private String title;
         private String[] tags;
         private String userName;
@@ -163,6 +169,11 @@ public final class FeedbackBean implements Serializable {
             return this;
         }
 
+        public Builder withRating(long rating) {
+            this.rating = rating;
+            return this;
+        }
+
         public Builder isPublic(boolean isPublic) {
             this.isPublic = isPublic;
             return this;
@@ -173,6 +184,7 @@ public final class FeedbackBean implements Serializable {
             if (CompareUtility.notNull(feedbackId, title, timeStamp, feedbackStatus)) {
                 FeedbackBean bean = new FeedbackBean();
                 bean.feedbackId = feedbackId;
+                bean.rating = rating;
                 bean.title = this.title;
                 bean.tags = this.tags;
                 bean.userName = this.userName;
