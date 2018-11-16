@@ -1,4 +1,4 @@
-package ch.uzh.supersede.host;
+package uzh.ch.supersede.host;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -87,7 +87,7 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public String getConfiguredEndpointUrl() {
-        return "http://mt.ronnieschaniel.com:8080/feedback_repository/";
+        return "http://server1108.cs.technik.fhnw.ch/feedback_repository/";
     }
 
     @Override
@@ -97,6 +97,6 @@ public class HostActivity extends AppCompatActivity implements
 
     @Override
     public boolean isDeveloper() {
-        return false;
+        return BuildConfig.IS_DEVELOPER;
     }
 }

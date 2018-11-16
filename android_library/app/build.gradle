@@ -20,6 +20,27 @@ android {
     lintOptions {
         abortOnError false
     }
+    flavorDimensions 'access'
+    productFlavors {
+        user {
+            minSdkVersion 17
+            applicationId 'uzh.ch.supersede.host.user'
+            targetSdkVersion 24
+            versionCode 1
+            versionName 'user'
+            dimension 'access'
+            buildConfigField 'boolean', 'IS_DEVELOPER', 'false'
+        }
+        dev {
+            minSdkVersion 17
+            applicationId 'uzh.ch.supersede.host.dev'
+            targetSdkVersion 24
+            versionCode 1
+            versionName 'dev'
+            dimension 'access'
+            buildConfigField 'boolean', 'IS_DEVELOPER', 'true'
+        }
+    }
 }
 
 dependencies {

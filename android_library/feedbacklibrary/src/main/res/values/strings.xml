@@ -249,6 +249,7 @@
     <string name="notification_service_shutdown">feedbacklibrary.intent.action.SHUTDOWN_SERVICE</string>
     <string name="api_service_event_failed">Event %1$s failed: %2$s.</string>
     <string name="api_service_connection_failed">Event %1$s failed: server is not available.</string>
+    <string name="api_service_connection_failed_toast">Server is not available. Try again later.</string>
 
     <!-- Notifications -->
     <string name="notification_user_title">Your user has received new updates.</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="ch.uzh.supersede.host">
+    package="uzh.ch.supersede.host">
 
     <application
         android:allowBackup="false"
@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:theme">
         <activity
-            android:name="ch.uzh.supersede.host.HostActivity"
+            android:name="uzh.ch.supersede.host.HostActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
