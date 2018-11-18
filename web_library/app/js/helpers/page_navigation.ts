@@ -165,7 +165,7 @@ export class PageNavigation {
         }
 
         // TODO define parameters in the Orchestrator to control the feature, including tenant and number of similar feedback shown
-        let feedbackClusteringEnabled = true;
+        let feedbackClusteringEnabled = false;
 
         if(validFeedback && feedbackClusteringEnabled) {
             this.showClusteredFeedback();
