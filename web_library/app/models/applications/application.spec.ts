@@ -36,3 +36,31 @@ describe('Application', () => {
         expect(pullConfiguration2.type).toEqual('PULL');
     });
 });
+
+describe('Application with invalid data', () => {
+    let application:Application;
+
+    it('should create an application without configurations', () => {
+        var applications = readJSON('app/services/mocks/test/application/application_without_configurations_mock.json', '/base/');
+        application = Application.initByData(applications[0]);
+
+        expect(application).toBeDefined();
+        expect(application.configurations.length).toBe(0);
+        expect(application.generalConfiguration).toBeDefined();
+
+        const contextForView = application.getContextForView();
+        expect(contextForView).toBeDefined();
+    });
+
+    it('should create an application without general configuration', () => {
+        var applications = readJSON('app/services/mocks/test/application/application_without_general_configuration_mock.json', '/base/');
+        application = Application.initByData(applications[0]);
+
+        expect(application).toBeDefined();
+        expect(application.configurations.length).toBe(3);
+        expect(application.generalConfiguration).toBeNull();
+
+        const contextForView = application.getContextForView();
+        expect(contextForView).toBeDefined();
+    });
+});

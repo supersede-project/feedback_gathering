@@ -54,57 +54,19 @@ export class Application {
      *  Context object
      */
     getContextForView() {
-        if(this.generalConfiguration.getParameterValue('reviewFontType') === 'bold') {
-            var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-weight');
-        } else {
-            var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-style');
-        }
-
-        var reviewStyle = this.getCssStyle([
-            new ParameterValuePropertyPair('reviewFontFamily', 'font-family'),
-            reviewFontTypeCSSPair
-        ]);
-
-        if(this.generalConfiguration.getParameterValue('mandatoryLabelStyle') === 'bold') {
-            var mandatoryLabelStyle = this.getCssStyle([
-                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-weight')
-            ]);
-        } else {
-            var mandatoryLabelStyle = this.getCssStyle([
-                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-style')
-            ]);
-        }
-
-        var generalLabelStyle = '';
-        if(this.generalConfiguration.getParameterValue('labelFontColor')) {
-            generalLabelStyle += ' ' + this.getCssStyle([
-                    new ParameterValuePropertyPair('labelFontColor', 'color')
-                ]);
-        }
-        if(this.generalConfiguration.getParameterValue('labelFontSize')) {
-            generalLabelStyle += ' ' + this.getCssStyle([
-                    new ParameterValuePropertyPair('labelFontSize', 'font-size')
-                ]);
-        }
-        if(this.generalConfiguration.getParameterValue('labelFontWeight')) {
-            generalLabelStyle += ' ' + this.getCssStyle([
-                    new ParameterValuePropertyPair('labelFontWeight', 'font-weight')
-                ]);
-        }
-
         return {
-            buttonRowStyle: this.generalConfiguration.getParameterValue('buttonRowStyle') || '',
-            reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
-            reviewStyle: reviewStyle,
-            mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
-            mandatoryLabelStyle: mandatoryLabelStyle,
-            discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
-            discardClass: this.generalConfiguration.getParameterValue('discardClass') || '',
-            submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
-            labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
-            feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),
-            generalLabelStyle: generalLabelStyle,
-            dialogTitle: this.generalConfiguration.getParameterValue('dialogTitle')
+            buttonRowStyle: this.getGeneralConfigurationParameterValue('buttonRowStyle') || '',
+            reviewButtonPosition: this.getGeneralConfigurationParameterValue('reviewButtonPosition'),
+            reviewStyle: this.getReviewStyle(),
+            mandatorySign: this.getGeneralConfigurationParameterValue('mandatorySign'),
+            mandatoryLabelStyle: this.getMandatoryLabelStyle(),
+            discardAsButton: this.getGeneralConfigurationParameterValue('discardAsButton'),
+            discardClass: this.getGeneralConfigurationParameterValue('discardClass') || '',
+            submissionPageMessage: this.getGeneralConfigurationParameterValue('submissionPageMessage'),
+            labelPositioning: this.getGeneralConfigurationParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
+            feedbackFormTitle: this.getGeneralConfigurationParameterValue('feedbackFormTitle'),
+            generalLabelStyle: this.getGeneralLabelStyle(),
+            dialogTitle: this.getGeneralConfigurationParameterValue('dialogTitle')
         };
     }
 
@@ -119,9 +81,9 @@ export class Application {
         var cssStyles = '';
         for(var i = 0; i < parameterValuePropertyPair.length; i++) {
             var parameterPropertyPair = parameterValuePropertyPair[i];
-            if (this.generalConfiguration.getParameterValue(parameterPropertyPair.parameter) !== null) {
+            if (this.getGeneralConfigurationParameterValue(parameterPropertyPair.parameter) !== null) {
                 var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
-                cssStyles += parameterPropertyPair.property + ': ' + this.generalConfiguration.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
+                cssStyles += parameterPropertyPair.property + ': ' + this.getGeneralConfigurationParameterValue(parameterPropertyPair.parameter) + unit + ';';
                 if(i !== parameterValuePropertyPair.length - 1) {
                     cssStyles += ' ';
                 }
@@ -136,5 +98,72 @@ export class Application {
         } else {
             return '';
         }
+    }
+
+    private getGeneralConfigurationParameterValue(key: string): string {
+        if (!this.generalConfiguration) {
+            return '';
+        }
+        return this.generalConfiguration.getParameterValue(key);
+    }
+
+    private getReviewStyle(): string {
+        let reviewStyle = '';
+
+        if(this.generalConfiguration) {
+            if(this.getGeneralConfigurationParameterValue('reviewFontType') === 'bold') {
+                var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-weight');
+            } else {
+                var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-style');
+            }
+            reviewStyle = this.getCssStyle([
+                new ParameterValuePropertyPair('reviewFontFamily', 'font-family'),
+                reviewFontTypeCSSPair
+            ]);
+        }
+
+        return reviewStyle;
+    }
+
+    private getMandatoryLabelStyle(): string {
+        let mandatoryLabelStyle = '';
+
+        if(this.generalConfiguration) {
+            if(this.getGeneralConfigurationParameterValue('mandatoryLabelStyle') === 'bold') {
+                mandatoryLabelStyle = this.getCssStyle([
+                    new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-weight')
+                ]);
+            } else {
+                mandatoryLabelStyle = this.getCssStyle([
+                    new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-style')
+                ]);
+            }
+        }
+
+        return mandatoryLabelStyle;
+    }
+
+    private getGeneralLabelStyle(): string {
+        let generalLabelStyle = '';
+
+        if(this.generalConfiguration) {
+            if(this.getGeneralConfigurationParameterValue('labelFontColor')) {
+                generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontColor', 'color')
+                ]);
+            }
+            if(this.getGeneralConfigurationParameterValue('labelFontSize')) {
+                generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontSize', 'font-size')
+                ]);
+            }
+            if(this.getGeneralConfigurationParameterValue('labelFontWeight')) {
+                generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontWeight', 'font-weight')
+                ]);
+            }
+        }
+
+        return generalLabelStyle;
     }
 }

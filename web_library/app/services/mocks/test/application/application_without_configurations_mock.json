@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "name": "Senercon Website",
+    "state": 1,
+    "generalConfiguration": {
+      "id": 1,
+      "name": "Senercon General Configuration",
+      "parameters": [
+        {
+          "id": 54,
+          "key": "reviewActive",
+          "value": 1
+        },
+        {
+          "id": 55,
+          "key": "mainColor",
+          "value": "#00ff00"
+        },
+        {
+          "id": 56,
+          "key": "dialogTitle",
+          "value": "Feedback"
+        }
+      ]
+    },
+    "configurations": [
+
+    ]
+  }
+]
