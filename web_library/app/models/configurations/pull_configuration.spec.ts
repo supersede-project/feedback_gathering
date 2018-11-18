@@ -1,7 +1,6 @@
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {PullConfiguration} from './pull_configuration';
 import {ConfigurationFactory} from './configuration_factory';
-import {platform} from 'os';
 
 
 describe('PullConfiguration object', () => {
