@@ -39,18 +39,14 @@ describe('Rating View', () => {
     it('should return the rating feedback', () => {
         let ratingFeedback:RatingFeedback = ratingView.getFeedback();
         expect(ratingFeedback.mechanismId).toEqual(99);
-        console.log(ratingFeedback.rating);
         expect(ratingFeedback.rating).toEqual(0);
         expect(ratingFeedback.title).toEqual("Rating title");
     });
 
     it('should round rating value', () => {
         let floatNumber = new Number(0.0).toFixed(1);
-        console.log(floatNumber);
         expect(floatNumber).toEqual('0.0');
-        console.log(floatNumber);
         expect(Math.round(floatNumber)).toEqual(0);
-        console.log(Math.round(floatNumber));
     });
 });
 

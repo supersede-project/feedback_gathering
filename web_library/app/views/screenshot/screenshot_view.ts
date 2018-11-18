@@ -178,7 +178,6 @@ export class ScreenshotView implements MechanismView {
                 useCORS: true,
                 onrendered: function (canvas) {
                     setTimeout(function() {
-                        console.log(myThis.container.offset().top);
                         jQuery('html, body').animate({
                             scrollTop: scrollPosition - 85
                         }, 0);

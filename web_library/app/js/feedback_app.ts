@@ -95,7 +95,6 @@ export class FeedbackApp {
     }
 
     checkPullConfigurations(application:Application) {
-        console.log('check pull');
         let alreadyTriggeredOne = false;
         for (let pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = pullConfiguration.checkTrigger(application, this.options, alreadyTriggeredOne);

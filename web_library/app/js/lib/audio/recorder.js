@@ -361,7 +361,6 @@ var Recorder = exports.Recorder = (function () {
                 if (e.data.cmd == 'data') {
                   var url = 'data:audio/mp3;base64,' + $that.encode64(e.data.buf);
                   currCallback(url);
-                  console.log("Done converting to Mp3");
                 }
               };
             };

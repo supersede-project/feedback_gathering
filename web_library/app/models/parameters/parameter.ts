@@ -2,10 +2,10 @@ import {ParameterInterface} from './parameter_interface';
 
 
 export class Parameter implements ParameterInterface {
-    id:number;
+    id?:number;
     key:string;
     value:any;
-    order:number;
+    order?:number;
 
     constructor(id:number, key:string, value:any, order?:number) {
         this.id = id;

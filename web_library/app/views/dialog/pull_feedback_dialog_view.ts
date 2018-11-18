@@ -27,7 +27,7 @@ export class PullFeedbackDialogView extends FeedbackDialogView {
             delay = this.configuration.generalConfiguration.getParameterValue('delay');
         }
         if (this.configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
-            let intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
+            let intermediateDialogTemplate = require('../../templates/intermediate_dialog.handlebars');
             let intermediateDialog = new QuestionDialogView('intermediateDialog', intermediateDialogTemplate, {});
             intermediateDialog.addAnswerOption('#feedbackYes', function() {
                 intermediateDialog.close();

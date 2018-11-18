@@ -192,7 +192,6 @@ export class PageNavigation {
         let clusteringService:ClusteringService = new ClusteringService();
         clusteringService.retrieveRelatedFeedback(clusteringEndpointUrl, feedbackText, 'atos', 5,
             (data) => {
-                console.log(data);
                 instantClusteringContainer.empty().html(data);
             },
             (data) => {

@@ -86,7 +86,6 @@ export class PullConfiguration extends Configuration {
      * @returns {boolean} true if the mechanismes should get triggered.
      */
     shouldGetTriggered():boolean {
-        console.log('shouldGetTriggered');
         let pullActive = this.isActive();
         let pageDoesMatch = this.pageDoesMatch(this.currentSlug());
         let hashDoesMatch = this.hashDoesMatch(this.currentHash());
@@ -97,19 +96,6 @@ export class PullConfiguration extends Configuration {
             askOnStartUp = this.generalConfiguration.getParameterValue('askOnAppStartup') || false;
             likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
         }
-
-        console.log('------');
-        console.log('config ID ' + this.id);
-        console.log('pullActive = ' + pullActive);
-        console.log('pageDoesMatch = ' + pageDoesMatch);
-        console.log('hashDoesMatch = ' + hashDoesMatch);
-        console.log('doNotDisturbTimeIsOver = ' + doNotDisturbTimeIsOver);
-        console.log('askOnStartUp = ' + askOnStartUp);
-        console.log('likeliHoodOkay = ' + likeliHoodOkay);
-        console.log('pullSpecificActive= ' + this.isSpecificActive());
-        console.log('all = ' + pullActive && (pageDoesMatch || hashDoesMatch) && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay));
-        console.log('------');
-
 
         if (this.shouldOnlyBeDisplayedOnce()) {
             return pullActive && !this.pullDialogAlreadyDisplayed() && (pageDoesMatch || hashDoesMatch) && (likeliHoodOkay || this.isSpecificActive());
@@ -192,7 +178,6 @@ export class PullConfiguration extends Configuration {
             return true;
         } else {
             for(var page of hashes) {
-                console.log(page);
                 if(page.value === hash) {
                     return true;
                 }

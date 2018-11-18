@@ -4,7 +4,6 @@ import Handlebars = require('handlebars');
 import {ScreenshotMechanism} from '../../models/mechanisms/screenshot_mechanism';
 
 
-/*
 describe('Screenshot View', () => {
     let screenshotView:ScreenshotView;
     let container:JQuery;
@@ -95,4 +94,3 @@ describe('Screenshot View', () => {
         expect($('.screenshot-operations').css('display')).toBe('none');
     });
 });
-    */

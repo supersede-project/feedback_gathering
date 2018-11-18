@@ -4,10 +4,6 @@ import {applyMixins} from '../../js/helpers/mixin_helper';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 
 
-/**
- * Base class for the mechanisms. Note that this class is extended by the Parameterizable mixin to provide methods on a
- * parameter array field.
- */
 export abstract class Mechanism implements Parameterizable {
     id:number;
     type:string;
