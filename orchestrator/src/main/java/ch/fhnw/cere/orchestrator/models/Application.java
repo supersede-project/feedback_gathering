@@ -1,10 +1,7 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -93,7 +90,10 @@ public class Application {
         this.userGroups = userGroups;
     }
 
-    public Application(String name, int state, Date createdAt, Date updatedAt, GeneralConfiguration generalConfiguration, List<Configuration> configurations, List<User> users, List<UserGroup> userGroups, List<ApiUserPermission> apiUserPermissions) {
+    public Application(long id, String name, int state, Date createdAt, Date updatedAt,
+                       GeneralConfiguration generalConfiguration, List<Configuration> configurations, List<User> users,
+                       List<UserGroup> userGroups, List<ApiUserPermission> apiUserPermissions) {
+        this.id = id;
         this.name = name;
         this.state = state;
         this.createdAt = createdAt;
@@ -109,15 +109,15 @@ public class Application {
     public String toString() {
         return String.format(
                 "Application[id=%d, name='%s', state='%d', generalConfiguration='%s', configurations='%s']",
-                id, name, state,  this.generalConfiguration != null ? this.generalConfiguration : "null", this.configurations != null ? this.configurations.stream().map(Object::toString)
-                        .collect(Collectors.joining(", ")): "null");
+                id, name, state, this.generalConfiguration != null ? this.generalConfiguration : "null", this.configurations != null ? this.configurations.stream().map(Object::toString)
+                        .collect(Collectors.joining(", ")) : "null");
     }
 
     public void filterByLanguage(String language, String fallbackLanguage) {
-        for(Configuration configuration: this.configurations) {
+        for (Configuration configuration : this.configurations) {
             configuration.filterByLanguage(language, fallbackLanguage);
         }
-        if(this.generalConfiguration != null) {
+        if (this.generalConfiguration != null) {
             generalConfiguration.setParameters(generalConfiguration.parametersByLanguage(language, fallbackLanguage));
         }
     }
@@ -148,19 +148,19 @@ public class Application {
      */
     public Application filterByUserIdentification(String userIdentification) {
         List<Configuration> pushConfigurationsForUser = this.configurations.stream().filter(configuration ->
-                        configuration.getType().equals(TriggerType.PUSH) &&
+                configuration.getType().equals(TriggerType.PUSH) &&
                         configuration.containsUserWithUserIdentification(userIdentification)
         ).collect(Collectors.toList());
 
         List<Configuration> pullConfigurationsForUser = this.configurations.stream().filter(configuration ->
-                        configuration.getType().equals(TriggerType.PULL) &&
+                configuration.getType().equals(TriggerType.PULL) &&
                         configuration.containsUserWithUserIdentification(userIdentification)
         ).collect(Collectors.toList());
 
-        if(pushConfigurationsForUser.size() == 0) {
+        if (pushConfigurationsForUser.size() == 0) {
             pushConfigurationsForUser.add(this.getDefaultConfigurationForTriggerType(TriggerType.PUSH));
         }
-        if(pullConfigurationsForUser.size() == 0) {
+        if (pullConfigurationsForUser.size() == 0) {
             pullConfigurationsForUser.add(this.getDefaultConfigurationForTriggerType(TriggerType.PULL));
         }
 
@@ -188,14 +188,14 @@ public class Application {
 
     public Configuration getDefaultConfigurationForTriggerType(TriggerType triggerType) {
         List<Configuration> defaultConfigurations;
-        if(triggerType.equals(TriggerType.PUSH)) {
-             defaultConfigurations = this.configurations.stream().filter(configuration ->
+        if (triggerType.equals(TriggerType.PUSH)) {
+            defaultConfigurations = this.configurations.stream().filter(configuration ->
                     configuration.isPushDefault()).collect(Collectors.toList());
         } else {
             defaultConfigurations = this.configurations.stream().filter(configuration ->
                     configuration.isPullDefault()).collect(Collectors.toList());
         }
-        if(defaultConfigurations == null || defaultConfigurations.size() < 1) {
+        if (defaultConfigurations == null || defaultConfigurations.size() < 1) {
             return null;
         }
         return defaultConfigurations.get(0);
@@ -279,5 +279,77 @@ public class Application {
 
     public void setApiUserPermissions(List<ApiUserPermission> apiUserPermissions) {
         this.apiUserPermissions = apiUserPermissions;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private long id;
+        private String name;
+        private int state;
+        private Date createdAt;
+        private Date updatedAt;
+        private List<ApiUserPermission> apiUserPermissions;
+        private List<UserGroup> userGroups;
+        private List<User> users;
+        private List<Configuration> configurations;
+        private GeneralConfiguration generalConfiguration;
+
+        public Builder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder state(int state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder updatedAt(Date updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Builder apiUserPermissions(List<ApiUserPermission> apiUserPermissions) {
+            this.apiUserPermissions = apiUserPermissions;
+            return this;
+        }
+
+        public Builder userGroups(List<UserGroup> userGroups) {
+            this.userGroups = userGroups;
+            return this;
+        }
+
+        public Builder users(List<User> users) {
+            this.users = users;
+            return this;
+        }
+
+        public Builder configurations(List<Configuration> configurations) {
+            this.configurations = configurations;
+            return this;
+        }
+
+        public Builder generalConfiguration(GeneralConfiguration generalConfiguration) {
+            this.generalConfiguration = generalConfiguration;
+            return this;
+        }
+
+        public Application build() {
+            return new Application(id, name, state, createdAt, updatedAt, generalConfiguration, configurations, users,
+                    userGroups, apiUserPermissions);
+        }
     }
 }

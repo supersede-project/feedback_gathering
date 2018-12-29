@@ -84,6 +84,7 @@ public class MonitorConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isCreated());
     }
 
+    @Ignore
     @Test
     public void createMonitorConfiguration() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();

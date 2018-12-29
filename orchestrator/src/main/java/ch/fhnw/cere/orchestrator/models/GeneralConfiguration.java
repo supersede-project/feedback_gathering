@@ -2,6 +2,7 @@ package ch.fhnw.cere.orchestrator.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.tools.javah.Gen;
 
 import javax.persistence.*;
 import java.util.*;
@@ -144,5 +145,58 @@ public class GeneralConfiguration {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private long id;
+        private String name;
+        private Date createdAt;
+        private Date updatedAt;
+        private List<Parameter> parameters;
+        private Application application;
+        private Configuration configuration;
+
+        public Builder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder updatedAt(Date updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Builder parameters(List<Parameter> parameters) {
+            this.parameters = parameters;
+            return this;
+        }
+
+        public Builder application(Application application) {
+            this.application = application;
+            return this;
+        }
+
+        public Builder configuration(Configuration configuration) {
+            this.configuration = configuration;
+            return this;
+        }
+
+        public GeneralConfiguration build() {
+            return new GeneralConfiguration(name, createdAt, updatedAt, parameters, application, configuration);
+        }
     }
 }
