@@ -84,10 +84,10 @@ public class TwitterAPI implements ToolInterface {
 	}
 	
 	private void resetStream() {
-		//logger.debug("Initialising kafka producer...");
-		//kafka.initProducer(confParams.getKafkaEndpoint());
-		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
+		logger.debug("Initialising kafka producer...");
+		kafka.initProducer(confParams.getKafkaEndpoint());
+		//logger.debug("Initialising proxy...");
+		//kafka.initProxy(confParams.getKafkaEndpoint());
 		logger.debug("Initialising streaming...");
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
@@ -147,8 +147,8 @@ public class TwitterAPI implements ToolInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
-		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
+		kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
+		//kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
